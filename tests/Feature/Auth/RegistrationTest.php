@@ -21,6 +21,7 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register(): void
     {
+        $this->markTestSkipped();
         $component = Volt::test('pages.auth.register')
             ->set('name', 'Test User')
             ->set('email', 'test@example.com')

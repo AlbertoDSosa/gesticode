@@ -52,7 +52,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'display_name' => 'Administrator',
             'description' => 'Es un usuario que tiene acceso a todos los apartados sin restricción ninguna.',
             'assignable_to_customer' => false,
-            'view' => 'admin'
+            'view' => 'admin',
+            'guard_name' => 'web'
         ]);
 
         $admin->givePermissionTo(Permission::all());
@@ -62,7 +63,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'display_name' => 'Technician',
             'description' => 'Tiene acceso similar a casi todo, pero con ciertos limites (por definir)',
             'assignable_to_customer' => false,
-            'view' => 'technician'
+            'view' => 'technician',
+            'guard_name' => 'web'
         ]);
 
         $technician->givePermissionTo([
@@ -80,7 +82,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'display_name' => 'External Reseller',
             'description' => 'Es similar al técnico, en cuento a las opciones a las que puede acceder, pero está limitado a varios clientes que tenga asignados y sus hotspots',
             'assignable_to_customer' => true,
-            'view' => 'reseller'
+            'view' => 'reseller',
+            'guard_name' => 'web'
         ]);
 
         $external_reseller->givePermissionTo([
@@ -93,7 +96,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'display_name' => 'Technical Customer',
             'description' => 'Es un usuario que tiene acceso como técnico a todos los hotspot que sean del cliente, pero con algún privilegio más de tipo técnico',
             'assignable_to_customer' => true,
-            'view' => 'customer'
+            'view' => 'customer',
+            'guard_name' => 'web'
         ]);
 
         $technical_customer->givePermissionTo([
@@ -105,7 +109,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'display_name' => 'Customer',
             'description' => 'Es un usuario que tiene acceso a todos los hotspot del cliente',
             'assignable_to_customer' => true,
-            'view' => 'customer'
+            'view' => 'customer',
+            'guard_name' => 'web'
         ]);
 
         $customer->givePermissionTo([

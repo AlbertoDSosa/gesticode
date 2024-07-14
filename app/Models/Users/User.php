@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 
 use Spatie\Permission\Traits\HasRoles;
 
+use App\Models\Customers\Customer;
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles;
@@ -21,7 +23,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'active',
         'password',
+        'last_access_failed_at'
     ];
 
     /**
@@ -44,10 +48,11 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'last_access_failed_at' => 'datetime'
         ];
     }
 
-    public function getRoleAttribute()
+    public function getMainRoleAttribute()
     {
         return $this->roles->first();
     }
@@ -56,4 +61,11 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserProfile::class);
     }
+
+    public function customers()
+    {
+        return $this->belongsToMany(Customer::class, 'user_has_customers');
+    }
+
+
 }
