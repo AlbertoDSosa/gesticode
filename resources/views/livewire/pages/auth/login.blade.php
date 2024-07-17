@@ -24,7 +24,7 @@ new #[Layout('layouts.guest')] class extends Component
     }
 }; ?>
 
-<div>
+<div class="auth-box h-full flex flex-col justify-center">
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 

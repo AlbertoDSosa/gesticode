@@ -1,0 +1,21 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+@tailwind base;
+
+// @layer base {
+//   html {
+//     @apply text-surface;
+//     @apply bg-white;
+//   }
+//   html.dark {
+//     @apply text-neutral-50;
+//     @apply bg-body-dark;
+//   }
+// }
+
+@tailwind components;
+@tailwind utilities;
+
+@import 'plugins/sidebar-menu.css';
+@import '../sass/base.scss';
