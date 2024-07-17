@@ -2,17 +2,27 @@
 <!-- Settings Toggle Button -->
 <button
     class="fixed ltr:md:right-[-29px] ltr:right-0 rtl:left-0 rtl:md:left-[-29px] top-1/2 z-[888] translate-y-1/2 bg-slate-800 text-slate-50 dark:bg-slate-700 dark:text-slate-300 cursor-pointer transform rotate-90 flex items-center text-sm font-medium px-2 py-2 shadow-deep ltr:rounded-b rtl:rounded-t"
-    data-bs-toggle="offcanvas" data-bs-target="#offcanvas" aria-controls="offcanvas">
+    type="button"
+    data-twe-offcanvas-toggle
+    data-twe-target="#offcanvasSettings"
+    aria-controls="offcanvasSettings"
+>
     <iconify-icon class="text-slate-50 text-lg animate-spin" icon="material-symbols:settings-outline-rounded">
     </iconify-icon>
     <span class="hidden md:inline-block ltr:ml-2 rtl:mr-2">{{ __('Settings') }}</span>
 </button>
 
 <!-- BEGIN: Settings Modal -->
-<div class="offcanvas offcanvas-end fixed bottom-0 flex flex-col max-w-full bg-white dark:bg-slate-800 invisible bg-clip-padding shadow-sm outline-none transition duration-300 ease-in-out text-gray-700 top-0 ltr:right-0 rtl:left-0 border-none w-96"
-    tabindex="-1" id="offcanvas" aria-labelledby="offcanvas">
+<div
+    class="offcanvas offcanvas-end fixed bottom-0 flex flex-col max-w-full bg-white dark:bg-slate-800 invisible bg-clip-padding shadow-sm outline-none transition duration-300 ease-in-out text-gray-700 top-0 ltr:right-0 rtl:left-0 border-none w-96"
+    tabindex="-1"
+    id="offcanvasSettings"
+    aria-labelledby="offcanvasSettings"
+    data-twe-offcanvas-init
+>
     <div
-        class="offcanvas-header flex items-center justify-between p-4 pt-3 border-b border-b-slate-300 dark:border-b-slate-900">
+        class="offcanvas-header flex items-center justify-between p-4 pt-3 border-b border-b-slate-300 dark:border-b-slate-900"
+    >
         <div>
             <h3 class="block text-xl font-Inter text-slate-900 font-medium dark:text-[#eee]">
                 Theme customizer
@@ -20,9 +30,11 @@
             <p class="block text-sm font-Inter font-light text-[#68768A] dark:text-[#eee]">Customize & Preview in Real
                 Time</p>
         </div>
-        <button type="button"
+        <button
+            type="button"
             class="box-content text-2xl w-4 h-4 p-2 pt-0 -my-5 -mr-2 text-black dark:text-white border-none rounded-none opacity-100 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
-            data-bs-dismiss="offcanvas">
+            data-twe-offcanvas-dismiss
+        >
             <iconify-icon icon="line-md:close"></iconify-icon>
         </button>
     </div>
