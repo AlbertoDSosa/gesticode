@@ -4,20 +4,22 @@ import jQuery from "jquery";
 window.$ = jQuery;
 window.jQuery = jQuery;
 
+// Icon
+import "iconify-icon";
+
+// animate css
+import "animate.css";
+
 import {
-    Offcanvas,
     Dropdown,
     initTWE,
   } from "tw-elements";
 
-initTWE({ Dropdown, Offcanvas });
+initTWE({ Dropdown });
 
 import SimpleBar from "simplebar";
 window.SimpleBar = SimpleBar;
 import "simplebar/dist/simplebar.css";
-
-// animate css
-import "animate.css";
 
 import ResizeObserver from "resize-observer-polyfill";
 window.ResizeObserver = ResizeObserver;
@@ -29,9 +31,6 @@ window.ResizeObserver = ResizeObserver;
 // import dragula from "dragula/dist/dragula";
 // import "dragula/dist/dragula.css";
 // window.dragula = dragula;
-
-// Icon
-import "iconify-icon";
 
 // SweetAlert
 // import Swal from "sweetalert2";

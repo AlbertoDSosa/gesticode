@@ -1,19 +1,11 @@
 <?php
 
 use App\Livewire\Actions\Logout;
-use Livewire\Volt\Component;
 
-new #[Layout('layouts.app')] class extends Component
-{
-    /**
-     * Log the current user out of the application.
-     */
-    public function logout(Logout $logout): void
-    {
-        $logout();
+$logout = function (Logout $logout) {
+    $logout();
 
-        $this->redirect('/', navigate: true);
-    }
+    $this->redirect('/', navigate: true);
 };
 
 ?>

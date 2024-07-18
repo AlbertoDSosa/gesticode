@@ -2,27 +2,25 @@
 
 use App\Livewire\Forms\LoginForm;
 use Illuminate\Support\Facades\Session;
-use Livewire\Attributes\Layout;
-use Livewire\Volt\Component;
 
-new #[Layout('layouts.guest')] class extends Component
-{
-    public LoginForm $form;
+use function Livewire\Volt\form;
+use function Livewire\Volt\layout;
 
-    /**
-     * Handle an incoming authentication request.
-     */
-    public function login(): void
-    {
-        $this->validate();
+layout('layouts.guest');
 
-        $this->form->authenticate();
+form(LoginForm::class);
 
-        Session::regenerate();
+$login = function () {
+    $this->validate();
 
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
-    }
-}; ?>
+    $this->form->authenticate();
+
+    Session::regenerate();
+
+    $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+};
+
+?>
 
 <div class="auth-box h-full flex flex-col justify-center">
     <!-- Session Status -->

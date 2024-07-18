@@ -25,7 +25,6 @@
         "jquery": "^3.7.1",
         "resize-observer-polyfill": "1.5.1",
         "simplebar": "6.2.7",
-        "sweetalert2": "11.12.2",
         "tw-elements": "2.0.0"
     }
 }
