@@ -13,13 +13,14 @@ import "animate.css";
 import {
     Dropdown,
     initTWE,
+    Offcanvas
   } from "tw-elements";
 
-initTWE({ Dropdown });
+initTWE({ Dropdown,  Offcanvas });
 
 import SimpleBar from "simplebar";
 window.SimpleBar = SimpleBar;
-import "simplebar/dist/simplebar.css";
+import "simplebar/dist/simplebar.min.css";
 
 import ResizeObserver from "resize-observer-polyfill";
 window.ResizeObserver = ResizeObserver;

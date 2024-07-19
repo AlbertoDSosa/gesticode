@@ -70,7 +70,8 @@
     }
 
     screenWidth();
-    $(window).resize(function() {
+
+    $(window).on('resize', function() {
         screenWidth();
     });
 

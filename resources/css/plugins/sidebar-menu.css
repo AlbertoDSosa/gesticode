@@ -50,11 +50,11 @@
 .sidebar-menu > li > a > .fa {
   width: 20px;
 }
-.sidebar-menu > li:hover > a,
+/* .sidebar-menu > li:hover > a,
 .sidebar-menu > li.active > a {
-  /* color: #fff; */
-  /* background: #1e282c; */
-}
+  color: #fff;
+  background: #1e282c;
+} */
 .sidebar-menu > li .label,
 .sidebar-menu > li .badge {
   margin-top: 3px;
@@ -185,7 +185,7 @@
 .sidebar-menu-rtl .sidebar-submenu > li > a > .fa-angle-down {
   width: auto;
 }
-.sidebar-menu-rtl .sidebar-submenu > li.active > a,
+/* .sidebar-menu-rtl .sidebar-submenu > li.active > a,
 .sidebar-menu-rtl .sidebar-submenu > li > a:hover {
-  /* color: #fff; */
-}
+  color: #fff;
+} */

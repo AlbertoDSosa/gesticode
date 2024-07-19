@@ -1,11 +1,11 @@
 <!-- BEGIN: Settings -->
 <!-- Settings Toggle Button -->
 <button
-    class="fixed ltr:md:right-[-29px] ltr:right-0 rtl:left-0 rtl:md:left-[-29px] top-1/2 z-[888] translate-y-1/2 bg-slate-800 text-slate-50 dark:bg-slate-700 dark:text-slate-300 cursor-pointer transform rotate-90 flex items-center text-sm font-medium px-2 py-2 shadow-deep ltr:rounded-b rtl:rounded-t"
+    class="fixed ltr:md:right-[-29px] ltr:right-0 rtl:left-0 rtl:md:left-[-29px] top-1/2 z-[1045] translate-y-1/2 bg-slate-800 text-slate-50 dark:bg-slate-700 dark:text-slate-300 cursor-pointer transform rotate-90 flex items-center text-sm font-medium px-2 py-2 shadow-deep ltr:rounded-b rtl:rounded-t"
     type="button"
     data-twe-offcanvas-toggle
-    data-twe-target="#offcanvasSettings"
-    aria-controls="offcanvasSettings"
+    data-twe-target="#offcanvas"
+    aria-controls="offcanvas"
 >
     <iconify-icon class="text-slate-50 text-lg animate-spin" icon="material-symbols:settings-outline-rounded">
     </iconify-icon>
@@ -14,10 +14,10 @@
 
 <!-- BEGIN: Settings Modal -->
 <div
-    class="offcanvas offcanvas-end fixed bottom-0 flex flex-col max-w-full bg-white dark:bg-slate-800 invisible bg-clip-padding shadow-sm outline-none transition duration-300 ease-in-out text-gray-700 top-0 ltr:right-0 rtl:left-0 border-none w-96"
+    class="offcanvas offcanvas-end z-[1045] fixed bottom-0 flex flex-col max-w-full bg-white dark:bg-slate-800 invisible bg-clip-padding shadow-sm outline-none transition duration-300 ease-in-out text-gray-700 top-0 ltr:right-0 rtl:left-0 border-none w-96"
     tabindex="-1"
-    id="offcanvasSettings"
-    aria-labelledby="offcanvasSettings"
+    id="offcanvas"
+    aria-labelledby="offcanvas"
     data-twe-offcanvas-init
 >
     <div
