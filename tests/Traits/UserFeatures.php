@@ -11,9 +11,7 @@ trait UserFeatures {
     /**
      * @return User
     */
-    public function createUser(
-        array $attributes = [],
-    )
+    public function createUser(array $attributes = [])
     {
         $userAttributes = collect($attributes)->only('email', 'name', 'password', 'email_verified_at')->toArray();
         $user = User::factory()->create($userAttributes);
@@ -21,8 +19,10 @@ trait UserFeatures {
             'user_id' => $user->id,
             'first_name' => $user->name
         ]);
+
         $user->assignRole($attributes['role']);
-        $this->assignPermissionsToRole($user->role);
+
+        $this->assignPermissionsToRole($user->mainRole);
 
         return $user;
     }
@@ -38,6 +38,7 @@ trait UserFeatures {
             'description' => $attributes['description'] ?? null
         ]);
     }
+
     public function createPermission(array $attributes)
     {
         return Permission::create([
@@ -62,7 +63,7 @@ trait UserFeatures {
                 'name' => 'technician',
                 'display_name' => 'Technician',
                 'assignable_to_customer' => false,
-                'view' => 'technincian',
+                'view' => 'technician',
                 'description' => 'Tiene acceso similar a casi todo, pero con ciertos limites (por definir)',
                 'guard_name' => 'web'
             ],
@@ -92,9 +93,7 @@ trait UserFeatures {
             ]
         ];
 
-        $roles = collect($arrayOfRolesNames);
-
-        Role::insert($roles->toArray());
+        Role::insert($arrayOfRolesNames);
     }
 
     public function createPermissions()
@@ -142,6 +141,25 @@ trait UserFeatures {
                     'edit-customers'
                 ]);
                 break;
+            case 'external-reseller':
+                $role->givePermissionTo([
+                    'show-customer-routes',
+                    'be-assigned-to-many-customers'
+                ]);
+                break;
+            case 'technical-customer':
+                $role->givePermissionTo([
+                    'show-customer-routes'
+                ]);
+                break;
+            case 'customer':
+                $role->givePermissionTo([
+                    'show-customer-routes'
+                ]);
+                break;
+            default:
+                return;
+
         }
     }
 }
