@@ -26,7 +26,6 @@ class ProfileTest extends TestCase
 
     public function test_profile_information_can_be_updated(): void
     {
-        $this->markTestSkipped();
         $user = (object) User::factory()->create();
 
         $this->actingAs($user);
@@ -49,7 +48,7 @@ class ProfileTest extends TestCase
 
     public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged(): void
     {
-        $this->markTestSkipped();
+        // $this->markTestSkipped();
         $user = (object) User::factory()->create();
 
         $this->actingAs($user);

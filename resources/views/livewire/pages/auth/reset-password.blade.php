@@ -56,12 +56,12 @@ $resetPassword = function () {
 
     Session::flash('status', __($status));
 
-    $this->redirectRoute('login', navigate: true);
+    $this->redirectRoute('login');
 };
 
 ?>
 
-<div>
+<div class="auth-box h-full flex flex-col justify-center">
     <form wire:submit="resetPassword">
         <!-- Email Address -->
         <div>
