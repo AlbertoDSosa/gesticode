@@ -12,7 +12,7 @@
 }
 
 .logo-segment {
-  @apply sticky top-0 z-10 flex items-center justify-between overflow-x-hidden border-none bg-white py-6 px-4 dark:bg-slate-800;
+  @apply sticky top-0 z-10 flex items-center justify-around overflow-x-hidden border-none bg-white py-6 px-4 dark:bg-slate-800;
 }
 
 .sidebar-menu {

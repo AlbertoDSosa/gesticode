@@ -4,11 +4,11 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-
         <title>{{ config('app.name', 'Gestimas') }}</title>
+        <x-favicon />
 
         <!-- Scripts -->
-        @vite(['resources/css/app.scss', 'resources/js/app.js'])
+        @vite(['resources/css/app.scss', 'resources/js/custom/store.js'])
     </head>
     <body>
         <div class="font-inter loginwrapper">
@@ -27,7 +27,7 @@
                         </h4>
                     </div>
                     <div class="absolute left-0 2xl:bottom-[-160px] bottom-[-130px] h-full w-full z-[-1]">
-                        {{-- <img class="h-full w-full object-containll" src="{{ getSettings('guest_background') }}" alt="image"> --}}
+                        <img class="h-full w-full object-containll" src="{{ getSettings('guest_background') }}" alt="image">
                     </div>
                 </div>
                 <div class="right-column relative">
@@ -45,5 +45,6 @@
                 </div>
             </div>
         </div>
+        @vite(['resources/js/app.js'])
     </body>
 </html>
