@@ -6,7 +6,7 @@
                 <div class="flex space-x-3 rtl:space-x-reverse">
                     <div class="flex-none">
                         <div class="h-10 w-10 rounded-full">
-                            <img src="images/users/user-1.jpg" alt="" class="w-full h-full object-cover rounded-full">
+                            <img src="{{asset('images/users/user-1.jpg')}}" alt="" class="w-full h-full object-cover rounded-full">
                         </div>
                     </div>
                     <div class="flex-1 text-start">

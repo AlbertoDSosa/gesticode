@@ -37,7 +37,7 @@
         <div class="flex space-x-3 px-6 rtl:space-x-reverse">
             <div class="flex-none">
                 <div class="h-10 w-10 rounded-full relative">
-                    <span class=" status ring-1 ring-white inline-block h-[10px] w-[10px] rounded-full absolute -right-0 top-0 
+                    <span class=" status ring-1 ring-white inline-block h-[10px] w-[10px] rounded-full absolute -right-0 top-0
                         bg-success-500 "></span>
                     <img src=images/users/user-3.jpg alt="" class="block w-full h-full object-cover rounded-full">
                 </div>
@@ -104,7 +104,7 @@
         <div class="flex space-x-3 px-6 rtl:space-x-reverse">
             <div class="flex-none">
                 <div class="h-10 w-10 rounded-full relative">
-                    <span class=" status ring-1 ring-white inline-block h-[10px] w-[10px] rounded-full absolute -right-0 top-0 
+                    <span class=" status ring-1 ring-white inline-block h-[10px] w-[10px] rounded-full absolute -right-0 top-0
                         bg-success-500 "></span>
                     <img src=images/users/user-5.jpg alt="" class="block w-full h-full object-cover rounded-full">
                 </div>
@@ -134,7 +134,7 @@
             <div class="flex-none">
                 <div class="h-10 w-10 rounded-full relative">
                     <span class=" status ring-1 ring-white inline-block h-[10px] w-[10px] rounded-full absolute -right-0 top-0  bg-secondary-500 "></span>
-                    <img src=images/users/user-1.jpg alt="" class="block w-full h-full object-cover rounded-full">
+                    <img src="{{asset('images/users/user-1.jpg')}}" alt="" class="block w-full h-full object-cover rounded-full">
                 </div>
             </div>
             <div class="flex-1 text-start flex">

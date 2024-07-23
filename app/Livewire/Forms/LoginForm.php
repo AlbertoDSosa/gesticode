@@ -50,7 +50,7 @@ class LoginForm extends Form
             return;
         }
 
-        event(new Lockout(request()));
+        event(new Lockout((object) request()));
 
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
@@ -67,6 +67,7 @@ class LoginForm extends Form
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
+        $request = (object) request();
+        return Str::transliterate(Str::lower($this->email).'|'. $request->ip());
     }
 }

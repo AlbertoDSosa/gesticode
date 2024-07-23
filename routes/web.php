@@ -13,3 +13,6 @@ Route::view('profile', 'profile')
     ->name('profile');
 
 require __DIR__.'/auth.php';
+
+// Management
+require __DIR__.'/management/settings.php';

@@ -37,8 +37,8 @@
             <li class="sidebar-menu-title">{{ __('MANAGEMENT') }}</li>
             <li>
                 <a
-                    href="#"
-                    class="navItem {{ request()->is('general-settings*') || request()->is('users*') || request()->is('roles*') || request()->is('profiles*') || request()->is('permissions*') ? 'active' : '' }}"
+                    href="{{route('management.settings')}}"
+                    class="navItem {{ \Request::route()->getName() == 'management.settings*' ? 'active' : '' }}"
                 >
                     <span class="flex items-center">
                         <iconify-icon class="nav-icon" icon="material-symbols:settings-outline"></iconify-icon>

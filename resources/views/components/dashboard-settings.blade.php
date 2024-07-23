@@ -9,7 +9,7 @@
 >
     <iconify-icon class="text-slate-50 text-lg animate-spin" icon="material-symbols:settings-outline-rounded">
     </iconify-icon>
-    <span class="hidden md:inline-block ltr:ml-2 rtl:mr-2">{{ __('Settings') }}</span>
+    <span class="hidden md:inline-block ltr:ml-2 rtl:mr-2">{{ __('Theme') }}</span>
 </button>
 
 <!-- BEGIN: Settings Modal -->

@@ -9,27 +9,42 @@ class CreateGeneralSettings extends SettingsMigration
         $this->migrator
             ->add(
                 'general-settings.logo',
-                asset('/images/logo.svg'));
+                ['contentType' => 'imageSrc', 'content' => asset('/images/logo.svg')]
+            );
 
         $this->migrator
             ->add(
                 'general-settings.favicon',
-                asset('/images/favicon.png'));
+                ['contentType' => 'imageSrc', 'content' => asset('/images/favicon.png')]
+            );
 
         $this->migrator
             ->add(
                 'general-settings.dark_logo',
-                asset('/images/dark-logo.svg'));
+                ['contentType' => 'imageSrc', 'content' => asset('/images/dark-logo.svg')]
+            );
 
         $this->migrator
             ->add(
                 'general-settings.guest_logo',
-                asset('/images/guest-logo.svg'));
+                ['contentType' => 'imageSrc', 'content' => asset('/images/guest-logo.svg')]
+            );
 
         $this->migrator
             ->add(
                 'general-settings.guest_background',
-                asset('/images/guest-background.svg'));
+                ['contentType' => 'imageSrc', 'content' => asset('/images/guest-background.svg')]
+            );
 
+        $this->migrator
+            ->add(
+                'general-settings.site_name',
+                ['contentType' => 'text', 'content' => 'Gestimas']
+            );
+        $this->migrator
+            ->add(
+                'general-settings.site_description',
+                ['contentType' => 'text', 'content' => 'Gestión y herramientas para tus aplicaciones']
+            );
     }
 }

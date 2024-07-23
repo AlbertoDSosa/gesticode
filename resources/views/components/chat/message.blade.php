@@ -11,7 +11,7 @@
                         <div class="h-10 w-10 rounded-full relative">
                             <span class="status ring-1 ring-white inline-block h-[10px] w-[10px] rounded-full absolute -right-0 top-0 ${ user.status ===
                                 bg-success-500 "></span>
-                            <img src="images//users/user-1.jpg" alt="" class="w-full h-full object-cover rounded-full">
+                            <img src="{{asset('images/users/user-1.jpg')}}" alt="" class="w-full h-full object-cover rounded-full">
                         </div>
                     </div>
                     <div class="flex-1 text-start">

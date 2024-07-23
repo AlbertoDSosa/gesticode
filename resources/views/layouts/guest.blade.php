@@ -27,7 +27,7 @@
                         </h4>
                     </div>
                     <div class="absolute left-0 2xl:bottom-[-160px] bottom-[-130px] h-full w-full z-[-1]">
-                        <img class="h-full w-full object-containll" src="{{ getSettings('guest_background') }}" alt="image">
+                        <img class="h-full w-full object-containll" src="{{ getSettings('guest_background')['content'] }}" alt="image">
                     </div>
                 </div>
                 <div class="right-column relative">

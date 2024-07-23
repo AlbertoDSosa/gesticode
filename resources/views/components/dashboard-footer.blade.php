@@ -36,7 +36,7 @@
     <a href="profile.html" class="relative bg-white bg-no-repeat backdrop-filter backdrop-blur-[40px] rounded-full footer-bg dark:bg-slate-700
         h-[65px] w-[65px] z-[-1] -mt-[40px] flex justify-center items-center">
       <div class="h-[50px] w-[50px] rounded-full relative left-[0px] hrefp-[0px] custom-dropshadow">
-        <img src="images/users/user-1.jpg" alt="" class="w-full h-full rounded-full border-2 border-slate-100">
+        <img src="{{asset('images/users/user-1.jpg')}}" alt="" class="w-full h-full rounded-full border-2 border-slate-100">
       </div>
     </a>
     <a href="#">
