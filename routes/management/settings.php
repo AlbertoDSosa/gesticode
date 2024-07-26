@@ -14,10 +14,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('management')->group(function 
         ->name('management.settings.system');
 
 
-    // Volt::route('roles', 'pages.management.settings.roles')
-    //     ->name('management.settings.roles');
+    Volt::route('roles', 'pages.management.settings.roles.index')
+        ->name('management.settings.roles');
 
-    // Volt::route('permissions', 'pages.management.settings.permissions')
-    //     ->name('management.settings.permissions');
+    Volt::route('permissions', 'pages.management.settings.permissions.index')
+        ->name('management.settings.permissions');
 
 });

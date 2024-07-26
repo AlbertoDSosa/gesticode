@@ -23,22 +23,39 @@ class RolesAndPermissionsSeeder extends Seeder
         // Crear permisos
 
         $arrayOfPermissionNames = [
-            'show-users',
-            'create-users',
-            'create-admin-users',
-            'edit-users',
-            'edit-admin-users',
-            'delete-users',
-            'show-customers',
-            'create-customers',
-            'edit-customers',
-            'delete-customers',
-            'show-customer-routes',
-            'be-assigned-to-many-customers',
+            'show roles',
+            'create roles',
+            'edit roles',
+            'delete roles',
+            'show permissions',
+            'create permissions',
+            'edit permissions',
+            'delete permissions',
+            'show settings logos',
+            'edit settings logos',
+            'show settings system',
+            'edit settings system',
+            'show users',
+            'create users',
+            'create admin-users',
+            'edit users',
+            'edit admin users',
+            'delete users',
+            'show customers',
+            'create customers',
+            'edit customers',
+            'delete customers',
+            'show customer routes',
+            'be assigned to many customers',
         ];
 
         $permissions = collect($arrayOfPermissionNames)->map(function ($permission) {
-            return ['name' => $permission, 'guard_name' => 'web'];
+            return [
+                'name' => $permission,
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
         });
 
 
@@ -68,13 +85,13 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
         $technician->givePermissionTo([
-            'show-users',
-            'create-users',
-            'edit-users',
-            'show-customers',
-            'create-customers',
-            'edit-customers',
-            'be-assigned-to-many-customers'
+            'show users',
+            'create users',
+            'edit users',
+            'show customers',
+            'create customers',
+            'edit customers',
+            'be assigned to many customers'
         ]);
 
         $external_reseller = Role::create([
@@ -87,8 +104,8 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
         $external_reseller->givePermissionTo([
-            'show-customer-routes',
-            'be-assigned-to-many-customers'
+            'show customer routes',
+            'be assigned to many customers'
         ]);
 
         $technical_customer = Role::create([
@@ -101,7 +118,7 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
         $technical_customer->givePermissionTo([
-            'show-customer-routes'
+            'show customer routes'
         ]);
 
         $customer = Role::create([
@@ -114,7 +131,7 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
         $customer->givePermissionTo([
-            'show-customer-routes'
+            'show customer routes'
         ]);
 
     }

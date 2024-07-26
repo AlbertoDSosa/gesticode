@@ -41,7 +41,7 @@ state(compact('breadcrumbItems', 'pageTitle'));
                             Set up your app logos
                         </div>
                         <a
-                            href="{{ route('management.settings.logos')}}"
+                            href="{{route('management.settings.logos')}}"
                             class="inline-flex items-center space-x-3 rtl:space-x-reverse text-sm capitalize font-medium text-slate-600
                                 dark:text-slate-300"
                         >
@@ -68,7 +68,7 @@ state(compact('breadcrumbItems', 'pageTitle'));
                             Set up your system profile, and more
                         </div>
                         <a
-                            href="{{ route('management.settings.system')}}"
+                            href="{{route('management.settings.system')}}"
                             class="inline-flex items-center space-x-3 rtl:space-x-reverse text-sm capitalize font-medium text-slate-600
                                 dark:text-slate-300"
                         >
@@ -88,13 +88,13 @@ state(compact('breadcrumbItems', 'pageTitle'));
                                 <iconify-icon icon="heroicons:lock-closed"></iconify-icon>
                             </div>
                             <div class="flex-1 text-base text-slate-900 dark:text-white font-medium">
-                                Role
+                                Roles
                             </div>
                         </div>
                         <div class="text-slate-600 dark:text-slate-300 text-sm">
-                            Manage Role (Add, Edit, Delete role)
+                            Manage Roles (Add, Edit, Delete role)
                         </div>
-                        <a href="#"
+                        <a href="{{route('management.settings.roles')}}"
                             class="inline-flex items-center space-x-3 rtl:space-x-reverse text-sm capitalize font-medium text-slate-600
                                 dark:text-slate-300">
                             <span>Change Settings</span>
@@ -112,13 +112,13 @@ state(compact('breadcrumbItems', 'pageTitle'));
                                 <iconify-icon icon="heroicons:lock-closed"></iconify-icon>
                             </div>
                             <div class="flex-1 text-base text-slate-900 dark:text-white font-medium">
-                                Permission
+                                Permissions
                             </div>
                         </div>
                         <div class="text-slate-600 dark:text-slate-300 text-sm">
-                            Manage Permission (Add, Edit, Delete Permission)
+                            Manage Permissions (Add, Edit, Delete Permission)
                         </div>
-                        <a href="#"
+                        <a href="{{route('management.settings.permissions')}}"
                             class="inline-flex items-center space-x-3 rtl:space-x-reverse text-sm capitalize font-medium text-slate-600
                                 dark:text-slate-300">
                             <span>Change Settings</span>
