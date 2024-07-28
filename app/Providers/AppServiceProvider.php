@@ -25,11 +25,11 @@ class AppServiceProvider extends ServiceProvider
         // This works in the app by using gate-related functions like auth()->user->can() and @can()
 
         Gate::before(function ($user, $ability) {
-            return $user->hasRole('admin') ? true : null;
+            return $user->hasRole('super-admin') ? true : null;
         });
 
         LogViewer::auth(function ($request) {
-            return $request->user() && $request->user()->hasRole('admin');
+            return $request->user() && $request->user()->hasAnyRole(['admin', 'super-admin']);
         });
     }
 }

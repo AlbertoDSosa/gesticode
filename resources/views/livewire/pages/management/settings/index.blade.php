@@ -7,7 +7,7 @@ layout('layouts.app');
 $breadcrumbItems = [
     [
         'name' => 'Settings',
-        'url' => 'management.settings',
+        'url' => route('management.settings'),
         'active' => true
     ],
 ];

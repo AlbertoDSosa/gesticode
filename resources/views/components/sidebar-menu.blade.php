@@ -33,7 +33,7 @@
                     </span>
                 </a>
             </li>
-            @role('admin')
+            @role(['admin', 'super-admin'])
             <li class="sidebar-menu-title">{{ __('MANAGEMENT') }}</li>
             <li>
                 <a

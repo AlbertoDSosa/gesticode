@@ -27,12 +27,17 @@ class LogViewerTest extends TestCase
 
         $user = $this->createUser(['role' => 'technician']);
         $admin = $this->createUser(['role' => 'admin']);
+        $superAdmin = $this->createUser(['role' => 'super-admin']);
 
         $this->actingAs($user);
 
         $this->get('/log-viewer')->assertStatus(403);
 
         $this->actingAs($admin);
+
+        $this->get('/log-viewer')->assertStatus(200);
+
+        $this->actingAs($superAdmin);
 
         $this->get('/log-viewer')->assertStatus(200);
     }

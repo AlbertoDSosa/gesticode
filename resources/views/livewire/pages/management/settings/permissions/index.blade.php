@@ -15,33 +15,32 @@ state(['search', 'rows' => 10, 'sort' => 'id'])->url();
 $breadcrumbItems = [
     [
         'name' => 'Settings',
-        'url' => 'management.settings',
+        'url' => route('management.settings'),
         'active' => false
     ],
     [
         'name' => 'Permissions',
-        'url' => 'management.settings.permissions',
+        'url' => route('management.settings.permissions'),
         'active' => true
     ],
 ];
 
 $pageTitle = 'Permissions';
 
-
 with(function() {
     $permissions = QueryBuilder::for(Permission::class)
-            ->defaultSort($this->sort)
-            ->allowedSorts(['id', 'name', 'created_at', 'updated_at'])
-            ->where('name', 'like', "%{$this->search}%")
-            ->paginate($this->rows);
+        ->defaultSort($this->sort)
+        ->allowedSorts(['id', 'name'])
+        ->where('name', 'like', "%{$this->search}%")
+        ->paginate($this->rows);
     return compact('permissions');
 
 });
 
-state(compact('breadcrumbItems', 'pageTitle'));
+state(compact('breadcrumbItems', 'pageTitle'))->locked();
 
 $resetUrl = function() {
-    $this->search = '';
+    $this->search = null;
     $this->rows = 10;
     $this->sort = 'id';
 };
@@ -52,7 +51,12 @@ $toggleSort = function($sort) {
     } else {
         $this->sort = $sort;
     }
-}
+};
+
+$delete = function($id) {
+    $permission = Permission::find($id);
+    $permission->delete();
+};
 
 ?>
 
@@ -73,7 +77,10 @@ $toggleSort = function($sort) {
             <div class="justify-end flex gap-3 items-center flex-wrap">
                 {{-- Create Button start--}}
                 @can('create permissions')
-                <a class="btn inline-flex justify-center btn-dark rounded-[25px] items-center !p-2 !px-3" href="#">
+                <a
+                    class="btn inline-flex justify-center btn-dark rounded-[25px] items-center !p-2 !px-3"
+                    href="{{route('management.settings.permissions.create')}}"
+                >
                     <iconify-icon icon="ic:round-plus" class="text-lg mr-1"></iconify-icon>
                     {{ __('New') }}
                 </a>
@@ -89,7 +96,12 @@ $toggleSort = function($sort) {
             <div class="justify-center flex flex-wrap sm:flex items-center lg:justify-end gap-3">
                 <div class="relative w-full sm:w-auto flex items-center">
                     <form id="searchForm">
-                        <input wire:model.live="search" type="search" class="inputField pl-8 p-2 border border-slate-200 dark:border-slate-700 rounded-md dark:bg-slate-900" placeholder="Search">
+                        <input
+                            wire:model.live="search"
+                            type="search"
+                            class="inputField pl-8 p-2 border border-slate-200 dark:border-slate-700 rounded-md dark:bg-slate-900"
+                            placeholder="Search"
+                        >
                     </form>
                     <iconify-icon class="absolute text-textColor left-2 dark:text-white" icon="quill:search-alt"></iconify-icon>
                 </div>
@@ -156,17 +168,22 @@ $toggleSort = function($sort) {
                                         <div class="action-btns space-x-2 flex">
                                             {{-- Edit --}}
                                             @can('update permissions')
-                                            <a class="action-btn" href="#">
+                                            <a
+                                                class="action-btn"
+                                                href="{{route('management.settings.permissions.edit', ['permission' => $permission])}}"
+                                            >
                                                 <iconify-icon icon="uil:edit"></iconify-icon>
                                             </a>
                                             @endcan
                                             {{-- delete --}}
                                             @can('delete permisions')
-                                            <form id="deleteForm-{{ $permission->id }}" class="cursor-pointer">
-                                                <a class="action-btn" type="submit">
-                                                    <iconify-icon icon="fluent:delete-24-regular"></iconify-icon>
-                                                </a>
-                                            </form>
+                                            <button
+                                                x-data="deletePermission"
+                                                x-on:click="exec({{$permission->id}})"
+                                                class="action-btn"
+                                            >
+                                                <iconify-icon icon="fluent:delete-24-regular"></iconify-icon>
+                                            </button>
                                             @endcan
                                         </div>
                                     </td>
@@ -188,3 +205,23 @@ $toggleSort = function($sort) {
         </div>
     </div>
 </div>
+
+@script
+<script>
+    Alpine.data('deletePermission', () => ({
+        exec(id) {
+            Swal.fire({
+                title: '@lang('Are you sure ? ')',
+                icon : 'question',
+                showDenyButton: true,
+                confirmButtonText: '@lang('Delete')',
+                denyButtonText: '@lang('Cancel')',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $wire.delete(id);
+                }
+            });
+        }
+    }));
+</script>
+@endscript

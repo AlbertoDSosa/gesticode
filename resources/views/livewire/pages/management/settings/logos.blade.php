@@ -11,12 +11,12 @@ usesFileUploads();
 $breadcrumbItems = [
     [
         'name' => 'Settings',
-        'url' => 'management.settings',
+        'url' => route('management.settings'),
         'active' => false
     ],
     [
         'name' => 'Logos',
-        'url' => 'management.settings.logos',
+        'url' => route('management.settings.logos'),
         'active' => true
     ],
 ];

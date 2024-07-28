@@ -34,8 +34,8 @@ window.ResizeObserver = ResizeObserver;
 // window.dragula = dragula;
 
 // SweetAlert
-// import Swal from "sweetalert2";
-// window.Swal = Swal;
+import Swal from "sweetalert2";
+window.Swal = Swal;
 
 // tooltip and popover
 // import tippy from "tippy.js";

@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
-Route::middleware(['auth', 'role:admin'])->prefix('management')->group(function () {
+Route::middleware(['auth', 'role:admin|super-admin'])->prefix('management')->group(function () {
     Volt::route('settings', 'pages.management.settings.index')
         ->name('management.settings');
 
@@ -20,4 +20,15 @@ Route::middleware(['auth', 'role:admin'])->prefix('management')->group(function 
     Volt::route('permissions', 'pages.management.settings.permissions.index')
         ->name('management.settings.permissions');
 
+    Volt::route('roles/create', 'pages.management.settings.roles.create')
+        ->name('management.settings.roles.create');
+
+    Volt::route('roles/edit/{role}', 'pages.management.settings.roles.edit')
+        ->name('management.settings.roles.edit');
+
+    Volt::route('permissions/create', 'pages.management.settings.permissions.create')
+        ->name('management.settings.permissions.create');
+
+    Volt::route('permissions/edit/{permission}', 'pages.management.settings.permissions.edit')
+        ->name('management.settings.permissions.edit');
 });

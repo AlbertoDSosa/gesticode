@@ -19,13 +19,13 @@
         @foreach($breadcrumbItems as $breadcrumbItem)
             @if($breadcrumbItem['active'])
             <li class="inline-block">
-                <a href="{{route($breadcrumbItem['url'])}}" class="breadcrumbList breadcrumbActive dark:text-slate-300">
+                <a href="{{$breadcrumbItem['url']}}" class="breadcrumbList breadcrumbActive dark:text-slate-300">
                     {{ __($breadcrumbItem['name']) }}
                 </a>
             </li>
             @else
             <li class="inline-block relative text-sm text-primary-500 font-Inter">
-                <a href="{{route($breadcrumbItem['url'])}}" class="breadcrumbList">
+                <a href="{{$breadcrumbItem['url']}}" class="breadcrumbList">
                     {{ __($breadcrumbItem['name']) }}
                     <iconify-icon icon="heroicons-outline:chevron-right" class="relative top-[3px] text-slate-500 rtl:rotate-180"></iconify-icon>
                 </a>

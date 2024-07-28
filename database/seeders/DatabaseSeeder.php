@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
     {
 
         $alberto = User::factory()->create([
-            'name' => 'Alberto D. Sosa',
+            'name' => 'Alberto D.Sosa',
             'email' => 'albertodsosa@gmail.com',
             'password' => Hash::make('yalasabes')
         ]);
@@ -65,7 +65,7 @@ class DatabaseSeeder extends Seeder
             'first_name' => $alberto->name
         ]);
 
-        $alberto->assignRole('admin');
+        $alberto->assignRole('super-admin');
     }
 
     public function createCustomers()

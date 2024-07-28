@@ -25,6 +25,7 @@ class DashboardTest extends TestCase
 
         $user = $this->createUser(['role' => 'technician']);
         $admin = $this->createUser(['role' => 'admin']);
+        $superAdmin = $this->createUser(['role' => 'super-admin']);
 
         $this->actingAs($user);
 
@@ -33,6 +34,13 @@ class DashboardTest extends TestCase
             ->assertDontSeeText('MANAGEMENT');
 
         $this->actingAs($admin);
+
+        $this->get('/dashboard')
+            ->assertSee('<span>Settings</span>', $escaped = false)
+            ->assertSeeText('MANAGEMENT');
+            $this->actingAs($admin);
+
+        $this->actingAs($superAdmin);
 
         $this->get('/dashboard')
             ->assertSee('<span>Settings</span>', $escaped = false)

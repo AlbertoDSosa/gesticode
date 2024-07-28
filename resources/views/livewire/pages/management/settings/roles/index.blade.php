@@ -9,17 +9,17 @@ usesPagination();
 
 layout('layouts.app');
 
-state(['search', 'rows' => 10, 'sort' => 'created_at'])->url();
+state(['search', 'rows' => 10, 'sort' => 'id'])->url();
 
 $breadcrumbItems = [
     [
         'name' => 'Settings',
-        'url' => 'management.settings',
+        'url' => route('management.settings'),
         'active' => false
     ],
     [
         'name' => 'Roles',
-        'url' => 'management.settings.roles',
+        'url' => route('management.settings.roles'),
         'active' => true
     ],
 ];
@@ -29,7 +29,7 @@ $pageTitle = 'Roles';
 with(function() {
     $roles = QueryBuilder::for(Role::class)
         ->defaultSort($this->sort)
-        ->allowedSorts(['id', 'name', 'created_at', 'updated_at'])
+        ->allowedSorts(['id', 'name'])
         ->where('name', 'like', "%{$this->search}%")
         ->paginate($this->rows);
     return compact('roles');
@@ -38,9 +38,9 @@ with(function() {
 state(compact('breadcrumbItems', 'pageTitle'));
 
 $resetUrl = function() {
-    $this->search = '';
+    $this->search = null;
     $this->rows = 10;
-    $this->sort = 'created_at';
+    $this->sort = 'id';
 };
 
 $toggleSort = function($sort) {
@@ -49,7 +49,12 @@ $toggleSort = function($sort) {
     } else {
         $this->sort = $sort;
     }
-}
+};
+
+$delete = function($id) {
+    $role = Role::find($id);
+    $role->delete();
+};
 
 ?>
 
@@ -70,9 +75,11 @@ $toggleSort = function($sort) {
             <div class="justify-end flex gap-3 items-center flex-wrap">
                 {{-- Create Button start--}}
                 @can('create roles')
-                <a class="btn inline-flex justify-center btn-dark rounded-[25px] items-center !p-2 !px-3" href="#">
-                    <iconify-icon icon="ic:round-plus" class="text-lg mr-1">
-                    </iconify-icon>
+                <a
+                    class="btn inline-flex justify-center btn-dark rounded-[25px] items-center !p-2 !px-3"
+                    href="{{route('management.settings.roles.create')}}"
+                >
+                    <iconify-icon icon="ic:round-plus" class="text-lg mr-1"></iconify-icon>
                     {{ __('New') }}
                 </a>
                 @endcan
@@ -87,7 +94,13 @@ $toggleSort = function($sort) {
             <div class="justify-center flex flex-wrap sm:flex items-center lg:justify-end gap-3">
                 <div class="relative w-full sm:w-auto flex items-center">
                     <form id="searchForm">
-                        <input name="q" type="text" class="inputField pl-8 p-2 border border-slate-200 dark:border-slate-700 rounded-md dark:bg-slate-900" placeholder="Search" value="{{ request()->q }}">
+                        <input
+                            name="search"
+                            type="text"
+                            class="inputField pl-8 p-2 border border-slate-200 dark:border-slate-700 rounded-md dark:bg-slate-900"
+                            placeholder="Search"
+                            wire:model.live="search"
+                        >
                     </form>
                     <iconify-icon class="absolute text-textColor left-2 dark:text-white" icon="quill:search-alt"></iconify-icon>
                 </div>
@@ -152,25 +165,24 @@ $toggleSort = function($sort) {
                                     <td class="table-td">{{$role->created_at ? $role->updated_at->toFormattedDateString() : '' }}</td>
                                     <td class="table-td">
                                         <div class="action-btns space-x-2 flex">
-                                            {{-- show --}}
-                                            @can('show roles')
-                                            <a class="action-btn" href="" x-data="{ tooltip: 'View' }" x-tooltip="tooltip">
-                                                <iconify-icon icon="ph:eye-light"></iconify-icon>
-                                            </a>
-                                            @endcan
                                             {{-- Edit --}}
                                             @can('update roles')
-                                            <a class="action-btn" href="">
+                                            <a
+                                                class="action-btn"
+                                                href="{{route('management.settings.roles.edit', ['role' => $role])}}"
+                                            >
                                                 <iconify-icon icon="uil:edit"></iconify-icon>
                                             </a>
                                             @endcan
                                             {{-- delete --}}
                                             @can('delete roles')
-                                            <form id="deleteForm{{ $role->id }}" class="cursor-pointer">
-                                                {{-- <a class="action-btn" onclick="sweetAlertDelete(event, 'deleteForm{{ $role->id }}')" type="submit">
-                                                    <iconify-icon icon="fluent:delete-24-regular"></iconify-icon>
-                                                </a> --}}
-                                            </form>
+                                            <button
+                                                x-data="deleteRole"
+                                                x-on:click="exec({{$role->id}})"
+                                                class="action-btn"
+                                            >
+                                                <iconify-icon icon="fluent:delete-24-regular"></iconify-icon>
+                                            </button>
                                             @endcan
                                         </div>
                                     </td>
@@ -192,3 +204,23 @@ $toggleSort = function($sort) {
         </div>
     </div>
 </div>
+
+@script
+<script>
+    Alpine.data('deleteRole', () => ({
+        exec(id) {
+            Swal.fire({
+                title: '@lang('Are you sure ? ')',
+                icon : 'question',
+                showDenyButton: true,
+                confirmButtonText: '@lang('Delete')',
+                denyButtonText: '@lang('Cancel')',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $wire.delete(id);
+                }
+            });
+        }
+    }));
+</script>
+@endscript
