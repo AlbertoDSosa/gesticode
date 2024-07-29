@@ -66,7 +66,7 @@ $create = function() {
     <form wire:submit="create">
         <div class="bg-white dark:bg-slate-800 rounded-md p-5 pb-6 space-y-4">
             {{-- module name--}}
-            {{-- <div class="input-area">
+            <div class="input-area">
                 <label for="module_name" class="form-label">{{ __('Module Name') }}</label>
                 <input
                     name="module_name"
@@ -77,7 +77,7 @@ $create = function() {
                     required
                 >
                 <x-input-error :messages="$errors->get('module_name')" class="mt-2"/>
-            </div> --}}
+            </div>
 
             {{--Name input --}}
             <div class="input-area">

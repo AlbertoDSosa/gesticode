@@ -2,8 +2,7 @@
 
 use function Livewire\Volt\{state, layout, usesPagination, with};
 use Spatie\QueryBuilder\QueryBuilder;
-
-use Spatie\Permission\Models\Permission;
+use App\Models\Users\User;
 
 usesPagination();
 
@@ -18,21 +17,21 @@ $breadcrumbItems = [
         'active' => false
     ],
     [
-        'name' => 'Permissions',
-        'url' => route('management.settings.permissions'),
+        'name' => 'Users',
+        'url' => route('management.settings.users'),
         'active' => true
     ],
 ];
 
-$pageTitle = 'Permissions';
+$pageTitle = 'Users';
 
 with(function() {
-    $permissions = QueryBuilder::for(Permission::class)
+    $users = QueryBuilder::for(User::class)
         ->defaultSort($this->sort)
         ->allowedSorts(['id', 'name'])
         ->where('name', 'like', "%{$this->search}%")
         ->paginate($this->rows);
-    return compact('permissions');
+    return compact('users');
 });
 
 state(compact('breadcrumbItems', 'pageTitle'))->locked();
@@ -52,34 +51,37 @@ $toggleSort = function($sort) {
 };
 
 $delete = function($id) {
-    $permission = Permission::find($id);
-    $permission->delete();
+    $user = User::find($id);
+    $user->delete();
 };
 
 ?>
 
 <div>
-    <div class="mb-6">
-        {{--Breadcrumb--}}
-        <x-breadcrumb :pageTitle="$pageTitle" :breadcrumbItems="$breadcrumbItems" />
+    <div class=" mb-6">
+        {{--Breadcrumb start--}}
+        <x-breadcrumb :breadcrumb-items="$breadcrumbItems" :page-title="$pageTitle" />
+
     </div>
 
-    {{-- Alert start --}}
+    {{--Alert start--}}
     @if (session('status'))
     <x-alert :message="session('status')['message']" :type="session('status')['type']" />
     @endif
-    {{-- Alert end --}}
+    {{--Alert end--}}
+
 
     <div class="card">
         <header class=" card-header noborder">
             <div class="justify-end flex gap-3 items-center flex-wrap">
                 {{-- Create Button start--}}
-                @can('create permissions')
+                @can('create users')
                 <a
                     class="btn inline-flex justify-center btn-dark rounded-[25px] items-center !p-2 !px-3"
-                    href="{{route('management.settings.permissions.create')}}"
+                    href="{{route('management.settings.users.create')}}"
                 >
-                    <iconify-icon icon="ic:round-plus" class="text-lg mr-1"></iconify-icon>
+                    <iconify-icon icon="ic:round-plus" class="text-lg mr-1">
+                    </iconify-icon>
                     {{ __('New') }}
                 </a>
                 @endcan
@@ -143,10 +145,13 @@ $delete = function($id) {
                                         </button>
                                     </th>
                                     <th scope="col" class="table-th ">
-                                        {{ __('Created At') }}
+                                        {{ __('Email') }}
                                     </th>
                                     <th scope="col" class="table-th ">
-                                        {{ __('Updated At') }}
+                                        {{ __('Member Since') }}
+                                    </th>
+                                    <th scope="col" class="table-th ">
+                                        {{ __('Verified') }}
                                     </th>
                                     <th scope="col" class="table-th w-20">
                                         {{ __('Action') }}
@@ -154,30 +159,60 @@ $delete = function($id) {
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
-                                @forelse ($permissions as $permission)
-                                <tr class="border border-slate-100 dark:border-slate-900 relative">
-                                    <td class="table-td sticky left-0"># {{ $permission->id }}</td>
+                                @forelse ($users as $user)
+                                <tr>
                                     <td class="table-td">
-                                        <span>{{ $permission->name }}</span>
+                                        # {{ $user->id }}
                                     </td>
-                                    <td class="table-td">{{ $permission->created_at ? $permission->created_at->toFormattedDateString() : '' }}</td>
-                                    <td class="table-td">{{ $permission->created_at ? $permission->updated_at->toFormattedDateString() : '' }}</td>
                                     <td class="table-td">
-                                        <div class="action-btns space-x-2 flex">
-                                            {{-- Edit --}}
-                                            @can('update permissions')
+                                        <div class="flex items-center">
+                                            <div class="flex-none">
+                                                <div class="w-8 h-8 rounded-[100%] ltr:mr-3 rtl:ml-3">
+                                                    <img class="w-full h-full rounded-[100%] object-cover" src="{{ Avatar::create($user->name)->toBase64() }}" alt="image">
+                                                </div>
+                                            </div>
+                                            <div class="flex-1 text-start">
+                                                <h4 class="text-sm font-medium text-slate-600 whitespace-nowrap">
+                                                    {{ $user->name }}
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="table-td !normal-case">
+                                        {{ $user->email }}
+                                    </td>
+                                    <td class="table-td">
+                                        {{ $user->created_at->diffForHumans() }}
+                                    </td>
+                                    <td class="table-td">
+                                        @if($user->email_verified_at)
+                                        <span class="badge bg-primary-500 text-white capitalize">{{ __('YES') }}</span>
+                                        @else
+                                        <span class="badge bg-danger-500 text-white capitalize">{{ __('NO') }}</span>
+                                        @endif
+                                    </td>
+                                    <td class="table-td">
+                                        <div class="flex space-x-3 rtl:space-x-reverse">
+                                            {{--view--}}
+                                            {{-- @can('show users')
+                                            <a class="action-btn" href="{{ route('', $user) }}">
+                                                <iconify-icon icon="heroicons:eye"></iconify-icon>
+                                            </a>
+                                            @endcan --}}
+                                            {{--Edit--}}
+                                            @can('update users')
                                             <a
                                                 class="action-btn"
-                                                href="{{route('management.settings.permissions.edit', ['permission' => $permission])}}"
+                                                href="{{ route('management.settings.users.edit', ['user'=> $user]) }}"
                                             >
-                                                <iconify-icon icon="uil:edit"></iconify-icon>
+                                                <iconify-icon icon="heroicons:pencil-square"></iconify-icon>
                                             </a>
                                             @endcan
-                                            {{-- delete --}}
-                                            @can('delete permisions')
+                                            {{--delete--}}
+                                            @can('delete users')
                                             <button
-                                                x-data="deletePermission"
-                                                x-on:click="exec({{$permission->id}})"
+                                                x-data="deleteUsers"
+                                                x-on:click="exec({{$user->id}})"
                                                 class="action-btn"
                                             >
                                                 <iconify-icon icon="fluent:delete-24-regular"></iconify-icon>
@@ -196,7 +231,7 @@ $delete = function($id) {
                                 @endforelse
                             </tbody>
                         </table>
-                        <x-table-footer :data="$permissions" />
+                        <x-table-footer :data="$users" />
                     </div>
                 </div>
             </div>
@@ -206,7 +241,7 @@ $delete = function($id) {
 
 @script
 <script>
-    Alpine.data('deletePermission', () => ({
+    Alpine.data('deleteUser', () => ({
         exec(id) {
             Swal.fire({
                 title: '@lang('Are you sure ? ')',

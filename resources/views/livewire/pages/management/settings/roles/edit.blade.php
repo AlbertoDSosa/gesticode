@@ -18,7 +18,6 @@ $permissionModules = computed(function() {
 
 state(compact('breadcrumbItems', 'pageTitle', 'role', 'rolePermissions'))->locked();
 
-
 mount(function(Role $role) {
     $this->role = $role;
     $this->rolePermissions = $role->permissions()->pluck('id')->toArray();

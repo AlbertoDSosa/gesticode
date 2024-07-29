@@ -1,6 +1,6 @@
 <?php
 
-use function Livewire\Volt\{state, layout, computed, usesPagination, with};
+use function Livewire\Volt\{state, layout, usesPagination, with};
 use Spatie\QueryBuilder\QueryBuilder;
 
 use Spatie\Permission\Models\Role;
