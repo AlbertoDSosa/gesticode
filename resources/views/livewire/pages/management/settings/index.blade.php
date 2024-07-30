@@ -31,7 +31,7 @@ state(compact('breadcrumbItems', 'pageTitle'));
                         <div class="flex space-x-3 items-center rtl:space-x-reverse">
                             <div class="flex-none h-8 w-8 rounded-full bg-slate-800 dark:bg-slate-700 text-slate-300 flex flex-col items-center
                                     justify-center text-lg">
-                                <iconify-icon icon="heroicons:building-office-2"></iconify-icon>
+                                <iconify-icon icon="material-symbols:settings-photo-camera-outline"></iconify-icon>
                             </div>
                             <div class="flex-1 text-base text-slate-900 dark:text-white font-medium">
                                 Logos Settings
@@ -58,7 +58,7 @@ state(compact('breadcrumbItems', 'pageTitle'));
                         <div class="flex space-x-3 items-center rtl:space-x-reverse">
                             <div class="flex-none h-8 w-8 rounded-full bg-slate-800 dark:bg-slate-700 text-slate-300 flex flex-col items-center
                                     justify-center text-lg">
-                                <iconify-icon icon="heroicons:building-office-2"></iconify-icon>
+                                <iconify-icon icon="material-symbols:settings-applications-outline"></iconify-icon>
                             </div>
                             <div class="flex-1 text-base text-slate-900 dark:text-white font-medium">
                                 System Settings
@@ -85,7 +85,7 @@ state(compact('breadcrumbItems', 'pageTitle'));
                         <div class="flex space-x-3 items-center rtl:space-x-reverse">
                             <div class="flex-none h-8 w-8 rounded-full bg-slate-800 dark:bg-slate-700 text-slate-300 flex flex-col items-center
                                     justify-center text-lg">
-                                <iconify-icon icon="heroicons:lock-closed"></iconify-icon>
+                                <iconify-icon icon="material-symbols:admin-panel-settings-outline-rounded"></iconify-icon>
                             </div>
                             <div class="flex-1 text-base text-slate-900 dark:text-white font-medium">
                                 Roles
@@ -109,7 +109,7 @@ state(compact('breadcrumbItems', 'pageTitle'));
                         <div class="flex space-x-3 items-center rtl:space-x-reverse">
                             <div class="flex-none h-8 w-8 rounded-full bg-slate-800 dark:bg-slate-700 text-slate-300 flex flex-col items-center
                                     justify-center text-lg">
-                                <iconify-icon icon="heroicons:lock-closed"></iconify-icon>
+                                <iconify-icon icon="material-symbols:admin-panel-settings-outline-rounded"></iconify-icon>
                             </div>
                             <div class="flex-1 text-base text-slate-900 dark:text-white font-medium">
                                 Permissions
@@ -133,7 +133,7 @@ state(compact('breadcrumbItems', 'pageTitle'));
                         <div class="flex space-x-3 items-center rtl:space-x-reverse">
                             <div class="flex-none h-8 w-8 rounded-full bg-slate-800 dark:bg-slate-700 text-slate-300 flex flex-col items-center
                                     justify-center text-lg">
-                                <iconify-icon icon="heroicons:users"></iconify-icon>
+                                <iconify-icon icon="material-symbols:settings-account-box-outline"></iconify-icon>
                             </div>
                             <div class="flex-1 text-base text-slate-900 dark:text-white font-medium">
                                 Users

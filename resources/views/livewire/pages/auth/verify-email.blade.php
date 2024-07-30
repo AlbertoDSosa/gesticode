@@ -10,7 +10,7 @@ layout('layouts.guest');
 
 $sendVerification = function () {
     if (Auth::user()->hasVerifiedEmail()) {
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        $this->redirectIntended(default: route('dashboard', absolute: false));
 
         return;
     }
@@ -23,7 +23,7 @@ $sendVerification = function () {
 $logout = function (Logout $logout) {
     $logout();
 
-    $this->redirect('/', navigate: true);
+    $this->redirect('/');
 };
 
 ?>

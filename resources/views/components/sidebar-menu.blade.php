@@ -25,7 +25,7 @@
     <div class="sidebar-menus bg-white dark:bg-slate-800 py-2 px-4 h-[calc(100%-80px)] z-50" id="sidebar_menus">
         <ul class="sidebar-menu">
             <li class="sidebar-menu-title">{{ __('MENU') }}</li>
-            <li class="{{ \Request::route()->getName() == 'dashboard' ? 'active' : '' }}">
+            <li class="{{ request()->route()->getName() == 'dashboard' ? 'active' : '' }}">
                 <a href="{{ route('dashboard') }}" class="navItem">
                     <span class="flex items-center">
                         <iconify-icon class="nav-icon" icon="heroicons-outline:cube"></iconify-icon>
@@ -38,11 +38,23 @@
             <li>
                 <a
                     href="{{route('management.settings')}}"
-                    class="navItem {{ \Request::route()->getName() == 'management.settings*' ? 'active' : '' }}"
+                    class="navItem {{ Str::startsWith(request()->route()->getName(), 'management.settings') ? 'active' : '' }}"
                 >
                     <span class="flex items-center">
-                        <iconify-icon class="nav-icon" icon="material-symbols:settings-outline"></iconify-icon>
+                        {{-- <iconify-icon class="nav-icon" icon="material-symbols:settings-outline"></iconify-icon> --}}
+                        <iconify-icon class="nav-icon" icon="heroicons:cog-8-tooth"></iconify-icon>
                         <span>{{ __('Settings') }}</span>
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a
+                    href="{{route('management.tools')}}"
+                    class="navItem {{ Str::startsWith(request()->route()->getName(), 'management.tools') ? 'active' : '' }}"
+                >
+                    <span class="flex items-center">
+                        <iconify-icon class="nav-icon" icon="heroicons:wrench-screwdriver"></iconify-icon>
+                        <span>{{ __('Tools') }}</span>
                     </span>
                 </a>
             </li>
