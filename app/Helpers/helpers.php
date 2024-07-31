@@ -3,14 +3,12 @@
 use App\Settings\GeneralSettings;
 
 if (! function_exists('getSettings')) {
-    function getSettings($key)
-    {
+    function getSettings($key) {
         return app(GeneralSettings::class)->$key ?? null;
     }
 }
 
-// function getSelected(): string
-// {
+// function getSelected(): string {
 //     if (request()->routeIs('users.*')) {
 //         return 'tab_two';
 //     } elseif (request()->routeIs('permissions.*')) {

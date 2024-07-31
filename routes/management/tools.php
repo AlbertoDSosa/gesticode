@@ -7,7 +7,7 @@ Route::middleware(['auth', 'role:admin|super-admin'])->prefix('management')->gro
     Volt::route('tools', 'pages.management.tools.index')
         ->name('management.tools');
 
-    Volt::route('tools/backups', 'pages.management.tools.backups')
+    Volt::route('tools/backups', 'pages.management.tools.backups.index')
         ->name('management.tools.backups');
 
     Volt::route('tools/logs/user-activity', 'pages.management.tools.logs.user-activity')
