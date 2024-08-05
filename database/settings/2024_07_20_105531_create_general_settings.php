@@ -8,36 +8,6 @@ class CreateGeneralSettings extends SettingsMigration
     {
         $this->migrator
             ->add(
-                'general-settings.logo',
-                ['contentType' => 'imageSrc', 'content' => asset('/images/logo.svg')]
-            );
-
-        $this->migrator
-            ->add(
-                'general-settings.favicon',
-                ['contentType' => 'imageSrc', 'content' => asset('/images/favicon.png')]
-            );
-
-        $this->migrator
-            ->add(
-                'general-settings.dark_logo',
-                ['contentType' => 'imageSrc', 'content' => asset('/images/dark-logo.svg')]
-            );
-
-        $this->migrator
-            ->add(
-                'general-settings.guest_logo',
-                ['contentType' => 'imageSrc', 'content' => asset('/images/guest-logo.svg')]
-            );
-
-        $this->migrator
-            ->add(
-                'general-settings.guest_background',
-                ['contentType' => 'imageSrc', 'content' => asset('/images/guest-background.svg')]
-            );
-
-        $this->migrator
-            ->add(
                 'general-settings.site_name',
                 ['contentType' => 'text', 'content' => 'Gestimas']
             );

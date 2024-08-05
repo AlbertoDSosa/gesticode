@@ -20,6 +20,15 @@ class AuthenticationTest extends TestCase
             ->assertSeeVolt('pages.auth.login');
     }
 
+    public function test_guest_users_will_be_redirected_to_login_if_routes_are_not_guest(): void
+    {
+        $this->get('/dashboard')
+            ->assertRedirectToRoute('login');
+
+        $this->get('/whatever')
+            ->assertRedirectToRoute('login');
+    }
+
     public function test_users_can_authenticate_using_the_login_screen(): void
     {
         $user = User::factory()->create();

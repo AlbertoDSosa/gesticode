@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\GeneralSetting;
-use App\Settings\GeneralSettings;
+use App\Models\Common\LogoSetting;
+use App\Settings\LogoSettings;
 use function Livewire\Volt\{layout, state, usesFileUploads, form};
 
 layout('layouts.app');
@@ -43,7 +43,7 @@ state(compact(
     'disabledUpload'
 ));
 
-$update = function (GeneralSettings $logoSettings) {
+$update = function (LogoSettings $logoSettings) {
 
     $this->validate(
         [
@@ -82,68 +82,10 @@ $update = function (GeneralSettings $logoSettings) {
         ]
     );
 
-    if ($this->logo) {
-        $generalSetting = GeneralSetting::where('group', 'general-settings')
-            ->where('name', 'logo')
-            ->first();
-        $generalSetting->clearMediaCollection('logo');
-        $generalSetting->addMedia($this->logo)->toMediaCollection('logo');
-        $logoSettings->logo = [
-            'contentType' => 'image',
-            'content' => $generalSetting->getFirstMediaUrl('logo')
-        ];
-        $logoSettings->save();
-    }
-    if ($this->favicon) {
-        $generalSetting = GeneralSetting::where('group', 'general-settings')
-            ->where('name', 'favicon')
-            ->first();
-        $generalSetting->clearMediaCollection('favicon');
-        $generalSetting->addMedia($this->favicon)->toMediaCollection('favicon');
-        $logoSettings->favicon = [
-            'contentType' => 'image',
-            'content' => $generalSetting->getFirstMediaUrl('favicon')
-        ];
-        $logoSettings->save();
-    }
-    if ($this->dark_logo) {
-        $generalSetting = GeneralSetting::where('group', 'general-settings')
-            ->where('name', 'dark_logo')
-            ->first();
-        $generalSetting->clearMediaCollection('dark_logo');
-        $generalSetting->addMedia($this->dark_logo)->toMediaCollection('dark_logo');
-        $logoSettings->dark_logo = [
-            'contentType' => 'image',
-            'content' => $generalSetting->getFirstMediaUrl('dark_logo')
-        ];
-        $logoSettings->save();
-    }
-    if ($this->guest_logo) {
-        $generalSetting = GeneralSetting::where('group', 'general-settings')
-            ->where('name', 'guest_logo')
-            ->first();
-        $generalSetting->clearMediaCollection('guest_logo');
-        $generalSetting->addMedia($this->guest_logo)->toMediaCollection('guest_logo');
-        $logoSettings->guest_logo = [
-            'contentType' => 'image',
-            'content' => $generalSetting->getFirstMediaUrl('guest_logo')
-        ];
+    $logoSettings->saveLogos($this);
 
-        $logoSettings->save();
-    }
-    if ($this->guest_background) {
-        $generalSetting = GeneralSetting::where('group', 'general-settings')
-            ->where('name', 'guest_background')
-            ->first();
-        $generalSetting->clearMediaCollection('guest_background');
-        $generalSetting->addMedia($this->guest_background)->toMediaCollection('guest_background');
-        $logoSettings->guest_background = [
-            'contentType' => 'image',
-            'content' => $generalSetting->getFirstMediaUrl('guest_background')
-        ];
-        $logoSettings->save();
-    }
     $this->status = true;
+
     session()
         ->flash('status', ['message' => 'Logo updated successfully.', 'type' => 'success']);
 
@@ -182,7 +124,7 @@ $resetStatus = function () {
                                 wire:ignore
                                 id="logoPreview"
                                 class="mx-auto h-36 w-36 rounded-md"
-                                src="{{ getSettings('logo')['content'] }}"
+                                src="{{ getLogoSettings('logo')['content'] }}"
                                 alt="logo"
                             >
                             <div class="relative">
@@ -210,7 +152,7 @@ $resetStatus = function () {
                                 <img
                                     wire:ignore
                                     id="faviconPreview"
-                                    src="{{ getSettings('favicon')['content'] }}"
+                                    src="{{ getLogoSettings('favicon')['content'] }}"
                                     alt="favicon"
                                 >
                             </div>
@@ -239,7 +181,7 @@ $resetStatus = function () {
                                 wire:ignore
                                 id="darkLogoPreview"
                                 class="mx-auto h-36 w-36 rounded-md"
-                                src="{{ getSettings('dark_logo')['content'] }}"
+                                src="{{ getLogoSettings('dark_logo')['content'] }}"
                                 alt="dark_logo"
                             >
                             <div class="relative">
@@ -267,7 +209,7 @@ $resetStatus = function () {
                                 wire:ignore
                                 id="guestLogoPreview"
                                 class="mx-auto h-36 w-36 rounded-md"
-                                src="{{ getSettings('guest_logo')['content'] }}"
+                                src="{{ getLogoSettings('guest_logo')['content'] }}"
                                 alt="guest_logo"
                             >
                             <div class="relative">
@@ -295,7 +237,7 @@ $resetStatus = function () {
                                 wire:ignore
                                 id="guestBackgroundPreview"
                                 class="mx-auto h-36 w-36 rounded-md"
-                                src="{{ getSettings('guest_background')['content'] }}"
+                                src="{{ getLogoSettings('guest_background')['content'] }}"
                                 alt="guest_background"
                             >
                             <div class="relative">

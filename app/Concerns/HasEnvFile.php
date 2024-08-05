@@ -3,13 +3,11 @@
 
 namespace App\Concerns;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Jackiedo\DotenvEditor\Facades\DotenvEditor;
 
 trait HasEnvFile
 {
-
     /**
      * @return Collection
      */
@@ -49,21 +47,19 @@ trait HasEnvFile
     }
 
     /**
-     * @param  Request  $request
+     * @param  arrray $inputs
      * @return Collection
      */
-    public function updateEnv(Request $request) : Collection
+    public function updateEnv($inputs) : void
     {
-        $keys = DotenvEditor::getKeys($request->keys());
+        $keys = DotenvEditor::getKeys($inputs->keys());
 
-        array_walk($keys, function ($data, $key) use ($request) {
-            if ($request->input($key) != $data['value']) {
-                DotenvEditor::setKey($key, $request->input($key));
+        array_walk($keys, function ($data, $key) use ($inputs) {
+            if ($inputs->input($key) != $data['value']) {
+                DotenvEditor::setKey($key, $inputs->input($key));
             }
         });
 
         DotenvEditor::save();
-
-        return $this->getEnv($request->keys());
     }
 }

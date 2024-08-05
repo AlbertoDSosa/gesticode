@@ -1,12 +1,21 @@
 <?php
 
 use App\Settings\GeneralSettings;
+use App\Settings\LogoSettings;
 
-if (! function_exists('getSettings')) {
-    function getSettings($key) {
+if (! function_exists('getGeneralSettings')) {
+    function getGeneralSettings($key) {
         return app(GeneralSettings::class)->$key ?? null;
     }
 }
+
+if (! function_exists('getLogoSettings')) {
+    function getLogoSettings($key) {
+        return app(LogoSettings::class)->$key ?? null;
+    }
+}
+
+
 
 // function getSelected(): string {
 //     if (request()->routeIs('users.*')) {
