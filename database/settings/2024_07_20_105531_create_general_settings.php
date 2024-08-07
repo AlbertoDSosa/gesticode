@@ -16,5 +16,11 @@ class CreateGeneralSettings extends SettingsMigration
                 'general-settings.site_description',
                 ['contentType' => 'text', 'content' => 'Gestión y herramientas para tus aplicaciones']
             );
+
+        $this->migrator
+            ->add(
+                'general-settings.site_slogan',
+                ['contentType' => 'rich_text', 'content' => '<p>Más que gestión, <strong>Confianza</strong></p>']
+            );
     }
 }

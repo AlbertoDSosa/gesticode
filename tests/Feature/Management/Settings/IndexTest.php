@@ -1,12 +1,15 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Management\Settings;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Database\Seeders\RolesAndPermissionsSeeder;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\Group;
 use Tests\TestCase;
 
-class DashboardTest extends TestCase
+class IndexTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -19,7 +22,8 @@ class DashboardTest extends TestCase
         $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
     }
 
-    public function test_only_admin_users_can_display_the_settings_menu(): void
+    #[Group('settings'), Test]
+    public function only_admin_users_can_display_the_settings_page(): void
     {
         $this->seed(RolesAndPermissionsSeeder::class);
 
@@ -29,21 +33,14 @@ class DashboardTest extends TestCase
 
         $this->actingAs($user);
 
-        $this->get('/dashboard')
-            ->assertDontSee('<span>Settings</span>', $escaped = false)
-            ->assertDontSeeText('MANAGEMENT');
+        $this->get('/management/settings')->assertForbidden();
 
         $this->actingAs($admin);
 
-        $this->get('/dashboard')
-            ->assertSee('<span>Settings</span>', $escaped = false)
-            ->assertSeeText('MANAGEMENT');
+        $this->get('/management/settings')->assertSuccessful();
 
         $this->actingAs($superAdmin);
 
-        $this->get('/dashboard')
-            ->assertSee('<span>Settings</span>', $escaped = false)
-            ->assertSeeText('MANAGEMENT');
+        $this->get('/management/settings')->assertSuccessful();
     }
-
 }

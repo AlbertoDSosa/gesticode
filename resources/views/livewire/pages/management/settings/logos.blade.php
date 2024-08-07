@@ -2,7 +2,7 @@
 
 use App\Models\Common\LogoSetting;
 use App\Settings\LogoSettings;
-use function Livewire\Volt\{layout, state, usesFileUploads, form};
+use function Livewire\Volt\{layout, state, usesFileUploads};
 
 layout('layouts.app');
 
@@ -44,6 +44,8 @@ state(compact(
 ));
 
 $update = function (LogoSettings $logoSettings) {
+
+    $this->authorize('update', LogoSetting::class);
 
     $this->validate(
         [

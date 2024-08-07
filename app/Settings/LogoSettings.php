@@ -19,19 +19,22 @@ class LogoSettings extends Settings
         return $this->toCollection()->keys();
     }
 
-    public function saveLogos($component): void
+    public function saveLogos($form): void
     {
-        $this->getLogoKeys()->each(function($key) use($component) {
-            if($component->$key) {
+        $this->getLogoKeys()->each(function($key) use($form) {
+            if($form->$key) {
                 $logoSetting = LogoSetting::where('group', 'logo-settings')
                 ->where('name', $key)
                 ->first();
+
                 $logoSetting->clearMediaCollection($key);
-                $logoSetting->addMedia($component->$key)->toMediaCollection($key);
+                $logoSetting->addMedia($form->$key)->toMediaCollection($key);
+
                 $this->$key = [
                     'contentType' => 'image',
                     'content' => $logoSetting->getFirstMediaUrl($key)
                 ];
+
                 $this->save();
             }
         });

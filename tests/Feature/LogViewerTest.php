@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Database\Seeders\RolesAndPermissionsSeeder;
 use Tests\TestCase;
 
 class LogViewerTest extends TestCase
@@ -21,9 +22,9 @@ class LogViewerTest extends TestCase
     public function test_only_admin_users_can_display_the_page(): void
     {
 
-        $this->get('/log-viewer')->assertStatus(403);
+        $this->seed(RolesAndPermissionsSeeder::class);
 
-        $this->createRoles();
+        $this->get('/log-viewer')->assertStatus(403);
 
         $user = $this->createUser(['role' => 'technician']);
         $admin = $this->createUser(['role' => 'admin']);

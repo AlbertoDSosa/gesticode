@@ -8,6 +8,7 @@ class GeneralSettings extends Settings
 {
     public array $site_name;
     public array $site_description;
+    public array $site_slogan;
 
     public static function group(): string
     {
