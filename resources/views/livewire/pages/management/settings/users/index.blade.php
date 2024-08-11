@@ -1,6 +1,6 @@
 <?php
 
-use function Livewire\Volt\{state, layout, usesPagination, with};
+use function Livewire\Volt\{state, layout, usesPagination, with, computed};
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Models\Users\User;
 
@@ -9,6 +9,10 @@ usesPagination();
 layout('layouts.app');
 
 state(['search', 'rows' => 10, 'sort' => 'id'])->url();
+
+$authUser = computed(function() {
+    return auth()->user();
+});
 
 $breadcrumbItems = [
     [
@@ -26,9 +30,16 @@ $breadcrumbItems = [
 $pageTitle = 'Users';
 
 with(function() {
+    $isntSuperAdmin = $this->authUser->cannot('show super admin users');
     $users = QueryBuilder::for(User::class)
+        ->with(['roles', 'profile'])
         ->defaultSort($this->sort)
         ->allowedSorts(['id', 'name'])
+        ->when($isntSuperAdmin, function ($query) {
+            $query->whereHas('roles', function ($query) {
+                $query->where('name', '!=', 'super-admin');
+            });
+        })
         ->where('name', 'like', "%{$this->search}%")
         ->paginate($this->rows);
     return compact('users');
@@ -50,8 +61,29 @@ $toggleSort = function($sort) {
     }
 };
 
+$resetStatus = function () {
+    session()->forget('status');
+};
+
 $delete = function($id) {
     $user = User::find($id);
+
+    if(
+        $this->authUser->cannot('delete super admin users') &&
+        $user->hasRole('super-admin')
+    ) {
+        abort(403);
+    }
+
+    if(
+        $this->authUser->cannot('delete admin users') &&
+        $user->hasRole('admin')
+    ) {
+        abort(403);
+    }
+
+    $this->authorize('delete', $user);
+
     $user->delete();
 };
 
@@ -194,11 +226,9 @@ $delete = function($id) {
                                     <td class="table-td">
                                         <div class="flex space-x-3 rtl:space-x-reverse">
                                             {{--view--}}
-                                            {{-- @can('show users')
-                                            <a class="action-btn" href="{{ route('', $user) }}">
+                                            {{-- <a class="action-btn" href="{{ route('profile', $user->profile) }}">
                                                 <iconify-icon icon="heroicons:eye"></iconify-icon>
-                                            </a>
-                                            @endcan --}}
+                                            </a> --}}
                                             {{--Edit--}}
                                             @can('update users')
                                             <a
@@ -211,7 +241,7 @@ $delete = function($id) {
                                             {{--delete--}}
                                             @can('delete users')
                                             <button
-                                                x-data="deleteUsers"
+                                                x-data="deleteUser"
                                                 x-on:click="exec({{$user->id}})"
                                                 class="action-btn"
                                             >

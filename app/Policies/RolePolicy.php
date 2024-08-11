@@ -18,9 +18,23 @@ class RolePolicy
      * @param  User  $user
      * @return bool
      */
-    public function view(User $user): bool
+    public function viewAny(User $user): bool
     {
-        return $user->can('list roles');
+        return $user->can('list roles') &&
+               $user->can('show super admin role');
+    }
+
+    /**
+     * Determine whether the user can view the model.
+     *
+     * @param  User  $user
+     * @param  Role  $role
+     * @return bool
+     */
+    public function view(User $user, Role $role): bool
+    {
+        return $user->can('list roles') &&
+               $user->can('show super admin role');
     }
 
     /**

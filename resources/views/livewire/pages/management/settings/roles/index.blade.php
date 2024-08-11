@@ -56,6 +56,10 @@ $delete = function($id) {
     $role->delete();
 };
 
+$resetStatus = function () {
+    session()->forget('status');
+};
+
 ?>
 
 <div>

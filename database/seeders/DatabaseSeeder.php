@@ -66,6 +66,32 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $alberto->assignRole('super-admin');
+
+        $orlando = User::factory()->create([
+            'name' => 'Orlando D.Sosa',
+            'email' => 'orlandodsosa@gmail.com',
+            'password' => Hash::make('yalasabes')
+        ]);
+
+        UserProfile::factory()->create([
+            'user_id' => $orlando->id,
+            'first_name' => $orlando->name
+        ]);
+
+        $orlando->assignRole('admin');
+
+        $sebas = User::factory()->create([
+            'name' => 'Sebatián D.Sosa',
+            'email' => 'sebasdsosa@gmail.com',
+            'password' => Hash::make('yalasabes')
+        ]);
+
+        UserProfile::factory()->create([
+            'user_id' => $sebas->id,
+            'first_name' => $sebas->name
+        ]);
+
+        $sebas->assignRole('technician');
     }
 
     public function createCustomers()

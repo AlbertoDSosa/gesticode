@@ -22,9 +22,9 @@
                 class="flex-none text-slate-600 dark:text-white text-sm font-normal items-center lg:flex hidden overflow-hidden text-ellipsis whitespace-nowrap">
                 {{ Str::limit(Auth::user()->name, 20) }}
             </span>
-            <!-- <small class="text-[9px] block">{{ auth()->user()->roles()->first()?->name }}</small> -->
+            {{-- <small class="text-[9px] block">{{ auth()->user()->roles()->first()?->name }}</small> --}}
         </div>
-        <svg class="w-[16px] h-[16px] dark:text-white hidden lg:inline-block text-base inline-block ml-[10px] rtl:mr-[10px]"
+        <svg class="w-[16px] h-[16px] dark:text-white hidden lg:inline-block text-base ml-[10px] rtl:mr-[10px]"
             aria-hidden="true" fill="none" stroke="currentColor" viewbox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -32,7 +32,7 @@
     </button>
     <!-- Dropdown menu -->
     <ul
-        class="absolute text-sm text-slate-800 dark:text-slate-200 z-[1000] float-left m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-base shadow-lg data-[twe-dropdown-show]:block dark:bg-surface-dark"
+        class="absolute text-slate-800 dark:text-slate-200 z-[1000] float-left m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-base shadow-lg data-[twe-dropdown-show]:block dark:bg-surface-dark"
         aria-labelledby="NavUserDropdown"
         data-twe-dropdown-menu-ref
     >

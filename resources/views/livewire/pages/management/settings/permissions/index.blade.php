@@ -51,6 +51,10 @@ $toggleSort = function($sort) {
     }
 };
 
+$resetStatus = function () {
+    session()->forget('status');
+};
+
 $delete = function($id) {
     $permission = Permission::find($id);
     $permission->delete();

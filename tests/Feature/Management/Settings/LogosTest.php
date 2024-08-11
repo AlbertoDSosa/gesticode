@@ -82,6 +82,24 @@ class LogosTest extends TestCase
     }
 
     #[Group('settings'), Test]
+    public function the_logos_file_can_be_image(): void
+    {
+        $this->seed(RolesAndPermissionsSeeder::class);
+
+        $admin = $this->createUser(['role' => 'admin']);
+
+        Storage::fake('public');
+
+        $file = UploadedFile::fake()->create('file.pdf');
+
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.logos')
+            ->set('logo', $file)
+            ->call('update')
+            ->assertHasErrors('logo');
+    }
+
+    #[Group('settings'), Test]
     public function can_update_logos(): void
     {
         $this->seed(RolesAndPermissionsSeeder::class);

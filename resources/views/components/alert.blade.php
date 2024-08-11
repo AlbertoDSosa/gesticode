@@ -5,7 +5,7 @@
         <iconify-icon class="text-2xl flex-0" icon="system-uicons:target"></iconify-icon>
         <p class="flex-1 font-Inter">{{ $message }}</p>
         <div class="flex-0 text-xl cursor-pointer">
-            <button x-on:click="trigger">
+            <button x-on:click="close">
                 <iconify-icon icon="line-md:close" class="relative top-[2px] ">
                 </iconify-icon>
             </button>
@@ -17,11 +17,11 @@
 <script>
     Alpine.data('message', () => {
         return {
-            trigger() {
+            close() {
                 this.open = false;
                 $wire.resetStatus();
             },
-            open: $wire.status,
+            open: true,
             // init() {
             //     setTimeout(() => {
             //         this.open = false;

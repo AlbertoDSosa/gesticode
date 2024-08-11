@@ -28,7 +28,6 @@ $favicon = '';
 $dark_logo = '';
 $guest_logo = '';
 $guest_background = '';
-$status = false;
 $disabledUpload = true;
 
 state(compact(
@@ -86,17 +85,14 @@ $update = function (LogoSettings $logoSettings) {
 
     $logoSettings->saveLogos($this);
 
-    $this->status = true;
-
     session()
         ->flash('status', ['message' => 'Logo updated successfully.', 'type' => 'success']);
 
 };
 
 $resetStatus = function () {
-    $this->status = false;
     session()->forget('status');
-}
+};
 
 ?>
 
