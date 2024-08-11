@@ -105,7 +105,6 @@ class CreateTest extends TestCase
             ->call('create')
             ->assertForbidden();
 
-
         Volt::actingAs($admin)
             ->test('pages.management.settings.users.create')
             ->set('name', 'Test User 2')

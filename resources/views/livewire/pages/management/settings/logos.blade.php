@@ -38,7 +38,6 @@ state(compact(
     'dark_logo',
     'guest_logo',
     'guest_background',
-    'status',
     'disabledUpload'
 ));
 

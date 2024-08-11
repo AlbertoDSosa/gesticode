@@ -11,7 +11,7 @@ layout('layouts.app');
 
 rules([
     'name' => ['required', 'string', 'max:255'],
-    'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+    'email' => ['required', 'lowercase', 'string', 'email', 'max:255', 'unique:users'],
     'password' => ['required', 'string', 'min:8'],
     'role' => ['required', 'exists:roles,name']
 ])->messages([
@@ -20,6 +20,7 @@ rules([
     'password.required' => 'The password field is required',
     'role.required' => 'The role field is required',
     'email.email' => 'This is not a valid email',
+    'email.unique' => 'This is not a valid email',
     'password.min' => 'The password must have at least 8 characters',
     'role.exists' => 'It is not a valid role',
 ]);
