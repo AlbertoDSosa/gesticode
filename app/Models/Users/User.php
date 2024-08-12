@@ -30,7 +30,8 @@ class User extends Authenticatable implements HasMedia
         'email',
         'active',
         'password',
-        'last_access_failed_at'
+        'wiew',
+        'assignable_to_customer'
     ];
 
     /**
@@ -52,8 +53,7 @@ class User extends Authenticatable implements HasMedia
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'last_access_failed_at' => 'datetime'
+            'password' => 'hashed'
         ];
     }
 

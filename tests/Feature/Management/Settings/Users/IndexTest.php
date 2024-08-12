@@ -25,7 +25,7 @@ class IndexTest extends TestCase
     }
 
     #[Group('users'), Test]
-    public function only_admin_users_can_display_the__users_page(): void
+    public function only_admin_users_can_display_the_users_page(): void
     {
         $this->seed(RolesAndPermissionsSeeder::class);
 
@@ -96,15 +96,16 @@ class IndexTest extends TestCase
             ->call('delete', $user2->id)
             ->assertForbidden();
 
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.users.index')
+            ->call('delete', $user2->id)
+            ->assertSuccessful();
+
         Volt::actingAs($superAdmin)
             ->test('pages.management.settings.users.index')
             ->call('delete', $user3->id)
             ->assertSuccessful();
 
-        Volt::actingAs($admin)
-            ->test('pages.management.settings.users.index')
-            ->call('delete', $user2->id)
-            ->assertSuccessful();
     }
 
     #[Group('users'), Test]

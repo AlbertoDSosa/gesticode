@@ -47,8 +47,7 @@ return new class extends Migration
             $table->string('guard_name'); // For MyISAM use string('guard_name', 25);
             $table->string('display_name');
             $table->text('description')->nullable();
-            $table->boolean('assignable_to_customer');
-            $table->enum('view', ['admin', 'technician', 'customer', 'reseller']);
+            $table->boolean('removable')->default(true);
             $table->timestamps();
 
             if ($teams || config('permission.testing')) {

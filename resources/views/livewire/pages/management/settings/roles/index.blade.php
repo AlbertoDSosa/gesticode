@@ -1,6 +1,6 @@
 <?php
 
-use function Livewire\Volt\{state, layout, usesPagination, with};
+use function Livewire\Volt\{state, layout, usesPagination, with, computed};
 use Spatie\QueryBuilder\QueryBuilder;
 
 use Spatie\Permission\Models\Role;
@@ -26,8 +26,16 @@ $breadcrumbItems = [
 
 $pageTitle = 'Roles';
 
+$authUser = computed(function() {
+   return auth()->user();
+});
+
 with(function() {
+    $isntSuperAdmin = !$this->authUser->hasRole('super-admin');
     $roles = QueryBuilder::for(Role::class)
+        ->when($isntSuperAdmin, function ($query) {
+            $query->where('name', '!=', 'super-admin');
+        })
         ->defaultSort($this->sort)
         ->allowedSorts(['id', 'name'])
         ->where('name', 'like', "%{$this->search}%")
@@ -35,7 +43,7 @@ with(function() {
     return compact('roles');
 });
 
-state(compact('breadcrumbItems', 'pageTitle'));
+state(compact('breadcrumbItems', 'pageTitle'))->locked();
 
 $resetUrl = function() {
     $this->search = null;
@@ -53,6 +61,13 @@ $toggleSort = function($sort) {
 
 $delete = function($id) {
     $role = Role::find($id);
+    $cannotDelete = $this->authUser->cannot('delete roles');
+    $roleIsntRemovable = !$role->removable;
+
+    if($cannotDelete || $roleIsntRemovable) {
+        abort(403);
+    }
+
     $role->delete();
 };
 
@@ -180,13 +195,15 @@ $resetStatus = function () {
                                             @endcan
                                             {{-- delete --}}
                                             @can('delete roles')
+                                            @if ($role->removable)
                                             <button
                                                 x-data="deleteRole"
                                                 x-on:click="exec({{$role->id}})"
                                                 class="action-btn"
                                             >
-                                                <iconify-icon icon="fluent:delete-24-regular"></iconify-icon>
+                                                <iconify-icon icon="fluent:delete-24-regular">{{$role->name}}-{{$role->id}}</iconify-icon>
                                             </button>
+                                            @endif
                                             @endcan
                                         </div>
                                     </td>

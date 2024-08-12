@@ -28,9 +28,11 @@ class RolesAndPermissionsSeeder extends Seeder
             ['name' => 'show super admin role', 'module_name' => 'roles', 'level' => 'super-admin'],
             ['name' => 'create roles', 'module_name' => 'roles', 'level' => 'normal'],
             ['name' => 'edit roles', 'module_name' => 'roles', 'level' => 'normal'],
+            ['name' => 'edit admin roles', 'module_name' => 'roles', 'level' => 'admin'],
             ['name' => 'delete roles', 'module_name' => 'roles', 'level' => 'normal'],
             ['name' => 'list permissions', 'module_name' => 'permissions', 'level' => 'normal'],
-            ['name' => 'show admin permissions', 'module_name' => 'permissions', 'level' => 'super-admin'],
+            ['name' => 'show admin permissions', 'module_name' => 'permissions', 'level' => 'admin'],
+            ['name' => 'show super admin permissions', 'module_name' => 'permissions', 'level' => 'super-admin'],
             ['name' => 'create permissions', 'module_name' => 'permissions', 'level' => 'normal'],
             ['name' => 'create admin permissions', 'module_name' => 'permissions', 'level' => 'admin'],
             ['name' => 'create super admin permissions', 'module_name' => 'permissions', 'level' => 'super-admin'],
@@ -89,8 +91,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'name' => 'super-admin',
             'display_name' => 'Super Administrator',
             'description' => 'Es un usuario que tiene acceso a todos los apartados sin restricción ninguna.',
-            'assignable_to_customer' => false,
-            'view' => 'admin',
+            'removable' => false,
             'guard_name' => 'web'
         ]);
 
@@ -100,8 +101,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'name' => 'admin',
             'display_name' => 'Administrator',
             'description' => 'Es un usuario que tiene acceso a todos los apartados con algunas restricciones.',
-            'assignable_to_customer' => false,
-            'view' => 'admin',
+            'removable' => false,
             'guard_name' => 'web'
         ]);
 
@@ -110,8 +110,10 @@ class RolesAndPermissionsSeeder extends Seeder
             'show admin role',
             'create roles',
             'edit roles',
+            'edit admin roles',
             'delete roles',
             'list permissions',
+            'show admin permissions',
             'create permissions',
             'edit permissions',
             'delete permissions',
@@ -145,8 +147,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'name' => 'technician',
             'display_name' => 'Technician',
             'description' => 'Solo tendrá accseso a areas y acciones por definir',
-            'assignable_to_customer' => true,
-            'view' => 'technician',
+            'removable' => false,
             'guard_name' => 'web'
         ]);
 
@@ -201,5 +202,13 @@ class RolesAndPermissionsSeeder extends Seeder
         //     'show customer routes',
         //     'be assigned to customer'
         // ]);
+
+        Role::create([
+            'name' => 'user',
+            'display_name' => 'User Test',
+            'description' => 'Esto es un usuario de test',
+            'removable' => true,
+            'guard_name' => 'web'
+        ]);
     }
 }

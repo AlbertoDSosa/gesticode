@@ -17,7 +17,8 @@ return new class extends Migration
             $table->boolean('active')->default(true);
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('last_access_failed_at')->nullable();
+            $table->enum('view', ['app', 'admin', 'technician', 'customer', 'reseller'])->default('app');
+            $table->boolean('assignable_to_customer')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

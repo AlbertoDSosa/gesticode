@@ -57,7 +57,9 @@ class DatabaseSeeder extends Seeder
         $alberto = User::factory()->create([
             'name' => 'Alberto D.Sosa',
             'email' => 'albertodsosa@gmail.com',
-            'password' => Hash::make('yalasabes')
+            'password' => Hash::make('yalasabes'),
+            'assignable_to_customer' => false,
+            'view' => 'admin',
         ]);
 
         UserProfile::factory()->create([
@@ -70,7 +72,9 @@ class DatabaseSeeder extends Seeder
         $orlando = User::factory()->create([
             'name' => 'Orlando D.Sosa',
             'email' => 'orlandodsosa@gmail.com',
-            'password' => Hash::make('yalasabes')
+            'password' => Hash::make('yalasabes'),
+            'assignable_to_customer' => false,
+            'view' => 'admin',
         ]);
 
         UserProfile::factory()->create([
@@ -83,7 +87,9 @@ class DatabaseSeeder extends Seeder
         $sebas = User::factory()->create([
             'name' => 'Sebatián D.Sosa',
             'email' => 'sebasdsosa@gmail.com',
-            'password' => Hash::make('yalasabes')
+            'password' => Hash::make('yalasabes'),
+            'assignable_to_customer' => true,
+            'view' => 'technician'
         ]);
 
         UserProfile::factory()->create([
