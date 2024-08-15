@@ -99,7 +99,6 @@ $create = function () {
         ]);
     });
 
-
     session()->flash(
         'status',
         [

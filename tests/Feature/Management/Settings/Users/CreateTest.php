@@ -62,7 +62,7 @@ class CreateTest extends TestCase
     }
 
     #[Group('users'), Test]
-    public function form_fields_has_correct_data(): void
+    public function form_fields_should_have_correct_data(): void
     {
         $this->seed(RolesAndPermissionsSeeder::class);
 
