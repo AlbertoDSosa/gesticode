@@ -10,7 +10,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\Group;
 use Tests\TestCase;
 
-class CreateTest extends TestCase
+class EditTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -24,43 +24,51 @@ class CreateTest extends TestCase
     }
 
     #[Group('roles'), Test]
-    public function only_admin_users_can_display_create_role_page(): void
+    public function only_admin_users_can_display_edit_role_page(): void
     {
         $this->seed(RolesAndPermissionsSeeder::class);
 
         $user = $this->createUser(['role' => 'technician']);
         $admin = $this->createUser(['role' => 'admin']);
         $superAdmin = $this->createUser(['role' => 'super-admin']);
+        $role = $this->createRole([
+            'name' => 'role',
+            'display_name' => 'Role'
+        ]);
 
         $this->actingAs($user);
 
-        $this->get('/management/settings/roles/create')->assertForbidden();
+        $this->get("/management/settings/roles/edit/{$role->id}")->assertForbidden();
 
         $this->actingAs($admin);
 
-        $this->get('/management/settings/roles/create')->assertSuccessful();
+        $this->get("/management/settings/roles/edit/{$role->id}")->assertSuccessful();
 
         $this->actingAs($superAdmin);
 
-        $this->get('/management/settings/roles/create')->assertSuccessful();
+        $this->get("/management/settings/roles/edit/{$role->id}")->assertSuccessful();
     }
 
     #[Group('roles'), Test]
     public function only_superadmin_users_can_list_superadmin_permissions(): void
     {
-        // $this->markTestSkipped();
         $this->seed(RolesAndPermissionsSeeder::class);
 
         $admin = $this->createUser(['role' => 'admin']);
         $superAdmin = $this->createUser(['role' => 'super-admin']);
 
+        $role = $this->createRole([
+            'name' => 'role',
+            'display_name' => 'Role'
+        ]);
+
         $this->actingAs($admin);
 
-        $this->get('/management/settings/roles/create')->assertDontSeeText('show super admin permissions');
+        $this->get("/management/settings/roles/edit/{$role->id}")->assertDontSeeText('show super admin permissions');
 
         $this->actingAs($superAdmin);
 
-        $this->get('/management/settings/roles/create')->assertSeeText('show super admin permissions');
+        $this->get("/management/settings/roles/edit/{$role->id}")->assertSeeText('show super admin permissions');
 
     }
 
@@ -73,41 +81,53 @@ class CreateTest extends TestCase
 
         $this->actingAs($superAdmin);
 
-        Volt::test('pages.management.settings.roles.create')
+        $role1 = $this->createRole([
+            'name' => 'role-1',
+            'display_name' => 'Role 1'
+        ]);
+
+        $role2 = $this->createRole([
+            'name' => 'role- 2',
+            'display_name' => 'Role 2'
+        ]);
+
+        $role3 = $this->createRole([
+            'name' => 'role-3',
+            'display_name' => 'Role 3'
+        ]);
+
+        $role4 = $this->createRole([
+            'name' => 'role-4',
+            'display_name' => 'Role 4'
+        ]);
+
+        Volt::test('pages.management.settings.roles.edit', ['role' => $role1])
             ->set('name', 'test-role-1')
             ->set('display_name', 'Test Role 1')
-            ->set('removable', true)
-            ->call('create')
+            ->set('removable', false)
+            ->call('update')
             ->assertHasNoErrors();
 
-        Volt::test('pages.management.settings.roles.create')
+        Volt::test('pages.management.settings.roles.edit', ['role' => $role2])
             ->set('name', '')
             ->set('display_name', 'Test Role 2')
             ->set('removable', true)
-            ->call('create')
+            ->call('update')
             ->assertHasErrors(['name']);
 
-        Volt::test('pages.management.settings.roles.create')
+        Volt::test('pages.management.settings.roles.edit', ['role' => $role3])
             ->set('name', 'test-role-3')
             ->set('display_name', '')
             ->set('removable', true)
-            ->call('create')
+            ->call('update')
             ->assertHasErrors(['display_name']);
 
-        Volt::test('pages.management.settings.roles.create')
+        Volt::test('pages.management.settings.roles.edit', ['role' => $role4])
             ->set('name', 'test-role-4')
             ->set('display_name', 'Test Role 4')
             ->set('removable', true)
             ->set('permissions', [20000])
-            ->call('create')
-            ->assertHasErrors(['permissions']);
-
-        Volt::test('pages.management.settings.roles.create')
-            ->set('name', 'test-role-5')
-            ->set('display_name', 'Test Role 5')
-            ->set('removable', true)
-            ->set('permissions', 'array')
-            ->call('create')
+            ->call('update')
             ->assertHasErrors(['permissions']);
     }
 
@@ -119,49 +139,81 @@ class CreateTest extends TestCase
         $admin = $this->createUser(['role' => 'admin']);
         $superAdmin = $this->createUser(['role' => 'super-admin']);
 
-        $permission =$this->createPermission([
+        $permission = $this->createPermission([
             'name' => 'super admin permission level',
             'level' => 'super-admin',
             'module_name' => 'test'
         ]);
 
+        $role = $this->createRole([
+            'name' => 'role',
+            'display_name' => 'Role'
+        ]);
+
         Volt::actingAs($admin)
-            ->test('pages.management.settings.roles.create')
+            ->test('pages.management.settings.roles.edit', ['role' => $role])
             ->set('name', 'test-role-1')
             ->set('display_name', 'Test Role 1')
             ->set('removable', true)
             ->set('permissions', [$permission->id])
-            ->call('create')
+            ->call('update')
             ->assertUnauthorized();
 
         Volt::actingAs($superAdmin)
-            ->test('pages.management.settings.roles.create')
+            ->test('pages.management.settings.roles.edit', ['role' => $role])
             ->set('name', 'test-role-2')
             ->set('display_name', 'Test Role 2')
             ->set('removable', true)
             ->set('permissions', [$permission->id])
-            ->call('create')
-            ->assertRedirect(route('management.settings.roles'));
-
+            ->call('update')
+            ->assertOk();
     }
 
     #[Group('roles'), Test]
-    public function can_create_new_role(): void
+    public function can_update_roles(): void
     {
         $this->seed(RolesAndPermissionsSeeder::class);
 
         $superAdmin = $this->createUser(['role' => 'super-admin']);
 
+        $role = $this->createRole([
+            'name' => 'test-role-1',
+            'display_name' => 'Test Role 1',
+            'removable' => true
+        ]);
+
+        $permission1 = $this->createPermission([
+            'name' => 'super admin permission level',
+            'level' => 'super-admin',
+            'module_name' => 'test'
+        ]);
+
+        $permission2 = $this->createPermission([
+            'name' => 'admin permission level',
+            'level' => 'admin',
+            'module_name' => 'test'
+        ]);
+
         Volt::actingAs($superAdmin)
-            ->test('pages.management.settings.roles.create')
-            ->set('name', 'test-role')
-            ->set('display_name', 'Test Role')
-            ->set('removable', true)
-            ->call('create')
+            ->test('pages.management.settings.roles.edit', ['role' => $role])
+            ->assertSet('display_name', 'Test Role 1')
+            ->assertSet('name', 'test-role-1')
+            ->assertSet('removable', true)
+            ->assertSet('permissions', [])
+            ->set('name', 'test-role-2')
+            ->set('display_name', 'Test Role 2')
+            ->set('removable', false)
+            ->set('permissions', [$permission1->id, $permission2->id])
+            ->call('update')
             ->assertRedirect(route('management.settings.roles'));
 
+        $this->assertTrue($role->hasPermissionTo($permission1->name));
+        $this->assertTrue($role->hasPermissionTo($permission2->name));
+
         $this->get('/management/settings/roles')
-            ->assertSeeText('Test Role');
+            ->assertSeeText('Test Role 2')
+            ->assertDontSeeText('Test Role 1');
+
     }
 
     // #[Group('roles'), Test]
