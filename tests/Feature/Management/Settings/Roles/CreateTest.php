@@ -119,7 +119,7 @@ class CreateTest extends TestCase
         $admin = $this->createUser(['role' => 'admin']);
         $superAdmin = $this->createUser(['role' => 'super-admin']);
 
-        $permission =$this->createPermission([
+        $permission = $this->createPermission([
             'name' => 'super admin permission level',
             'level' => 'super-admin',
             'module_name' => 'test'

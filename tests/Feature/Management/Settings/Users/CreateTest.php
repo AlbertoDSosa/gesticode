@@ -82,7 +82,7 @@ class CreateTest extends TestCase
             ->set('name', 'Test User 2')
             ->set('email', 'test_2test')
             ->set('password', 'passwo')
-            ->set('role', 'user')
+            ->set('role', 'test')
             ->call('create')
             ->assertHasErrors(['email', 'password', 'role']);
     }

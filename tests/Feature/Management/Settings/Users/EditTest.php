@@ -86,7 +86,7 @@ class EditTest extends TestCase
             ->set('name', 'Test User 2')
             ->set('email', 'Test_2test')
             ->set('password', 'passwo')
-            ->set('role', 'user')
+            ->set('role', 'test')
             ->call('update')
             ->assertHasErrors(['email', 'password', 'role']);
     }

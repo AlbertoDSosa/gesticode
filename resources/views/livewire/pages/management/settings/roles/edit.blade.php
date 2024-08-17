@@ -159,7 +159,7 @@ $update = function () {
                         <label for="removable" class="capitalize form-label">
                             {{__('Removable')}}
                         </label>
-                        <div class="flex mr-2 sm:mr-4 space-x-2">
+                        <div class="flex mt-4 mr-2 sm:mr-4 space-x-2">
                             <label class="relative flex h-6 w-[46px] items-center rounded-full transition-all duration-150 cursor-pointer">
                                 <input
                                     wire:model="removable"

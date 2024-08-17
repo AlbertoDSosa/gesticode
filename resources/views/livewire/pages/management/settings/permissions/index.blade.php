@@ -1,6 +1,6 @@
 <?php
 
-use function Livewire\Volt\{state, layout, usesPagination, with};
+use function Livewire\Volt\{state, layout, usesPagination, with, computed};
 use Spatie\QueryBuilder\QueryBuilder;
 
 use Spatie\Permission\Models\Permission;
@@ -26,8 +26,16 @@ $breadcrumbItems = [
 
 $pageTitle = 'Permissions';
 
+$authUser = computed(function() {
+   return auth()->user();
+});
+
 with(function() {
+    $isntSuperAdmin = $this->authUser->cannot('show super admin permissions');
     $permissions = QueryBuilder::for(Permission::class)
+        ->when($isntSuperAdmin, function ($query) {
+            $query->where('level', '!=', 'super-admin');
+        })
         ->defaultSort($this->sort)
         ->allowedSorts(['id', 'name'])
         ->where('name', 'like', "%{$this->search}%")
@@ -57,6 +65,25 @@ $resetStatus = function () {
 
 $delete = function($id) {
     $permission = Permission::find($id);
+
+    if($this->authUser->cannot('delete permissions')) {
+        abort(401);
+    }
+
+    if(
+        $this->authUser->cannot('delete super admin permissions') &&
+        $permission->level === 'super-admin'
+    ) {
+        abort(401);
+    }
+
+    if(
+        $this->authUser->cannot('delete admin permissions') &&
+        $permission->level === 'admin'
+    ) {
+        abort(401);
+    }
+
     $permission->delete();
 };
 
