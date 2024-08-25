@@ -56,11 +56,11 @@ class CreateTest extends TestCase
 
         $this->actingAs($admin);
 
-        $this->get('/management/settings/roles/create')->assertDontSeeText('show super admin permissions');
+        $this->get('/management/settings/roles/create')->assertDontSeeText('show super admin users');
 
         $this->actingAs($superAdmin);
 
-        $this->get('/management/settings/roles/create')->assertSeeText('show super admin permissions');
+        $this->get('/management/settings/roles/create')->assertSeeText('show super admin users');
 
     }
 
@@ -143,6 +143,47 @@ class CreateTest extends TestCase
             ->call('create')
             ->assertRedirect(route('management.settings.roles'));
 
+    }
+
+    #[Group('roles'), Test]
+    public function only_can_assing_permissions_if_are_editables(): void
+    {
+        $this->seed(RolesAndPermissionsSeeder::class);
+
+        $admin = $this->createUser(['role' => 'admin']);
+        $superAdmin = $this->createUser(['role' => 'super-admin']);
+
+        $permission1 = $this->createPermission([
+            'name' => 'permission test 1',
+            'level' => 'regular',
+            'module_name' => 'test',
+            'editable' => false
+        ]);
+
+        $permission2 = $this->createPermission([
+            'name' => 'permission test 2',
+            'level' => 'regular',
+            'module_name' => 'test',
+            'editable' => true
+        ]);
+
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.roles.create')
+            ->set('name', 'test-role-1')
+            ->set('display_name', 'Test Role 1')
+            ->set('removable', true)
+            ->set('permissions', [$permission1->id])
+            ->call('create')
+            ->assertForbidden();
+
+        Volt::actingAs($superAdmin)
+            ->test('pages.management.settings.roles.create')
+            ->set('name', 'test-role-2')
+            ->set('display_name', 'Test Role 2')
+            ->set('removable', true)
+            ->set('permissions', [$permission2->id])
+            ->call('create')
+            ->assertOk();
     }
 
     #[Group('roles'), Test]

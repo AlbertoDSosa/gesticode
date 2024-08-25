@@ -103,7 +103,7 @@ class EditTest extends TestCase
         Volt::actingAs($user)
             ->test('pages.management.settings.users.edit', ['user' => $user])
             ->call('update')
-            ->assertForbidden();
+            ->assertUnauthorized();
 
         Volt::actingAs($admin)
             ->test('pages.management.settings.users.edit', ['user' => $user])
@@ -128,7 +128,7 @@ class EditTest extends TestCase
         Volt::actingAs($admin)
             ->test('pages.management.settings.users.edit', ['user' => $superAdmin])
             ->call('update')
-            ->assertForbidden();
+            ->assertUnauthorized();
 
         Volt::actingAs($superAdmin)
             ->test('pages.management.settings.users.edit', ['user' => $superAdmin2])
@@ -149,7 +149,7 @@ class EditTest extends TestCase
             ->test('pages.management.settings.users.edit', ['user' => $admin2])
             ->set('role', 'super-admin')
             ->call('update')
-            ->assertForbidden();
+            ->assertUnauthorized();
 
         Volt::actingAs($superAdmin)
             ->test('pages.management.settings.users.edit', ['user' => $admin2])

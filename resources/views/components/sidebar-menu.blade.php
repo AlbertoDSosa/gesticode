@@ -33,6 +33,26 @@
                     </span>
                 </a>
             </li>
+            @can('show site settings')
+            <li class="{{ Str::startsWith(request()->route()->getName(), 'site-settings') ? 'active' : '' }}">
+                <a href="#" class="navItem">
+                    <span class="flex items-center">
+                        <iconify-icon class=" nav-icon" icon="heroicons:cog-8-tooth"></iconify-icon>
+                        <span>{{ __('Site Settings') }}</span>
+                    </span>
+                    <iconify-icon class="icon-arrow" icon="heroicons-outline:chevron-right"></iconify-icon>
+                </a>
+                <ul class="sidebar-submenu">
+                    <li>
+                        <a href="{{ route('site-settings.logos') }}" class="navItem {{ (\Request::route()->getName() == 'site-settings.logos') ? 'active' : '' }}">Logos</a>
+                    </li>
+                    {{-- <li>
+                        <a href="{{ route('') }}" class="navItem {{ (\Request::route()->getName() == '') ? 'active' : '' }}">{{ __('') }}
+                        </a>
+                    </li> --}}
+                </ul>
+            </li>
+            @endcan
             @role(['admin', 'super-admin'])
             <li class="sidebar-menu-title">{{ __('MANAGEMENT') }}</li>
             <li>

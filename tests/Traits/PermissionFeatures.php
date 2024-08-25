@@ -17,7 +17,8 @@ trait PermissionFeatures {
             'display_name' => $attributes['display_name'],
             'description' => $attributes['description'] ?? null,
             'guard_name' => $attributes['guard_name'] ?? 'web',
-            'removable' => $attributes['removable'] ?? true
+            'removable' => $attributes['removable'] ?? true,
+            'editable' => $attributes['editable'] ?? true
         ]);
     }
 
@@ -25,13 +26,14 @@ trait PermissionFeatures {
     {
         return Permission::create([
             'name' => $attributes['name'],
-            'level' => $attributes['level'] ?? 'normal',
+            'level' => $attributes['level'] ?? 'regular',
             'name' => $attributes['name'],
             'module_name' => $attributes['module_name'],
-            'guard_name' => $attributes['guard_name'] ?? 'web'
+            'guard_name' => $attributes['guard_name'] ?? 'web',
+            'removable' => $attributes['removable'] ?? true,
+            'editable' => $attributes['editable'] ?? true
         ]);
     }
-
 
     public function createPermissions(array $arrayOfPermissionNames)
     {

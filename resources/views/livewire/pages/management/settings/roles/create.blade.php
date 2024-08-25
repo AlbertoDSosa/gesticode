@@ -53,7 +53,7 @@ $permissionModules = computed(function() {
     $isntSuperAdmin = $this->authUser->cannot('show super admin permissions');
     return Permission::when($isntSuperAdmin, function ($query) {
         $query->where('level', '!=', 'super-admin');
-    })->get()->groupBy('module_name');
+    })->get()->groupBy('module_name')->forget(['roles', 'permissions']);
 });
 
 on(['name-change' => function () {
@@ -73,6 +73,10 @@ $create = function() {
         if(!$permission) {
             $this->addError('permissions', "The permission with ID: {$permissonId} not exists");
             return false;
+        }
+
+        if(!$permission->editable) {
+            abort(403);
         }
 
         $permissionHasSuperAdminLevel = $permission->level === 'super-admin';
@@ -212,14 +216,14 @@ $create = function() {
                                             </label>
                                             <div class="flex items-center mr-2 sm:mr-4 mt-2 space-x-2">
                                                 <label class="relative inline-flex h-6 w-[46px] items-center rounded-full transition-all duration-150 cursor-pointer">
-                                                    <input wire:model="permissions" name="permissions[]"
-                                                        {{-- @empty(!old('permissions'))
-                                                            @checked(in_array($permission->id, old('permissions')))
-                                                        @endempty --}}
+                                                    <input
+                                                        wire:model="permissions"
+                                                        name="permissions[]"
                                                         id="{{$permission->name}}"
                                                         value="{{$permission->id}}"
                                                         type="checkbox"
                                                         class="sr-only peer"
+                                                        @disabled(!$permission->editable)
                                                     >
                                                     <div class="w-14 h-6 bg-gray-200 peer-focus:outline-none ring-0 rounded-full peer dark:bg-gray-900 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:z-10 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-500"></div>
                                                     <span class="absolute left-1 z-20 text-xs text-white font-Inter font-normal opacity-0 peer-checked:opacity-100">On</span>

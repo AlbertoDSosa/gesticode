@@ -50,6 +50,32 @@ class EditTest extends TestCase
     }
 
     #[Group('roles'), Test]
+    public function only_superadmin_users_can_display_edit_superadmin_role_page(): void
+    {
+        $this->seed(RolesAndPermissionsSeeder::class);
+
+        $user = $this->createUser(['role' => 'technician']);
+        $admin = $this->createUser(['role' => 'admin']);
+        $superAdmin = $this->createUser(['role' => 'super-admin']);
+        $role = $this->createRole([
+            'name' => 'role',
+            'display_name' => 'Role'
+        ]);
+
+        $this->actingAs($user);
+
+        $this->get("/management/settings/roles/edit/{$role->id}")->assertForbidden();
+
+        $this->actingAs($admin);
+
+        $this->get("/management/settings/roles/edit/{$role->id}")->assertSuccessful();
+
+        $this->actingAs($superAdmin);
+
+        $this->get("/management/settings/roles/edit/{$role->id}")->assertSuccessful();
+    }
+
+    #[Group('roles'), Test]
     public function only_superadmin_users_can_list_superadmin_permissions(): void
     {
         $this->seed(RolesAndPermissionsSeeder::class);
@@ -64,11 +90,11 @@ class EditTest extends TestCase
 
         $this->actingAs($admin);
 
-        $this->get("/management/settings/roles/edit/{$role->id}")->assertDontSeeText('show super admin permissions');
+        $this->get("/management/settings/roles/edit/{$role->id}")->assertDontSeeText('show super admin users');
 
         $this->actingAs($superAdmin);
 
-        $this->get("/management/settings/roles/edit/{$role->id}")->assertSeeText('show super admin permissions');
+        $this->get("/management/settings/roles/edit/{$role->id}")->assertSeeText('show super admin users');
 
     }
 
@@ -87,7 +113,7 @@ class EditTest extends TestCase
         ]);
 
         $role2 = $this->createRole([
-            'name' => 'role- 2',
+            'name' => 'role-2',
             'display_name' => 'Role 2'
         ]);
 
@@ -102,8 +128,15 @@ class EditTest extends TestCase
         ]);
 
         Volt::test('pages.management.settings.roles.edit', ['role' => $role1])
+            ->set('name', 'role-2')
+            ->set('display_name', 'Role 2')
+            ->set('removable', false)
+            ->call('update')
+            ->assertHasErrors(['name']);
+
+        Volt::test('pages.management.settings.roles.edit', ['role' => $role1])
             ->set('name', 'test-role-1')
-            ->set('display_name', 'Test Role 1')
+            ->set('display_name', 'Test Role 2')
             ->set('removable', false)
             ->call('update')
             ->assertHasNoErrors();
@@ -129,6 +162,76 @@ class EditTest extends TestCase
             ->set('permissions', [20000])
             ->call('update')
             ->assertHasErrors(['permissions']);
+    }
+
+    #[Group('roles'), Test]
+    public function only_admin_users_can_edit_roles(): void
+    {
+        $this->seed(RolesAndPermissionsSeeder::class);
+
+        $user = $this->createUser(['role' => 'technician']);
+        $admin = $this->createUser(['role' => 'admin']);
+        $superAdmin = $this->createUser(['role' => 'super-admin']);
+
+        $role = $this->createRole([
+            'name' => 'role',
+            'display_name' => 'Role'
+        ]);
+
+        Volt::actingAs($user)
+            ->test('pages.management.settings.roles.edit', ['role' => $role])
+            ->set('name', 'test-role-1')
+            ->set('display_name', 'Test Role 1')
+            ->call('update')
+            ->assertUnauthorized();
+
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.roles.edit', ['role' => $role])
+            ->set('name', 'test-role-2')
+            ->set('display_name', 'Test Role 2')
+            ->call('update')
+            ->assertOK();
+
+        Volt::actingAs($superAdmin)
+            ->test('pages.management.settings.roles.edit', ['role' => $role])
+            ->set('name', 'test-role-3')
+            ->set('display_name', 'Test Role 3')
+            ->call('update')
+            ->assertOk();
+    }
+
+    #[Group('roles'), Test]
+    public function can_edit_roles_if_are_editables(): void
+    {
+        $this->seed(RolesAndPermissionsSeeder::class);
+
+        $superAdmin = $this->createUser(['role' => 'super-admin']);
+
+        $role1 = $this->createRole([
+            'name' => 'test-role-1',
+            'display_name' => 'Test Role 1',
+            'editable' => true
+        ]);
+
+        $role2 = $this->createRole([
+            'name' => 'test-role-2',
+            'display_name' => 'Test Role 2',
+            'editable' => false
+        ]);
+
+        Volt::actingAs($superAdmin)
+            ->test('pages.management.settings.roles.edit', ['role' => $role1])
+            ->set('name', 'test-role-3')
+            ->set('display_name', 'Test Role 3')
+            ->call('update')
+            ->assertOk();
+
+        Volt::actingAs($superAdmin)
+            ->test('pages.management.settings.roles.edit', ['role' => $role2])
+            ->set('name', 'test-role-4')
+            ->set('display_name', 'Test Role 4')
+            ->call('update')
+            ->assertForbidden();
     }
 
     #[Group('roles'), Test]
@@ -170,7 +273,53 @@ class EditTest extends TestCase
     }
 
     #[Group('roles'), Test]
-    public function can_update_roles(): void
+    public function only_can_assing_permissions_if_are_editables(): void
+    {
+        $this->seed(RolesAndPermissionsSeeder::class);
+
+        $admin = $this->createUser(['role' => 'admin']);
+        $superAdmin = $this->createUser(['role' => 'super-admin']);
+
+        $permission1 = $this->createPermission([
+            'name' => 'permission test 1',
+            'level' => 'regular',
+            'module_name' => 'test',
+            'editable' => false
+        ]);
+
+        $permission2 = $this->createPermission([
+            'name' => 'permission test 2',
+            'level' => 'regular',
+            'module_name' => 'test',
+            'editable' => true
+        ]);
+
+        $role = $this->createRole([
+            'name' => 'role',
+            'display_name' => 'Role'
+        ]);
+
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.roles.edit', ['role' => $role])
+            ->set('name', 'test-role-1')
+            ->set('display_name', 'Test Role 1')
+            ->set('removable', true)
+            ->set('permissions', [$permission1->id])
+            ->call('update')
+            ->assertForbidden();
+
+        Volt::actingAs($superAdmin)
+            ->test('pages.management.settings.roles.edit', ['role' => $role])
+            ->set('name', 'test-role-2')
+            ->set('display_name', 'Test Role 2')
+            ->set('removable', true)
+            ->set('permissions', [$permission2->id])
+            ->call('update')
+            ->assertOk();
+    }
+
+    #[Group('roles'), Test]
+    public function can_edit_roles(): void
     {
         $this->seed(RolesAndPermissionsSeeder::class);
 

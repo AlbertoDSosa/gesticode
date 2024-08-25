@@ -94,7 +94,7 @@ class IndexTest extends TestCase
         Volt::actingAs($user1)
             ->test('pages.management.settings.users.index')
             ->call('delete', $user2->id)
-            ->assertForbidden();
+            ->assertUnauthorized();
 
         Volt::actingAs($admin)
             ->test('pages.management.settings.users.index')
@@ -140,7 +140,7 @@ class IndexTest extends TestCase
             Volt::actingAs($admin3)
             ->test('pages.management.settings.users.index')
             ->call('delete', $superAdmin3->id)
-            ->assertForbidden();
+            ->assertUnauthorized();
     }
 
     // #[Group('users'), Test]

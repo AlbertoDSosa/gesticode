@@ -23,55 +23,59 @@ class RolesAndPermissionsSeeder extends Seeder
         // Crear permisos
 
         $arrayOfPermissionNames = [
-            ['name' => 'list roles', 'module_name' => 'roles', 'level' => 'normal'],
-            ['name' => 'show admin role', 'module_name' => 'roles', 'level' => 'admin'],
-            ['name' => 'show super admin role', 'module_name' => 'roles', 'level' => 'super-admin'],
-            ['name' => 'create roles', 'module_name' => 'roles', 'level' => 'normal'],
-            ['name' => 'edit roles', 'module_name' => 'roles', 'level' => 'normal'],
-            ['name' => 'edit admin roles', 'module_name' => 'roles', 'level' => 'admin'],
-            ['name' => 'delete roles', 'module_name' => 'roles', 'level' => 'normal'],
-            ['name' => 'list permissions', 'module_name' => 'permissions', 'level' => 'normal'],
-            ['name' => 'show admin permissions', 'module_name' => 'permissions', 'level' => 'admin'],
-            ['name' => 'show super admin permissions', 'module_name' => 'permissions', 'level' => 'super-admin'],
-            ['name' => 'create permissions', 'module_name' => 'permissions', 'level' => 'normal'],
-            ['name' => 'create admin permissions', 'module_name' => 'permissions', 'level' => 'admin'],
-            ['name' => 'create super admin permissions', 'module_name' => 'permissions', 'level' => 'super-admin'],
-            ['name' => 'edit permissions', 'module_name' => 'permissions', 'level' => 'normal'],
-            ['name' => 'delete permissions', 'module_name' => 'permissions', 'level' => 'normal'],
-            ['name' => 'delete admin permissions', 'module_name' => 'permissions', 'level' => 'normal'],
-            ['name' => 'delete super admin permissions', 'module_name' => 'permissions', 'level' => 'normal'],
-            ['name' => 'list logo settings', 'module_name' => 'logo settings', 'level' => 'normal'],
-            ['name' => 'edit logo settings', 'module_name' => 'logo settings', 'level' => 'normal'],
-            ['name' => 'list system settings', 'module_name' => 'system settings', 'level' => 'normal'],
-            ['name' => 'show app system settings', 'module_name' => 'system settings', 'level' => 'normal'],
-            ['name' => 'edit app system settings', 'module_name' => 'system settings', 'level' => 'normal'],
-            ['name' => 'show db system settings', 'module_name' => 'system settings', 'level' => 'normal'],
-            ['name' => 'edit db system settings', 'module_name' => 'system settings', 'level' => 'normal'],
-            ['name' => 'list users', 'module_name' => 'users', 'level' => 'normal'],
-            ['name' => 'show admin users', 'module_name' => 'users', 'level' => 'admin'],
-            ['name' => 'show super admin users', 'module_name' => 'users', 'level' => 'super-admin'],
-            ['name' => 'create users', 'module_name' => 'users', 'level' => 'normal'],
-            ['name' => 'create admin users', 'module_name' => 'users', 'level' => 'admin'],
-            ['name' => 'create super admin users', 'module_name' => 'users', 'level' => 'super-admin'],
-            ['name' => 'edit users', 'module_name' => 'users', 'level' => 'normal'],
-            ['name' => 'edit admin users', 'module_name' => 'users', 'level' => 'admin'],
-            ['name' => 'edit super admin users', 'module_name' => 'users', 'level' => 'super-admin'],
-            ['name' => 'delete users', 'module_name' => 'users', 'level' => 'normal'],
-            ['name' => 'delete admin users', 'module_name' => 'users', 'level' => 'admin'],
-            ['name' => 'delete super admin users', 'module_name' => 'users', 'level' => 'super-admin'],
-            ['name' => 'assign admin role', 'module_name' => 'users', 'level' => 'admin'],
-            ['name' => 'assign super admin role', 'module_name' => 'users', 'level' => 'super-admin'],
-            // ['name' => 'list customers', 'module_name' => 'customers', 'level' => ''],
-            // ['name' => 'show all customers', 'module_name' => 'customers', 'level' => ''],
-            // ['name' => 'show own customers', 'module_name' => 'customers', 'level' => ''],
-            // ['name' => 'create customers', 'module_name' => 'customers', 'level' => ''],
-            // ['name' => 'edit all customers', 'module_name' => 'customers', 'level' => ''],
-            // ['name' => 'edit own customers', 'module_name' => 'customers', 'level' => ''],
-            // ['name' => 'delete customers', 'module_name' => 'customers', 'level' => ''],
-            // ['name' => 'show customer routes', 'module_name' => 'customers', 'level' => ''],
-            // ['name' => 'be assigned to customer', 'module_name' => 'customers', 'level' => ''],
-            // ['name' => 'be assigned to many customers', 'module_name' => 'customers', 'level' => ''],
-            // ['name' => '', 'module_name' => 'customers', 'level' => ''],
+            ['name' => 'list roles', 'module_name' => 'roles', 'level' => 'admin', 'removable' => false, 'editable' => false],
+            ['name' => 'show admin role', 'module_name' => 'roles', 'level' => 'admin', 'removable' => false, 'editable' => false],
+            ['name' => 'show super admin role', 'module_name' => 'roles', 'level' => 'super-admin', 'removable' => false, 'editable' => false],
+            ['name' => 'create roles', 'module_name' => 'roles', 'level' => 'admin', 'removable' => false, 'editable' => false],
+            ['name' => 'edit roles', 'module_name' => 'roles', 'level' => 'admin', 'removable' => false, 'editable' => false],
+            ['name' => 'edit admin roles', 'module_name' => 'roles', 'level' => 'admin', 'removable' => false, 'editable' => false],
+            ['name' => 'delete roles', 'module_name' => 'roles', 'level' => 'admin', 'removable' => false, 'editable' => false],
+            ['name' => 'list permissions', 'module_name' => 'permissions', 'level' => 'admin', 'removable' => false, 'editable' => false],
+            ['name' => 'show admin permissions', 'module_name' => 'permissions', 'level' => 'admin', 'removable' => false, 'editable' => false],
+            ['name' => 'show super admin permissions', 'module_name' => 'permissions', 'level' => 'super-admin', 'removable' => false, 'editable' => false],
+            ['name' => 'create permissions', 'module_name' => 'permissions', 'level' => 'admin', 'removable' => false, 'editable' => false],
+            ['name' => 'create admin permissions', 'module_name' => 'permissions', 'level' => 'admin', 'removable' => false, 'editable' => false],
+            ['name' => 'create super admin permissions', 'module_name' => 'permissions', 'level' => 'super-admin', 'removable' => false, 'editable' => false],
+            ['name' => 'edit permissions', 'module_name' => 'permissions', 'level' => 'admin', 'removable' => false, 'editable' => false],
+            ['name' => 'delete permissions', 'module_name' => 'permissions', 'level' => 'admin', 'removable' => false, 'editable' => false],
+            ['name' => 'delete admin permissions', 'module_name' => 'permissions', 'level' => 'admin', 'removable' => false, 'editable' => false],
+            ['name' => 'delete super admin permissions', 'module_name' => 'permissions', 'level' => 'super-admin', 'removable' => false, 'editable' => false],
+            ['name' => 'list users', 'module_name' => 'users', 'level' => 'admin', 'removable' => false, 'editable' => true],
+            ['name' => 'show admin users', 'module_name' => 'users', 'level' => 'admin', 'removable' => false, 'editable' => true],
+            ['name' => 'show super admin users', 'module_name' => 'users', 'level' => 'super-admin', 'removable' => false, 'editable' => false],
+            ['name' => 'create users', 'module_name' => 'users', 'level' => 'admin', 'removable' => false, 'editable' => true],
+            ['name' => 'create admin users', 'module_name' => 'users', 'level' => 'admin', 'removable' => false, 'editable' => true],
+            ['name' => 'create super admin users', 'module_name' => 'users', 'level' => 'super-admin', 'removable' => false, 'editable' => false],
+            ['name' => 'edit users', 'module_name' => 'users', 'level' => 'admin', 'removable' => false, 'editable' => true],
+            ['name' => 'edit admin users', 'module_name' => 'users', 'level' => 'admin', 'removable' => false, 'editable' => true],
+            ['name' => 'edit super admin users', 'module_name' => 'users', 'level' => 'super-admin', 'removable' => false, 'editable' => false],
+            ['name' => 'delete users', 'module_name' => 'users', 'level' => 'admin', 'removable' => false, 'editable' => true],
+            ['name' => 'delete admin users', 'module_name' => 'users', 'level' => 'admin', 'removable' => false, 'editable' => true],
+            ['name' => 'delete super admin users', 'module_name' => 'users', 'level' => 'super-admin', 'removable' => false, 'editable' => false],
+            ['name' => 'assign roles', 'module_name' => 'users', 'level' => 'admin', 'removable' => false, 'editable' => true],
+            ['name' => 'assign admin role', 'module_name' => 'users', 'level' => 'admin', 'removable' => false, 'editable' => true],
+            ['name' => 'assign super admin role', 'module_name' => 'users', 'level' => 'super-admin', 'removable' => false, 'editable' => false],
+            ['name' => 'list system settings', 'module_name' => 'system settings', 'level' => 'admin', 'removable' => false, 'editable' => false],
+            ['name' => 'show app system settings', 'module_name' => 'system settings', 'level' => 'admin', 'removable' => false, 'editable' => false],
+            ['name' => 'edit app system settings', 'module_name' => 'system settings', 'level' => 'admin', 'removable' => false, 'editable' => false],
+            ['name' => 'show db system settings', 'module_name' => 'system settings', 'level' => 'admin', 'removable' => false, 'editable' => false],
+            ['name' => 'edit db system settings', 'module_name' => 'system settings', 'level' => 'admin', 'removable' => false, 'editable' => false],
+            ['name' => 'show site settings', 'module_name' => 'site settings', 'level' => 'regular', 'removable' => false, 'editable' => true],
+            ['name' => 'show logo settings', 'module_name' => 'site settings', 'level' => 'regular', 'removable' => false, 'editable' => true],
+            ['name' => 'edit logo settings', 'module_name' => 'site settings', 'level' => 'regular', 'removable' => false, 'editable' => true],
+            ['name' => 'show identity settings', 'module_name' => 'site settings', 'level' => 'regular', 'removable' => false, 'editable' => true],
+            ['name' => 'edit identity settings', 'module_name' => 'site settings', 'level' => 'regular', 'removable' => false, 'editable' => true],
+            // ['name' => 'list customers', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
+            // ['name' => 'show all customers', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
+            // ['name' => 'show own customers', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
+            // ['name' => 'create customers', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
+            // ['name' => 'edit all customers', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
+            // ['name' => 'edit own customers', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
+            // ['name' => 'delete customers', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
+            // ['name' => 'show customer routes', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
+            // ['name' => 'be assigned to customer', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
+            // ['name' => 'be assigned to many customers', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
+            // ['name' => '', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
         ];
 
         $permissions = collect($arrayOfPermissionNames)->map(function ($permission) {
@@ -80,6 +84,8 @@ class RolesAndPermissionsSeeder extends Seeder
                 'module_name' => $permission['module_name'],
                 'guard_name' => 'web',
                 'level' => $permission['level'],
+                'editable' => $permission['editable'],
+                'removable' => $permission['removable'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
@@ -89,21 +95,21 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // Crear roles y asignar permisos
 
-        $superAdmin = Role::create([
+        Role::create([
             'name' => 'super-admin',
             'display_name' => 'Super Administrator',
             'description' => 'Es un usuario que tiene acceso a todos los apartados sin restricción ninguna.',
             'removable' => false,
+            'editable' => false,
             'guard_name' => 'web'
         ]);
-
-        $superAdmin->givePermissionTo(Permission::all());
 
         $admin = Role::create([
             'name' => 'admin',
             'display_name' => 'Administrator',
             'description' => 'Es un usuario que tiene acceso a todos los apartados con algunas restricciones.',
             'removable' => false,
+            'editable' => false,
             'guard_name' => 'web'
         ]);
 
@@ -117,16 +123,10 @@ class RolesAndPermissionsSeeder extends Seeder
             'list permissions',
             'show admin permissions',
             'create permissions',
+            'create admin permissions',
             'edit permissions',
             'delete permissions',
             'delete admin permissions',
-            'list logo settings',
-            'edit logo settings',
-            'list system settings',
-            'show app system settings',
-            'edit app system settings',
-            'show db system settings',
-            'edit db system settings',
             'list users',
             'show admin users',
             'create users',
@@ -135,7 +135,18 @@ class RolesAndPermissionsSeeder extends Seeder
             'edit admin users',
             'delete users',
             'delete admin users',
+            'assign roles',
             'assign admin role',
+            'list system settings',
+            'show app system settings',
+            'edit app system settings',
+            'show db system settings',
+            'edit db system settings',
+            'show site settings',
+            'show logo settings',
+            'edit logo settings',
+            'show identity settings',
+            'edit identity settings',
             // 'list customers',
             // 'show all customers',
             // 'create customers',
@@ -151,14 +162,33 @@ class RolesAndPermissionsSeeder extends Seeder
             'display_name' => 'Technician',
             'description' => 'Solo tendrá accseso a areas y acciones por definir',
             'removable' => false,
+            'editable' => false,
             'guard_name' => 'web'
         ]);
 
-        // $technician->givePermissionTo([
-        //     'list customers',
-        //     'show own customers',
-        //     'edit own customers',
-        //     'be assigned to many customers'
+        $technician->givePermissionTo([
+            'show site settings',
+            'show logo settings',
+            'edit logo settings',
+            'show identity settings',
+            'edit identity settings',
+            // 'list customers',
+            // 'show own customers',
+            // 'edit own customers',
+            // 'be assigned to many customers'
+        ]);
+
+        $guest = Role::create([
+            'name' => 'guest',
+            'display_name' => 'Guest',
+            'description' => 'Solo tendrá accseso a areas y acciones por definir',
+            'removable' => false,
+            'editable' => false,
+            'guard_name' => 'web'
+        ]);
+
+        // $guest->givePermissionTo([
+
         // ]);
 
         // $external_reseller = Role::create([
@@ -211,6 +241,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'display_name' => 'User Test',
             'description' => 'Esto es un usuario de test',
             'removable' => true,
+            'editable' => true,
             'guard_name' => 'web'
         ]);
     }

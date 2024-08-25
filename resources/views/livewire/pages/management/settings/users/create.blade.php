@@ -5,7 +5,6 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Models\Users\{User, UserProfile};
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 layout('layouts.app');
 
@@ -74,18 +73,17 @@ $create = function () {
     $adminRoleSelected = $this->role && $this->role == 'admin';
 
     if($superAdminRoleSelected && $cannotCreateSuperAdmin) {
-        abort(403);
+        abort(401);
     }
 
     if($adminRoleSelected && $cannotCreateAdmin) {
-        abort(403);
+        abort(401);
     }
 
     $this->authorize('create', User::class);
 
     DB::transaction(function () {
         $user = User::create([
-            'uuid' => Str::uuid(),
             'name' => $this->name,
             'email' => $this->email,
             'password' => bcrypt($this->password)

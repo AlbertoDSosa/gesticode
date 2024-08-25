@@ -103,7 +103,7 @@ class CreateTest extends TestCase
             ->set('password', 'password')
             ->set('role', 'technician')
             ->call('create')
-            ->assertForbidden();
+            ->assertUnauthorized();
 
         Volt::actingAs($admin)
             ->test('pages.management.settings.users.create')
@@ -166,7 +166,7 @@ class CreateTest extends TestCase
             ->set('password', 'password')
             ->set('role', 'super-admin')
             ->call('create')
-            ->assertForbidden();
+            ->assertUnauthorized();
 
         Volt::actingAs($superAdmin)
             ->test('pages.management.settings.users.create')

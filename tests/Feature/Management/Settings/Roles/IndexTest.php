@@ -83,7 +83,7 @@ class IndexTest extends TestCase
         Volt::actingAs($user)
             ->test('pages.management.settings.roles.index')
             ->call('delete', $role1->id)
-            ->assertForbidden();
+            ->assertUnauthorized();
 
         Volt::actingAs($admin)
             ->test('pages.management.settings.roles.index')
@@ -125,6 +125,27 @@ class IndexTest extends TestCase
             ->test('pages.management.settings.roles.index')
             ->call('delete', $role2->id)
             ->assertForbidden();
+    }
+
+    #[Group('roles'), Test]
+    public function can_delete_roles(): void
+    {
+        $this->seed(RolesAndPermissionsSeeder::class);
+
+        $admin = $this->createUser(['role' => 'admin']);
+
+        $role = $this->createRole([
+            'name' => 'role-test',
+            'display_name' => 'Role Test'
+        ]);
+
+        $this->actingAs($admin);
+
+        Volt::test('pages.management.settings.roles.index')
+            ->call('delete', $role->id)
+            ->assertSuccessful();
+
+        $this->get('/management/settings/roles')->assertDontSeeText('Role Test');
     }
 
     // #[Group('roles'), Test]

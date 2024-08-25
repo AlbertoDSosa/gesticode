@@ -63,11 +63,11 @@ $update = function() {
     $cannotEditAdmin = $this->authUser->cannot('edit admin users');
 
     if($cannotEditSuperAdmin && $this->user->hasRole('super-admin')) {
-        abort(403);
+        abort(401);
     }
 
     if($cannotEditAdmin && $this->user->hasRole('admin')) {
-        abort(403);
+        abort(401);
     }
 
     $this->authorize('update', $this->user);
@@ -78,11 +78,11 @@ $update = function() {
     $cannotAssignSuperAdmin = $this->authUser->cannot('assign super admin role');
 
     if($superAdminRoleSelected && $cannotAssignSuperAdmin) {
-        abort(403);
+        abort(401);
     }
 
     if($adminRoleSelected && $cannotAssignAdmin) {
-        abort(403);
+        abort(401);
     }
 
     if($this->password) {

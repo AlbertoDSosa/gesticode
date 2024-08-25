@@ -8,19 +8,6 @@ layout('layouts.app');
 
 usesFileUploads();
 
-$breadcrumbItems = [
-    [
-        'name' => 'Settings',
-        'url' => route('management.settings'),
-        'active' => false
-    ],
-    [
-        'name' => 'Logos',
-        'url' => route('management.settings.logos'),
-        'active' => true
-    ],
-];
-
 $pageTitle = 'App Logos';
 
 $logo = '';
@@ -31,7 +18,6 @@ $guest_background = '';
 $disabledUpload = true;
 
 state(compact(
-    'breadcrumbItems',
     'pageTitle',
     'logo',
     'favicon',
@@ -96,10 +82,6 @@ $resetStatus = function () {
 ?>
 
 <div class="space-y-8">
-    <div>
-        <x-breadcrumb :page-title="$pageTitle" :breadcrumb-items="$breadcrumbItems" />
-    </div>
-
     {{--Alert--}}
     @if (session('status'))
         <x-alert :message="session('status')['message']" :type="session('status')['type']" />

@@ -8,7 +8,7 @@ usesPagination();
 
 layout('layouts.app');
 
-state(['search', 'rows' => 10, 'sort' => 'id'])->url();
+state(['search', 'rows' => 10, 'sort' => '-id'])->url();
 
 $authUser = computed(function() {
     return auth()->user();
@@ -72,14 +72,14 @@ $delete = function($id) {
         $this->authUser->cannot('delete super admin users') &&
         $user->hasRole('super-admin')
     ) {
-        abort(403);
+        abort(401);
     }
 
     if(
         $this->authUser->cannot('delete admin users') &&
         $user->hasRole('admin')
     ) {
-        abort(403);
+        abort(401);
     }
 
     $this->authorize('delete', $user);

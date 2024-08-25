@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Query\Expression;
 
 return new class extends Migration
 {
@@ -13,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->uuid()->unique();
+            $table->uuid()->unique()->default(new Expression('(UUID())'));
             $table->string('name', 64)->unique();
             $table->string('email')->unique();
             $table->string('slug', 64)->unique();

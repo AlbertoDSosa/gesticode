@@ -9,7 +9,7 @@ usesPagination();
 
 layout('layouts.app');
 
-state(['search', 'rows' => 10, 'sort' => 'id'])->url();
+state(['search', 'rows' => 10, 'sort' => '-id'])->url();
 
 $breadcrumbItems = [
     [
@@ -65,6 +65,14 @@ $resetStatus = function () {
 
 $delete = function($id) {
     $permission = Permission::find($id);
+
+    if(!$permission) {
+        abort(404);
+    }
+
+    if(!$permission->removable) {
+        abort(403);
+    }
 
     if($this->authUser->cannot('delete permissions')) {
         abort(401);
@@ -205,7 +213,8 @@ $delete = function($id) {
                                             </a>
                                             @endcan
                                             {{-- delete --}}
-                                            @can('delete permisions')
+                                            @if ($permission->removable)
+                                            @can('delete permissions')
                                             <button
                                                 x-data="deletePermission"
                                                 x-on:click="exec({{$permission->id}})"
@@ -214,6 +223,7 @@ $delete = function($id) {
                                                 <iconify-icon icon="fluent:delete-24-regular"></iconify-icon>
                                             </button>
                                             @endcan
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

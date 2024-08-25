@@ -26,12 +26,17 @@ $permissionModules = computed(function() {
     $isntSuperAdmin = $this->authUser->cannot('show super admin permissions');
     return Permission::when($isntSuperAdmin, function ($query) {
         $query->where('level', '!=', 'super-admin');
-    })->get()->groupBy('module_name');
+    })->get()->groupBy('module_name')->forget(['roles', 'permissions']);
 });
 
 state(compact('breadcrumbItems', 'pageTitle', 'role'))->locked();
 
 mount(function(Role $role) {
+    $isntSuperAdmin = $this->authUser->mainRole->name !== 'super-admin';
+
+    if($role->name === 'super-admin' && $isntSuperAdmin) {
+        abort(403);
+    }
 
     $this->breadcrumbItems = [
         [
@@ -66,6 +71,17 @@ $update = function () {
         ]
     );
 
+    $isntEditable = !$this->role->editable;
+    $roleChange = $this->role->name !== $this->name || $this->role->display_name !== $this->display_name;
+
+    if($roleChange && $isntEditable) {
+        abort(403);
+    }
+
+    if($this->authUser->cannot('edit roles')) {
+        abort(401);
+    }
+
     $validatedPermissions = [];
 
     foreach ($this->permissions as $permissonId) {
@@ -74,6 +90,10 @@ $update = function () {
         if(!$permission) {
             $this->addError('permissions', "The permission with ID: {$permissonId} not exists");
             return false;
+        }
+
+        if(!$permission->editable) {
+            abort(403);
         }
 
         $permissionHasSuperAdminLevel = $permission->level === 'super-admin';
@@ -138,6 +158,7 @@ $update = function () {
                             class="form-control"
                             placeholder="{{ __('Enter your role name') }}"
                             required
+                            @disabled(!$this->role->editable)
                         >
                         <x-input-error :messages="$errors->get('name')" class="mt-2"/>
                     </div>
@@ -168,6 +189,7 @@ $update = function () {
                                     @checked($removable)
                                     type="checkbox"
                                     class="sr-only peer"
+                                    @disabled(!$this->role->editable)
                                 >
                                 <div class="w-14 h-6 bg-gray-200 peer-focus:outline-none ring-0 rounded-full peer dark:bg-gray-900 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:z-10 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-500"></div>
                                 <span class="absolute left-1 z-20 text-xs text-white font-Inter font-normal opacity-0 peer-checked:opacity-100">On</span>
@@ -180,7 +202,10 @@ $update = function () {
                 <div class="flex justify-center columns-2">
                     <h3 class="flex-1 font-semibold text-2xl text-black dark:text-white py-5 mt-8">Update Permission</h3>
                     <div class="flex-none self-center">
-                        <button class="btn btn-dark dark:bg-slate-700 dark:text-slate-300 m-2 !px-3 !py-2">
+                        <button
+                            class="btn btn-dark dark:bg-slate-700 dark:text-slate-300 m-2 !px-3 !py-2"
+                            @disabled($this->role->name === 'super-admin')
+                        >
                             <span class="flex items-center">
                                 <iconify-icon class="ltr:mr-2 rtl:ml-2" icon="ph:plus-bold"></iconify-icon>
                                 <span>@lang('Save')</span>
@@ -205,6 +230,22 @@ $update = function () {
                                                     {{ __($permission->name) }}
                                                 </label>
 
+                                                @if ($role->name === 'super-admin')
+                                                <div class="flex items-center mr-2 sm:mr-4 mt-2 space-x-2">
+                                                    <label class="relative inline-flex h-6 w-[46px] items-center rounded-full transition-all duration-150 cursor-pointer">
+                                                        <input
+                                                            checked
+                                                            type="checkbox"
+                                                            class="sr-only peer"
+                                                            disabled
+                                                        >
+                                                        <div class="w-14 h-6 bg-gray-200 peer-focus:outline-none ring-0 rounded-full peer dark:bg-gray-900 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:z-10 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-500"></div>
+                                                        <span class="absolute left-1 z-20 text-xs text-white font-Inter font-normal opacity-0 peer-checked:opacity-100">On</span>
+                                                        <span class="absolute right-1 z-20 text-xs text-white font-Inter font-normal opacity-100 peer-checked:opacity-0">Off</span>
+                                                    </label>
+                                                </div>
+                                                @else
+
                                                 <div class="flex items-center mr-2 sm:mr-4 mt-2 space-x-2">
                                                     <label class="relative inline-flex h-6 w-[46px] items-center rounded-full transition-all duration-150 cursor-pointer">
                                                         <input
@@ -215,12 +256,15 @@ $update = function () {
                                                             value="{{ $permission->id }}"
                                                             type="checkbox"
                                                             class="sr-only peer"
+                                                            @disabled(!$permission->editable)
                                                         >
                                                         <div class="w-14 h-6 bg-gray-200 peer-focus:outline-none ring-0 rounded-full peer dark:bg-gray-900 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:z-10 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-500"></div>
                                                         <span class="absolute left-1 z-20 text-xs text-white font-Inter font-normal opacity-0 peer-checked:opacity-100">On</span>
                                                         <span class="absolute right-1 z-20 text-xs text-white font-Inter font-normal opacity-100 peer-checked:opacity-0">Off</span>
                                                     </label>
                                                 </div>
+                                                @endif
+
                                             </div>
                                         </li>
                                     @endforeach

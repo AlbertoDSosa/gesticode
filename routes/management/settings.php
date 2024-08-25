@@ -8,8 +8,6 @@ Route::middleware(['auth', 'role:admin|super-admin'])->prefix('management')->gro
         ->name('management.settings');
 
     // General Settings
-    Volt::route('settings/logos', 'pages.management.settings.logos')
-        ->name('management.settings.logos');
 
     Volt::route('settings/system', 'pages.management.settings.system')
         ->name('management.settings.system');

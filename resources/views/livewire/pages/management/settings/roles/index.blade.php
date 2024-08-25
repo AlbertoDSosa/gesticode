@@ -9,7 +9,7 @@ usesPagination();
 
 layout('layouts.app');
 
-state(['search', 'rows' => 10, 'sort' => 'id'])->url();
+state(['search', 'rows' => 10, 'sort' => '-id'])->url();
 
 $breadcrumbItems = [
     [
@@ -61,11 +61,13 @@ $toggleSort = function($sort) {
 
 $delete = function($id) {
     $role = Role::find($id);
-    $cannotDelete = $this->authUser->cannot('delete roles');
-    $roleIsntRemovable = !$role->removable;
 
-    if($cannotDelete || $roleIsntRemovable) {
+    if(!$role->removable) {
         abort(403);
+    }
+
+    if($this->authUser->cannot('delete roles')) {
+        abort(401);
     }
 
     $role->delete();
@@ -185,7 +187,7 @@ $resetStatus = function () {
                                     <td class="table-td">
                                         <div class="action-btns space-x-2 flex">
                                             {{-- Edit --}}
-                                            @can('update roles')
+                                            @can('edit roles')
                                             <a
                                                 class="action-btn"
                                                 href="{{route('management.settings.roles.edit', ['role' => $role])}}"

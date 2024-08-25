@@ -25,34 +25,46 @@ class LogosTest extends TestCase
         $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
     }
 
-    #[Group('settings'), Test]
-    public function only_admin_users_can_display_the_setting_logos_page(): void
+    #[Group('site-settings'), Test]
+    public function only_users_with_permissions_can_display_the_setting_logos_page(): void
     {
         $this->seed(RolesAndPermissionsSeeder::class);
 
-        $user = $this->createUser(['role' => 'technician']);
+        $user = $this->createUser(['role' => 'user']);
+        $guest = $this->createUser(['role' => 'guest']);
+        $technician = $this->createUser(['role' => 'technician']);
         $admin = $this->createUser(['role' => 'admin']);
         $superAdmin = $this->createUser(['role' => 'super-admin']);
 
         $this->actingAs($user);
 
-        $this->get('/management/settings/logos')->assertForbidden();
+        $this->get('/site-settings/logos')->assertForbidden();
+
+        $this->actingAs($guest);
+
+        $this->get('/site-settings/logos')->assertForbidden();
+
+        $this->actingAs($technician);
+
+        $this->get('/site-settings/logos')->assertSuccessful();
 
         $this->actingAs($admin);
 
-        $this->get('/management/settings/logos')->assertSuccessful();
+        $this->get('/site-settings/logos')->assertSuccessful();
 
         $this->actingAs($superAdmin);
 
-        $this->get('/management/settings/logos')->assertSuccessful();
+        $this->get('/site-settings/logos')->assertSuccessful();
     }
 
-    #[Group('settings'), Test]
-    public function only_admin_users_can_update_logos(): void
+    #[Group('site-settings'), Test]
+    public function only_users_with_permissions_can_update_logos(): void
     {
         $this->seed(RolesAndPermissionsSeeder::class);
 
-        $user = $this->createUser(['role' => 'technician']);
+        $user = $this->createUser(['role' => 'user']);
+        $guest = $this->createUser(['role' => 'guest']);
+        $technician = $this->createUser(['role' => 'technician']);
         $admin = $this->createUser(['role' => 'admin']);
         $superAdmin = $this->createUser(['role' => 'super-admin']);
 
@@ -65,23 +77,33 @@ class LogosTest extends TestCase
         // 'disabledUpload'
 
         Volt::actingAs($user)
-            ->test('pages.management.settings.logos')
+            ->test('pages.site-settings.logos')
             ->call('update')
             ->assertForbidden();
 
+        Volt::actingAs($guest)
+            ->test('pages.site-settings.logos')
+            ->call('update')
+            ->assertForbidden();
+
+        Volt::actingAs($technician)
+            ->test('pages.site-settings.logos')
+            ->call('update')
+            ->assertSuccessful();
+
         Volt::actingAs($admin)
-            ->test('pages.management.settings.logos')
+            ->test('pages.site-settings.logos')
             ->call('update')
             ->assertSuccessful();
 
         Volt::actingAs($superAdmin)
-            ->test('pages.management.settings.logos')
+            ->test('pages.site-settings.logos')
             ->call('update')
             ->assertSuccessful();
 
     }
 
-    #[Group('settings'), Test]
+    #[Group('site-settings'), Test]
     public function the_logos_file_can_be_image(): void
     {
         $this->seed(RolesAndPermissionsSeeder::class);
@@ -93,13 +115,13 @@ class LogosTest extends TestCase
         $file = UploadedFile::fake()->create('file.pdf');
 
         Volt::actingAs($admin)
-            ->test('pages.management.settings.logos')
+            ->test('pages.site-settings.logos')
             ->set('logo', $file)
             ->call('update')
             ->assertHasErrors('logo');
     }
 
-    #[Group('settings'), Test]
+    #[Group('site-settings'), Test]
     public function can_update_logos(): void
     {
         $this->seed(RolesAndPermissionsSeeder::class);
@@ -111,7 +133,7 @@ class LogosTest extends TestCase
         $logo = UploadedFile::fake()->image('logo.png', 32, 32)->size(150);
 
         Volt::actingAs($admin)
-            ->test('pages.management.settings.logos')
+            ->test('pages.site-settings.logos')
             ->set('logo', $logo)
             ->call('update')
             ->assertSuccessful();
