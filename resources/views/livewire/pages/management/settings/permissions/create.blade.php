@@ -1,11 +1,34 @@
 <?php
 
-use function Livewire\Volt\{state, layout};
+use function Livewire\Volt\{state, layout, rules, computed, on};
 use Spatie\Permission\Models\Permission;
 
 layout('layouts.app');
 
-state('name');
+state([
+    'name' => '',
+    'module_name' => '',
+    'removable' => true,
+    'editable' => true,
+    'removable' => true,
+    'assignable' => true,
+    'level' => 'regular'
+]);
+
+rules([
+    'name' => ['required', 'string', 'max:255', 'unique:permissions'],
+    'removable' => ['boolean'],
+    'editable' => ['boolean'],
+    'assignable' => ['boolean'],
+    'module_name' => ['required', 'string', 'max:255'],
+    'level' => ['required', 'in:regular,admin,super-admin']
+])->messages([
+    'name.unique' => __('The permission name already exists.'),
+    'name.required' => __('The permission name field is required.'),
+    'module_name.required' => __('The module name field is required.'),
+    'level.required' => __('The level field is required.'),
+    'level.in' => __('The level value is invalid.')
+]);
 
 $breadcrumbItems = [
     [
@@ -25,22 +48,60 @@ $breadcrumbItems = [
     ],
 ];
 
+$authUser = computed(function() {
+   return auth()->user();
+});
+
 $pageTitle = 'Create Permission';
+
+$permissionLevels = computed(function () {
+    if($this->authUser->hasRole('super-admin')) {
+        return ['regular', 'admin', 'super-admin'];
+    }
+    return ['regular', 'admin'];
+});
 
 state(compact('breadcrumbItems', 'pageTitle'))->locked();
 
 $create = function() {
-    $this->validate(
-        ['name' => ['required', 'string', 'max:255', 'unique:permissions,name']]
-    );
+    $this->validate();
+
+    if($this->authUser->cannot('create permissions')) {
+        abort(401);
+    }
+
+    $isntSuperAdmin = !$this->authUser->hasRole('super-admin');
+
+    if($isntSuperAdmin && $this->level === 'super-admin') {
+        abort(403);
+    }
+
+    $cannotModifiable = $this->removable || $this->editable || $this->assignable;
+
+    if($this->level === 'super-admin' && $cannotModifiable) {
+        abort(403);
+    }
+
+    $onlyAssignable = $this->removable || $this->editable;
+
+    if($this->level === 'admin' && $onlyAssignable) {
+        abort(403);
+    }
 
     Permission::create([
         'name' => $this->name,
-        'guard_name' => 'web'
+        'module_name' => $this->module_name,
+        'removable' => $this->removable,
+        'editable' => $this->editable,
+        'removable' => $this->removable,
+        'assignable' => $this->assignable,
+        'level' => $this->level,
     ]);
 
     session()
         ->flash('status', ['message' => 'Permisson Create successfully.', 'type' => 'success']);
+
+    $this->redirect(route('management.settings.permissions'));
 
 }
 
@@ -96,7 +157,93 @@ $create = function() {
                 <x-input-error :messages="$errors->get('name')" class="mt-2"/>
             </div>
 
-            <x-input-error :messages="$errors->get('permission_name')" class="mt-2"/>
+            <div class="input-area">
+                <label for="select" class="form-label">Level</label>
+                <select
+                    x-data="levelSelect"
+                    id="select"
+                    class="form-control"
+                    x-on:change="levelChange"
+                >
+                    @foreach ($this->permissionLevels as $itemLevel)
+                    <option
+                        value="{{$itemLevel}}"
+                        class="dark:bg-slate-700"
+                        @selected($itemLevel === $level)
+                    >
+                        {{$itemLevel}}
+                    </option>
+                    @endforeach
+
+                </select>
+            </div>
+
+            <div class="flex">
+                <div class="flex items-center justify-between gap-x-3">
+                    <label for="editable" class="inputText">
+                        {{__('Editable')}}
+                    </label>
+                    <div class="flex items-center mr-2 sm:mr-4 space-x-2">
+                        <label class="relative inline-flex h-6 w-[46px] items-center rounded-full transition-all duration-150 cursor-pointer">
+                            <input
+                                x-ref="editable"
+                                wire:model="editable"
+                                name="editable"
+                                id="editable"
+                                type="checkbox"
+                                class="sr-only peer"
+                                @checked($editable)
+                            >
+                            <div class="w-14 h-6 bg-gray-200 peer-focus:outline-none ring-0 rounded-full peer dark:bg-gray-900 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:z-10 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-500"></div>
+                            <span class="absolute left-1 z-20 text-xs text-white font-Inter font-normal opacity-0 peer-checked:opacity-100">On</span>
+                            <span class="absolute right-1 z-20 text-xs text-white font-Inter font-normal opacity-100 peer-checked:opacity-0">Off</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between gap-x-3">
+                    <label for="removable" class="inputText">
+                        {{__('Removable')}}
+                    </label>
+                    <div class="flex items-center mr-2 sm:mr-4 space-x-2">
+                        <label class="relative inline-flex h-6 w-[46px] items-center rounded-full transition-all duration-150 cursor-pointer">
+                            <input
+                                x-ref="removable"
+                                wire:model="removable"
+                                name="removable"
+                                id="removable"
+                                type="checkbox"
+                                class="sr-only peer"
+                                @checked($removable)
+                            >
+                            <div class="w-14 h-6 bg-gray-200 peer-focus:outline-none ring-0 rounded-full peer dark:bg-gray-900 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:z-10 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-500"></div>
+                            <span class="absolute left-1 z-20 text-xs text-white font-Inter font-normal opacity-0 peer-checked:opacity-100">On</span>
+                            <span class="absolute right-1 z-20 text-xs text-white font-Inter font-normal opacity-100 peer-checked:opacity-0">Off</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between gap-x-3">
+                    <label for="assignable" class="inputText">
+                        {{__('Assignable')}}
+                    </label>
+                    <div class="flex items-center mr-2 sm:mr-4 space-x-2">
+                        <label class="relative inline-flex h-6 w-[46px] items-center rounded-full transition-all duration-150 cursor-pointer">
+                            <input
+                                x-ref="assignable"
+                                wire:model="assignable"
+                                name="assignable"
+                                id="assignable"
+                                type="checkbox"
+                                class="sr-only peer"
+                                @checked($assignable)
+                            >
+                            <div class="w-14 h-6 bg-gray-200 peer-focus:outline-none ring-0 rounded-full peer dark:bg-gray-900 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:z-10 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-500"></div>
+                            <span class="absolute left-1 z-20 text-xs text-white font-Inter font-normal opacity-0 peer-checked:opacity-100">On</span>
+                            <span class="absolute right-1 z-20 text-xs text-white font-Inter font-normal opacity-100 peer-checked:opacity-0">Off</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
 
             <button
                 type="submit"
@@ -110,3 +257,38 @@ $create = function() {
         </div>
     </form>
 </div>
+
+@script
+<script>
+    Alpine.data('levelSelect', () => ({
+        levelChange(e) {
+            if(e.target.value === 'super-admin') {
+                $refs.removable.disabled = true;
+                $refs.editable.disabled = true;
+                $refs.assignable.disabled = true;
+                $refs.removable.checked = false;
+                $refs.editable.checked = false;
+                $refs.assignable.checked = false;
+            }
+
+            if(e.target.value === 'admin') {
+                $refs.removable.disabled = true;
+                $refs.editable.disabled = true;
+                $refs.assignable.disabled = false;
+                $refs.removable.checked = false;
+                $refs.editable.checked = false;
+                $refs.assignable.checked = true;
+            }
+
+            if(e.target.value === 'regular') {
+                $refs.removable.disabled = false;
+                $refs.editable.disabled = false;
+                $refs.assignable.disabled = false;
+                $refs.removable.checked = true;
+                $refs.editable.checked = true;
+                $refs.assignable.checked = true;
+            }
+        }
+    }));
+</script>
+@endscript

@@ -34,6 +34,7 @@ return new class extends Migration
             $table->string('module_name');
             $table->boolean('removable')->default(true);
             $table->boolean('editable')->default(true);
+            $table->boolean('assignable')->default(true);
             $table->enum('level', ['super-admin', 'admin', 'regular'])->default('regular');
             $table->timestamps();
 

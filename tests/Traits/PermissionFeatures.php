@@ -26,12 +26,13 @@ trait PermissionFeatures {
     {
         return Permission::create([
             'name' => $attributes['name'],
-            'level' => $attributes['level'] ?? 'regular',
             'name' => $attributes['name'],
             'module_name' => $attributes['module_name'],
             'guard_name' => $attributes['guard_name'] ?? 'web',
+            'level' => $attributes['level'] ?? 'regular',
             'removable' => $attributes['removable'] ?? true,
-            'editable' => $attributes['editable'] ?? true
+            'editable' => $attributes['editable'] ?? true,
+            'assignable' => $attributes['assignable'] ?? true
         ]);
     }
 
@@ -43,9 +44,12 @@ trait PermissionFeatures {
                 'name' => $permission['name'],
                 'module_name' => $permission['module_name'],
                 'guard_name' => $permission['guard_name'] ?? 'web',
+                'level' => $attributes['level'] ?? 'regular',
+                'removable' => $attributes['removable'] ?? true,
+                'editable' => $attributes['editable'] ?? true,
+                'assignable' => $attributes['assignable'] ?? true,
                 'created_at' => now(),
-                'updated_at' => now(),
-                'level' => $permission['level'] ?? 'normal'
+                'updated_at' => now()
             ];
         });
 
