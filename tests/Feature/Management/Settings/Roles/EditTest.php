@@ -273,7 +273,7 @@ class EditTest extends TestCase
     }
 
     #[Group('roles'), Test]
-    public function only_can_assing_permissions_if_are_editables(): void
+    public function only_can_assing_permissions_if_are_assignables(): void
     {
         $this->seed(RolesAndPermissionsSeeder::class);
 
@@ -284,14 +284,14 @@ class EditTest extends TestCase
             'name' => 'permission test 1',
             'level' => 'regular',
             'module_name' => 'test',
-            'editable' => false
+            'assignable' => false
         ]);
 
         $permission2 = $this->createPermission([
             'name' => 'permission test 2',
             'level' => 'regular',
             'module_name' => 'test',
-            'editable' => true
+            'assignable' => true
         ]);
 
         $role = $this->createRole([

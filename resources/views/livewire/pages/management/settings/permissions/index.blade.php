@@ -9,7 +9,7 @@ usesPagination();
 
 layout('layouts.app');
 
-state(['search', 'rows' => 10, 'sort' => '-id'])->url();
+state(['search', 'rows' => 10, 'sort' => '-id', 'level'])->url();
 
 $breadcrumbItems = [
     [
@@ -30,6 +30,13 @@ $authUser = computed(function() {
    return auth()->user();
 });
 
+$permissionLevels = computed(function () {
+    if($this->authUser->hasRole('super-admin')) {
+        return ['regular', 'admin', 'super-admin'];
+    }
+    return ['regular', 'admin'];
+});
+
 with(function() {
     $isntSuperAdmin = $this->authUser->cannot('show super admin permissions');
     $permissions = QueryBuilder::for(Permission::class)
@@ -38,6 +45,10 @@ with(function() {
         })
         ->defaultSort($this->sort)
         ->allowedSorts(['id', 'name'])
+        ->when($this->level, function ($query) {
+            $query->where('level', $this->level);
+            $this->resetPage();
+        })
         ->where('name', 'like', "%{$this->search}%")
         ->paginate($this->rows);
     return compact('permissions');
@@ -47,8 +58,10 @@ state(compact('breadcrumbItems', 'pageTitle'))->locked();
 
 $resetUrl = function() {
     $this->search = null;
+    $this->level = null;
     $this->rows = 10;
-    $this->sort = 'id';
+    $this->sort = '-id';
+    $this->resetPage();
 };
 
 $toggleSort = function($sort) {
@@ -110,7 +123,7 @@ $delete = function($id) {
     {{-- Alert end --}}
 
     <div class="card">
-        <header class=" card-header noborder">
+        <header class="card-header noborder">
             <div class="justify-end flex gap-3 items-center flex-wrap">
                 {{-- Create Button start--}}
                 @can('create permissions')
@@ -127,10 +140,33 @@ $delete = function($id) {
                     wire:click="resetUrl"
                     class="btn inline-flex justify-center btn-dark rounded-[25px] items-center !p-2.5"
                 >
-                    <iconify-icon icon="mdi:refresh" class="text-xl "></iconify-icon>
+                    <iconify-icon icon="mdi:refresh" class="text-xl"></iconify-icon>
                 </button>
             </div>
-            <div class="justify-center flex flex-wrap sm:flex items-center lg:justify-end gap-3">
+            <div class="justify-center flex sm:flex items-center lg:justify-end gap-4   ">
+                <div class="input-area">
+                    <select
+                        wire:model.live="level"
+                        id="selectLevel"
+                        class="rounded"
+                    >
+                        <option
+                            selected
+                            value=""
+                            class="dark:bg-slate-700 w-full"
+                        >
+                            {{__('Select Level')}}
+                        </option>
+                        @foreach ($this->permissionLevels as $itemLevel)
+                        <option
+                            value="{{$itemLevel}}"
+                            class="dark:bg-slate-700"
+                        >
+                            {{$itemLevel}}
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="relative w-full sm:w-auto flex items-center">
                     <form id="searchForm">
                         <input
@@ -182,6 +218,18 @@ $delete = function($id) {
                                         </button>
                                     </th>
                                     <th scope="col" class="table-th ">
+                                        {{ __('Level') }}
+                                    </th>
+                                    <th scope="col" class="table-th ">
+                                        {{ __('Assignable') }}
+                                    </th>
+                                    <th scope="col" class="table-th ">
+                                        {{ __('Editable') }}
+                                    </th>
+                                    <th scope="col" class="table-th ">
+                                        {{ __('Removable') }}
+                                    </th>
+                                    <th scope="col" class="table-th ">
                                         {{ __('Created At') }}
                                     </th>
                                     <th scope="col" class="table-th ">
@@ -198,6 +246,36 @@ $delete = function($id) {
                                     <td class="table-td sticky left-0"># {{ $permission->id }}</td>
                                     <td class="table-td">
                                         <span>{{ $permission->name }}</span>
+                                    </td>
+                                    <td class="table-td">
+                                        @if ($permission->level === 'super-admin')
+                                        <span class="badge bg-danger-500 text-white capitalize">{{ $permission->level }}</span>
+                                        @elseif ($permission->level === 'admin')
+                                        <span class="badge bg-warning-500 text-white capitalize">{{ $permission->level }}</span>
+                                        @else
+                                        <span class="badge bg-secondary-500 text-white capitalize">{{ $permission->level }}</span>
+                                        @endif
+                                    </td>
+                                    <td class="table-td">
+                                        @if ($permission->assignable)
+                                        <span class="badge bg-success-500 text-white capitalize">Yes</span>
+                                        @else
+                                        <span class="badge bg-danger-500 text-white capitalize">No</span>
+                                        @endif
+                                    </td>
+                                    <td class="table-td">
+                                        @if ($permission->editable)
+                                        <span class="badge bg-success-500 text-white capitalize">Yes</span>
+                                        @else
+                                        <span class="badge bg-danger-500 text-white capitalize">No</span>
+                                        @endif
+                                    </td>
+                                    <td class="table-td">
+                                        @if ($permission->removable)
+                                        <span class="badge bg-success-500 text-white capitalize">Yes</span>
+                                        @else
+                                        <span class="badge bg-danger-500 text-white capitalize">No</span>
+                                        @endif
                                     </td>
                                     <td class="table-td">{{ $permission->created_at ? $permission->created_at->toFormattedDateString() : '' }}</td>
                                     <td class="table-td">{{ $permission->created_at ? $permission->updated_at->toFormattedDateString() : '' }}</td>

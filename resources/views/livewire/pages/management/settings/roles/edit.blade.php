@@ -15,6 +15,7 @@ state([
     'name' => fn() => $this->role->name,
     'display_name' => fn() => $this->role->display_name,
     'removable' => fn() => $this->role->removable,
+    'editable' => fn() => $this->role->editable,
     'permissions' => fn() => $this->role->permissions()->pluck('id')->toArray(),
 ]);
 
@@ -26,7 +27,7 @@ $permissionModules = computed(function() {
     $isntSuperAdmin = $this->authUser->cannot('show super admin permissions');
     return Permission::when($isntSuperAdmin, function ($query) {
         $query->where('level', '!=', 'super-admin');
-    })->get()->groupBy('module_name')->forget(['roles', 'permissions']);
+    })->get()->groupBy('module_name')->forget(['roles', 'permissions', 'system settings']);
 });
 
 state(compact('breadcrumbItems', 'pageTitle', 'role'))->locked();
@@ -62,6 +63,7 @@ $update = function () {
         [
             'name' => ['required', 'string', 'max:255', Rule::unique(Role::class)->ignore($this->role->id)],
             'removable' => ['boolean'],
+            'editable' => ['boolean'],
             'display_name' => ['required', 'string', 'max:255'],
             'permissions' => ['array']
         ],
@@ -92,7 +94,7 @@ $update = function () {
             return false;
         }
 
-        if(!$permission->editable) {
+        if(!$permission->assignable) {
             abort(403);
         }
 
@@ -109,7 +111,8 @@ $update = function () {
     $this->role->update([
         'name' => $this->name,
         'display_name' => $this->display_name,
-        'removable' => $this->removable ?? null
+        'removable' => $this->removable,
+        'editable' => $this->editable
     ]);
 
     if(count($validatedPermissions)) {
@@ -197,6 +200,27 @@ $update = function () {
                             </label>
                         </div>
                     </div>
+                    <div class="input-area">
+                        <label for="editable" class="capitalize form-label">
+                            {{__('Editable')}}
+                        </label>
+                        <div class="flex mt-4 mr-2 sm:mr-4 space-x-2">
+                            <label class="relative flex h-6 w-[46px] items-center rounded-full transition-all duration-150 cursor-pointer">
+                                <input
+                                    wire:model="editable"
+                                    name="editable"
+                                    id="editable"
+                                    @checked($editable)
+                                    type="checkbox"
+                                    class="sr-only peer"
+                                    @disabled($name === 'super-admin' || $name === 'admin')
+                                >
+                                <div class="w-14 h-6 bg-gray-200 peer-focus:outline-none ring-0 rounded-full peer dark:bg-gray-900 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:z-10 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-500"></div>
+                                <span class="absolute left-1 z-20 text-xs text-white font-Inter font-normal opacity-0 peer-checked:opacity-100">On</span>
+                                <span class="absolute right-1 z-20 text-xs text-white font-Inter font-normal opacity-100 peer-checked:opacity-0">Off</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="flex justify-center columns-2">
@@ -256,7 +280,7 @@ $update = function () {
                                                             value="{{ $permission->id }}"
                                                             type="checkbox"
                                                             class="sr-only peer"
-                                                            @disabled(!$permission->editable)
+                                                            @disabled(!$permission->assignable)
                                                         >
                                                         <div class="w-14 h-6 bg-gray-200 peer-focus:outline-none ring-0 rounded-full peer dark:bg-gray-900 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:z-10 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-500"></div>
                                                         <span class="absolute left-1 z-20 text-xs text-white font-Inter font-normal opacity-0 peer-checked:opacity-100">On</span>

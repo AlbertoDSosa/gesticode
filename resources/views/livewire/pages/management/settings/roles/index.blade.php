@@ -165,6 +165,12 @@ $resetStatus = function () {
                                         </button>
                                     </th>
                                     <th scope="col" class="table-th ">
+                                        {{ __('Editable') }}
+                                    </th>
+                                    <th scope="col" class="table-th ">
+                                        {{ __('Removable') }}
+                                    </th>
+                                    <th scope="col" class="table-th ">
                                         {{ __('Created At') }}
                                     </th>
                                     <th scope="col" class="table-th ">
@@ -181,6 +187,20 @@ $resetStatus = function () {
                                     <td class="table-td sticky left-0"># {{ $role->id }}</td>
                                     <td class="table-td">
                                         <span>{{ $role->display_name }}</span>
+                                    </td>
+                                    <td class="table-td">
+                                        @if ($role->editable)
+                                        <span class="badge bg-success-500 text-white capitalize">Yes</span>
+                                        @else
+                                        <span class="badge bg-danger-500 text-white capitalize">No</span>
+                                        @endif
+                                    </td>
+                                    <td class="table-td">
+                                        @if ($role->removable)
+                                        <span class="badge bg-success-500 text-white capitalize">Yes</span>
+                                        @else
+                                        <span class="badge bg-danger-500 text-white capitalize">No</span>
+                                        @endif
                                     </td>
                                     <td class="table-td">{{$role->created_at ? $role->created_at->toFormattedDateString() : '' }}</td>
                                     <td class="table-td">{{$role->created_at ? $role->updated_at->toFormattedDateString() : '' }}</td>

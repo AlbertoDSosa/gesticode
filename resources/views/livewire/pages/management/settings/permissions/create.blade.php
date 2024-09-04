@@ -1,6 +1,6 @@
 <?php
 
-use function Livewire\Volt\{state, layout, rules, computed, on};
+use function Livewire\Volt\{state, layout, rules, computed};
 use Spatie\Permission\Models\Permission;
 
 layout('layouts.app');
@@ -99,7 +99,7 @@ $create = function() {
     ]);
 
     session()
-        ->flash('status', ['message' => 'Permisson Create successfully.', 'type' => 'success']);
+        ->flash('status', ['message' => 'Permisson has been created successfully.', 'type' => 'success']);
 
     $this->redirect(route('management.settings.permissions'));
 
