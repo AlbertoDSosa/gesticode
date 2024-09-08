@@ -112,7 +112,7 @@ class CreateTest extends TestCase
     }
 
     #[Group('roles'), Test]
-    public function only_superadmin_user_can_assing_superadmin_permissions_level(): void
+    public function only_superadmin_user_can_assign_superadmin_permissions_level(): void
     {
         $this->seed(RolesAndPermissionsSeeder::class);
 
@@ -146,7 +146,7 @@ class CreateTest extends TestCase
     }
 
     #[Group('roles'), Test]
-    public function only_can_assing_permissions_if_are_assignables(): void
+    public function only_can_assign_permissions_if_are_assignables(): void
     {
         $this->seed(RolesAndPermissionsSeeder::class);
 

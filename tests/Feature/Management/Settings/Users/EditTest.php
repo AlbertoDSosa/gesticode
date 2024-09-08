@@ -76,9 +76,10 @@ class EditTest extends TestCase
 
         Volt::test('pages.management.settings.users.edit', ['user' => $user])
             ->set('name', 'Test User 1')
+            ->assertSet('role', 'technician')
             ->set('email', 'test_1@gmail.com')
             ->set('password', 'password')
-            ->set('role', 'technician')
+            ->set('role', 'guest')
             ->call('update')
             ->assertHasNoErrors();
 

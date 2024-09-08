@@ -199,11 +199,11 @@ mount(function(User $user) {
                         name="role"
                         class="form-control"
                     >
-                        <option value="" selected disabled>
-                            {{ __('Select Role') }}
-                        </option>
                         @foreach($this->roles as $itemRole)
-                            <option value="{{ $itemRole->id }}" @selected($role)>
+                            <option
+                                value="{{ $itemRole->name }}"
+                                @selected($role === $itemRole->name)
+                            >
                                 {{ $itemRole->display_name }}
                             </option>
                         @endforeach

@@ -9,7 +9,7 @@ usesPagination();
 
 layout('layouts.app');
 
-state(['search', 'rows' => 10, 'sort' => '-id', 'level'])->url();
+state(['search', 'rows' => 10, 'sort' => '-id', 'level', 'module'])->url();
 
 $breadcrumbItems = [
     [
@@ -30,6 +30,10 @@ $authUser = computed(function() {
    return auth()->user();
 });
 
+$modules = computed(function () {
+    return Permission::all()->groupBy('module_name')->keys();
+});
+
 $permissionLevels = computed(function () {
     if($this->authUser->hasRole('super-admin')) {
         return ['regular', 'admin', 'super-admin'];
@@ -45,8 +49,12 @@ with(function() {
         })
         ->defaultSort($this->sort)
         ->allowedSorts(['id', 'name'])
-        ->when($this->level, function ($query) {
-            $query->where('level', $this->level);
+        ->when($this->level, function ($query, $level) {
+            $query->where('level', $level);
+            $this->resetPage();
+        })
+        ->when($this->module, function ($query, $module) {
+            $query->where('module_name', $module);
             $this->resetPage();
         })
         ->where('name', 'like', "%{$this->search}%")
@@ -59,6 +67,7 @@ state(compact('breadcrumbItems', 'pageTitle'))->locked();
 $resetUrl = function() {
     $this->search = null;
     $this->level = null;
+    $this->module = null;
     $this->rows = 10;
     $this->sort = '-id';
     $this->resetPage();
@@ -143,7 +152,30 @@ $delete = function($id) {
                     <iconify-icon icon="mdi:refresh" class="text-xl"></iconify-icon>
                 </button>
             </div>
-            <div class="justify-center flex sm:flex items-center lg:justify-end gap-4   ">
+            <div class="justify-center flex sm:flex items-center lg:justify-end gap-4">
+                <div class="input-area">
+                    <select
+                        wire:model.live="module"
+                        id="selectModule"
+                        class="rounded"
+                    >
+                        <option
+                            selected
+                            value=""
+                            class="dark:bg-slate-700 w-full"
+                        >
+                            {{__('Select Module')}}
+                        </option>
+                        @foreach ($this->modules as $itemModule)
+                        <option
+                            value="{{$itemModule}}"
+                            class="dark:bg-slate-700"
+                        >
+                            {{$itemModule}}
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="input-area">
                     <select
                         wire:model.live="level"
@@ -218,6 +250,9 @@ $delete = function($id) {
                                         </button>
                                     </th>
                                     <th scope="col" class="table-th ">
+                                        {{ __('Module') }}
+                                    </th>
+                                    <th scope="col" class="table-th ">
                                         {{ __('Level') }}
                                     </th>
                                     <th scope="col" class="table-th ">
@@ -246,6 +281,9 @@ $delete = function($id) {
                                     <td class="table-td sticky left-0"># {{ $permission->id }}</td>
                                     <td class="table-td">
                                         <span>{{ $permission->name }}</span>
+                                    </td>
+                                    <td class="table-td">
+                                        <span>{{ $permission->module_name }}</span>
                                     </td>
                                     <td class="table-td">
                                         @if ($permission->level === 'super-admin')

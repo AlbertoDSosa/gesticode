@@ -142,7 +142,7 @@ $delete = function($id) {
         <div class="card-body px-6 pb-6">
             <div class="overflow-x-auto -mx-6">
                 <div class="inline-block min-w-full align-middle">
-                    <div class="overflow-hidden ">
+                    <div class="overflow-hidden">
                         <table class="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700">
                             <thead class="bg-slate-200 dark:bg-slate-700">
                                 <tr>
@@ -180,10 +180,13 @@ $delete = function($id) {
                                         {{ __('Email') }}
                                     </th>
                                     <th scope="col" class="table-th ">
-                                        {{ __('Member Since') }}
+                                        {{ __('Active') }}
                                     </th>
                                     <th scope="col" class="table-th ">
                                         {{ __('Verified') }}
+                                    </th>
+                                    <th scope="col" class="table-th ">
+                                        {{ __('Member Since') }}
                                     </th>
                                     <th scope="col" class="table-th w-20">
                                         {{ __('Action') }}
@@ -214,7 +217,11 @@ $delete = function($id) {
                                         {{ $user->email }}
                                     </td>
                                     <td class="table-td">
-                                        {{ $user->created_at->diffForHumans() }}
+                                        @if($user->active)
+                                        <span class="badge bg-success-500 text-white capitalize">{{ __('YES') }}</span>
+                                        @else
+                                        <span class="badge bg-danger-500 text-white capitalize">{{ __('NO') }}</span>
+                                        @endif
                                     </td>
                                     <td class="table-td">
                                         @if($user->email_verified_at)
@@ -222,6 +229,9 @@ $delete = function($id) {
                                         @else
                                         <span class="badge bg-danger-500 text-white capitalize">{{ __('NO') }}</span>
                                         @endif
+                                    </td>
+                                    <td class="table-td">
+                                        {{ $user->created_at->diffForHumans() }}
                                     </td>
                                     <td class="table-td">
                                         <div class="flex space-x-3 rtl:space-x-reverse">

@@ -19,7 +19,7 @@ class DashboardTest extends TestCase
         $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
     }
 
-    public function test_only_users_can_display_the_site_settings_menu(): void
+    public function test_only_authorized_users_can_display_the_site_settings_menu(): void
     {
         $this->seed(RolesAndPermissionsSeeder::class);
 
@@ -55,7 +55,7 @@ class DashboardTest extends TestCase
             ->assertSee('<span>Site Settings</span>', $escaped = false);
     }
 
-    public function test_only_admin_users_can_display_the_settings_menu(): void
+    public function test_only_admin_users_can_display_the_management_settings_menu(): void
     {
         $this->seed(RolesAndPermissionsSeeder::class);
 
