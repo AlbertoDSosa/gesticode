@@ -80,6 +80,7 @@ class EditTest extends TestCase
             ->set('email', 'test_1@gmail.com')
             ->set('password', 'password')
             ->set('role', 'guest')
+            ->set('active', true)
             ->call('update')
             ->assertHasNoErrors();
 
@@ -88,6 +89,7 @@ class EditTest extends TestCase
             ->set('email', 'Test_2test')
             ->set('password', 'passwo')
             ->set('role', 'test')
+            ->set('active', false)
             ->call('update')
             ->assertHasErrors(['email', 'password', 'role']);
     }

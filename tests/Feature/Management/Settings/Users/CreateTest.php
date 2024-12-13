@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Management\Users;
+namespace Tests\Feature\Management\Settings\Users;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Database\Seeders\RolesAndPermissionsSeeder;
@@ -75,6 +75,7 @@ class CreateTest extends TestCase
             ->set('email', 'test_1@gmail.com')
             ->set('password', 'password')
             ->set('role', 'technician')
+            ->set('active', true)
             ->call('create')
             ->assertHasNoErrors();
 
@@ -83,6 +84,7 @@ class CreateTest extends TestCase
             ->set('email', 'test_2test')
             ->set('password', 'passwo')
             ->set('role', 'test')
+            ->set('active', true)
             ->call('create')
             ->assertHasErrors(['email', 'password', 'role']);
     }
@@ -102,6 +104,7 @@ class CreateTest extends TestCase
             ->set('email', 'test_1@test.com')
             ->set('password', 'password')
             ->set('role', 'technician')
+            ->set('active', true)
             ->call('create')
             ->assertUnauthorized();
 
@@ -111,6 +114,7 @@ class CreateTest extends TestCase
             ->set('email', 'test_2@gmail.com')
             ->set('password', 'password')
             ->set('role', 'technician')
+            ->set('active', true)
             ->call('create')
             ->assertRedirect(route('management.settings.users'));
 
@@ -120,6 +124,7 @@ class CreateTest extends TestCase
             ->set('email', 'test_3@gmail.com')
             ->set('password', 'password')
             ->set('role', 'admin')
+            ->set('active', true)
             ->call('create')
             ->assertRedirect(route('management.settings.users'));
 
@@ -129,6 +134,7 @@ class CreateTest extends TestCase
             ->set('email', 'test_4@gmail.com')
             ->set('password', 'password')
             ->set('role', 'technician')
+            ->set('active', true)
             ->call('create')
             ->assertRedirect(route('management.settings.users'));
 
@@ -138,6 +144,7 @@ class CreateTest extends TestCase
             ->set('email', 'test_5@gmail.com')
             ->set('password', 'password')
             ->set('role', 'admin')
+            ->set('active', true)
             ->call('create')
             ->assertRedirect(route('management.settings.users'));
 
@@ -147,6 +154,7 @@ class CreateTest extends TestCase
             ->set('email', 'test_6@gmail.com')
             ->set('password', 'password')
             ->set('role', 'super-admin')
+            ->set('active', true)
             ->call('create')
             ->assertRedirect(route('management.settings.users'));
     }
@@ -165,6 +173,7 @@ class CreateTest extends TestCase
             ->set('email', 'test_1@gmail.com')
             ->set('password', 'password')
             ->set('role', 'super-admin')
+            ->set('active', true)
             ->call('create')
             ->assertUnauthorized();
 
@@ -174,6 +183,7 @@ class CreateTest extends TestCase
             ->set('email', 'test_2@gmail.com')
             ->set('password', 'password')
             ->set('role', 'super-admin')
+            ->set('active', true)
             ->call('create')
             ->assertRedirect(route('management.settings.users'));
     }
@@ -191,6 +201,7 @@ class CreateTest extends TestCase
             ->set('email', 'test@gmail.com')
             ->set('password', 'password')
             ->set('role', 'technician')
+            ->set('active', true)
             ->call('create')
             ->assertRedirect(route('management.settings.users'));
 

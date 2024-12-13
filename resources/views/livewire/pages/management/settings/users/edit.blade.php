@@ -1,6 +1,7 @@
 <?php
 
 use function Livewire\Volt\{state, layout, computed, mount};
+use Illuminate\Auth\Events\Registered;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Illuminate\Validation\Rule;
@@ -16,7 +17,10 @@ $breadcrumbItems = [];
 $pageTitle = 'Edit User';
 
 $permissionModules = computed(function() {
-    return Permission::all()->groupBy('module_name');
+    $isntSuperAdmin = $this->authUser->cannot('show super admin permissions');
+    return Permission::when($isntSuperAdmin, function ($query) {
+        $query->where('level', '!=', 'super-admin');
+    })->get()->groupBy('module_name')->forget(['roles', 'permissions', 'system settings']);
 });
 
 $authUser = computed(function() {
@@ -31,10 +35,11 @@ $roles = computed(function() {
 });
 
 state([
-    'name' => fn() => $this->user->name ,
+    'name' => fn() => $this->user->name,
     'email' => fn() => $this->user->email,
     'password' => '',
-    'role' => fn() => $this->user->mainRole->name
+    'role' => fn() => $this->user->mainRole->name,
+    'active' => fn() => $this->user->active
 ]);
 
 state(compact('breadcrumbItems', 'pageTitle', 'permissions', 'rolePermissions', 'user'))->locked();
@@ -45,7 +50,8 @@ $update = function() {
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'lowercase', 'string', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user->id)],
             'password' => ['nullable', 'string', 'min:8'],
-            'role' => ['required', 'exists:roles,name']
+            'active' => ['required', 'boolean'],
+            'role' => ['required', 'exists:roles,name'],
         ],
         [
             'name.required' => 'The name field is required',
@@ -56,33 +62,49 @@ $update = function() {
             'email.unique' => 'This is not a valid email',
             'password.min' => 'The password must have at least 8 characters',
             'role.exists' => 'It is not a valid role',
+            'active.required' => 'The active field is required',
         ]
     );
 
+    $this->authorize('update', $this->user);
+
     $cannotEditSuperAdmin = $this->authUser->cannot('edit super admin users');
-    $cannotEditAdmin = $this->authUser->cannot('edit admin users');
 
     if($cannotEditSuperAdmin && $this->user->hasRole('super-admin')) {
         abort(401);
     }
 
+    $cannotEditAdmin = $this->authUser->cannot('edit admin users');
+
     if($cannotEditAdmin && $this->user->hasRole('admin')) {
         abort(401);
     }
 
-    $this->authorize('update', $this->user);
-
-    $superAdminRoleSelected = $this->role && $this->role === 'super-admin';
-    $cannotAssignSuperAdmin = $this->authUser->cannot('assign super admin role');
-    $adminRoleSelected = $this->role && $this->role === 'admin';
+    $superAdminRoleSelected = $this->role === 'super-admin';
     $cannotAssignSuperAdmin = $this->authUser->cannot('assign super admin role');
 
     if($superAdminRoleSelected && $cannotAssignSuperAdmin) {
         abort(401);
     }
 
+    $adminRoleSelected = $this->role === 'admin';
+    $cannotAssignAdmin = $this->authUser->cannot('assign admin role');
+
     if($adminRoleSelected && $cannotAssignAdmin) {
         abort(401);
+    }
+
+    $userChangeToActive = !$this->user->active && $this->active;
+
+    if($userChangeToActive && !$this->user->hasVerifiedEmail()) {
+        event(new Registered($this->user));
+    }
+
+    $emailChange = $this->user->email !== $this->email;
+
+    if($emailChange) {
+        $this->user->email_verified_at = null;
+        $this->user->sendEmailVerificationNotification();
     }
 
     if($this->password) {
@@ -113,7 +135,7 @@ mount(function(User $user) {
     $userPermissions = $user->permissions()->pluck('id')->toArray();
 
     $this->rolePermissions = $rolePemissions;
-    $this->permissions = collect($rolePemissions)->merge($userPermissions);
+    $this->permissions = collect($rolePemissions)->merge($userPermissions)->toArray();
 
     $this->breadcrumbItems = [
         [
@@ -144,8 +166,8 @@ mount(function(User $user) {
     {{--Breadcrumb end--}}
 
     {{--Create user form start--}}
-    <form wire:submit="update" class="max-w-4xl m-auto">
-        <div class="bg-white dark:bg-slate-800 rounded-md p-5 pb-6">
+    <form wire:submit="update" class="max-w-6xl m-auto">
+        <div class="bg-white dark:bg-slate-800 rounded-md p-5 pb-6 max-w-4xl mb-4">
             <div class="grid sm:grid-cols-1 gap-x-8 gap-y-4">
                 {{--Name input end--}}
                 <div class="input-area">
@@ -215,12 +237,74 @@ mount(function(User $user) {
                     </iconify-icon>
                 </div>
                 {{--Role input end--}}
+                <div class="flex items-center gap-x-3">
+                    <label for="active" class="inputText">
+                        {{__('Active')}}
+                    </label>
+                    <div class="flex items-center mr-2 sm:mr-4 space-x-2">
+                        <label class="relative inline-flex h-6 w-[46px] items-center rounded-full transition-all duration-150 cursor-pointer">
+                            <input
+                                wire:model="active"
+                                @checked($active)
+                                name="active"
+                                id="active"
+                                type="checkbox"
+                                class="sr-only peer"
+                            >
+                            <div class="w-14 h-6 bg-gray-200 peer-focus:outline-none ring-0 rounded-full peer dark:bg-gray-900 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:z-10 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-500"></div>
+                            <span class="absolute left-1 z-20 text-xs text-white font-Inter font-normal opacity-0 peer-checked:opacity-100">On</span>
+                            <span class="absolute right-1 z-20 text-xs text-white font-Inter font-normal opacity-100 peer-checked:opacity-0">Off</span>
+                        </label>
+                    </div>
+                </div>
             </div>
             <button type="submit" class="btn inline-flex justify-center btn-dark mt-4 w-full">
                 {{ __('Save Changes') }}
             </button>
         </div>
-
+        <div class="bg-white dark:bg-slate-800 rounded-md p-5 pb-6">
+            <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-7">
+                @foreach ($this->permissionModules as $key => $permissionModule)
+                    <div class="card border border-slate-200">
+                        <div class="card-header bg-slate-100 !p-3">
+                            <h4 class="p-0 text-lg uppercase">{{ __($key) }}</h4>
+                        </div>
+                        <!-- Card Body Start -->
+                        <div class="p-4">
+                            <ul>
+                                @foreach ($permissionModule as $permission)
+                                    <li @class(['permissionCardList', 'singlePermissionCardList' => ($loop->count == 1)])>
+                                        <div class="flex items-center justify-between gap-x-3">
+                                            <label for="{{$permission->name}}" class="inputText">
+                                                {{ __($permission->name) }}
+                                            </label>
+                                            <div class="flex items-center mr-2 sm:mr-4 mt-2 space-x-2">
+                                                <label class="relative inline-flex h-6 w-[46px] items-center rounded-full transition-all duration-150 cursor-pointer">
+                                                    <input
+                                                        wire:model="permissions"
+                                                        name="permissions[]"
+                                                        @checked(in_array($permission->id, $permissions))
+                                                        id="{{$permission->name}}"
+                                                        value="{{ $permission->id }}"
+                                                        type="checkbox"
+                                                        class="sr-only peer"
+                                                        @disabled(!$permission->assignable || in_array($permission->id, $this->rolePermissions))
+                                                    >
+                                                    <div class="w-14 h-6 bg-gray-200 peer-focus:outline-none ring-0 rounded-full peer dark:bg-gray-900 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:z-10 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-500"></div>
+                                                    <span class="absolute left-1 z-20 text-xs text-white font-Inter font-normal opacity-0 peer-checked:opacity-100">On</span>
+                                                    <span class="absolute right-1 z-20 text-xs text-white font-Inter font-normal opacity-100 peer-checked:opacity-0">Off</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <!-- Card Body End -->
+                    </div>
+                @endforeach
+            </div>
+        </div>
     </form>
     {{--Create user form end--}}
 </div>

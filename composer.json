@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "codezero/laravel-unique-translation": "^4.3",
         "jackiedo/dotenv-editor": "^1.1",
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",
@@ -14,14 +15,18 @@
         "livewire/livewire": "^3.4",
         "livewire/volt": "^1.0",
         "opcodesio/log-viewer": "^3.10",
+        "spatie/image": "^3.7",
         "spatie/laravel-activitylog": "^4.8",
         "spatie/laravel-backup": "^9.0",
+        "spatie/laravel-data": "^4.9",
         "spatie/laravel-medialibrary": "^11.7",
         "spatie/laravel-pdf": "^1.5",
         "spatie/laravel-permission": "^6.9",
         "spatie/laravel-query-builder": "^6.0",
         "spatie/laravel-settings": "^3.3",
+        "spatie/laravel-translatable": "^6.8",
         "spatie/simple-excel": "^3.6",
+        "stichoza/google-translate-php": "^5.2",
         "vemcogroup/laravel-translation": "^3.0"
     },
     "require-dev": {

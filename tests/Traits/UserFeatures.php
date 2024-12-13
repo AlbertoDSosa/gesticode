@@ -11,7 +11,15 @@ trait UserFeatures {
     */
     public function createUser(array $attributes = [])
     {
-        $userAttributes = collect($attributes)->only('email', 'name', 'password', 'email_verified_at')->toArray();
+        $userAttributes = collect($attributes)->only(
+            'email',
+            'name',
+            'password',
+            'active',
+            'view',
+            'email_verified_at',
+            'assignable_to_customer'
+        )->toArray();
         $user = User::factory()->create($userAttributes);
         UserProfile::factory()->create([
             'user_id' => $user->id,

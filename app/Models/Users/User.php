@@ -29,7 +29,7 @@ class User extends Authenticatable implements HasMedia
         'email',
         'active',
         'password',
-        'wiew',
+        'view',
         'assignable_to_customer'
     ];
 
