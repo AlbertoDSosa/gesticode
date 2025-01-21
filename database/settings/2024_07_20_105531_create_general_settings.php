@@ -9,7 +9,7 @@ class CreateGeneralSettings extends SettingsMigration
         $this->migrator
             ->add(
                 'general-settings.site_name',
-                ['contentType' => 'text', 'content' => 'Gestimas']
+                ['contentType' => 'text', 'content' => 'Gesticode']
             );
         $this->migrator
             ->add(
