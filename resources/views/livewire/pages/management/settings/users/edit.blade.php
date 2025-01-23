@@ -10,8 +10,8 @@ use App\Models\Users\User;
 layout('layouts.app');
 
 $user = fn() => $this->user;
-$permissions = [];
 $rolePermissions = [];
+$userPermissions = [];
 $breadcrumbItems = [];
 
 $pageTitle = 'Edit User';
@@ -39,10 +39,11 @@ state([
     'email' => fn() => $this->user->email,
     'password' => '',
     'role' => fn() => $this->user->mainRole->name,
-    'active' => fn() => $this->user->active
+    'active' => fn() => $this->user->active,
+    'permissions'
 ]);
 
-state(compact('breadcrumbItems', 'pageTitle', 'permissions', 'rolePermissions', 'user'))->locked();
+state(compact('breadcrumbItems', 'rolePermissions', 'userPermissions', 'pageTitle', 'user'))->locked();
 
 $update = function() {
     $this->validate(
@@ -52,17 +53,17 @@ $update = function() {
             'password' => ['nullable', 'string', 'min:8'],
             'active' => ['required', 'boolean'],
             'role' => ['required', 'exists:roles,name'],
+            'permissions' => ['array']
         ],
         [
             'name.required' => 'The name field is required',
             'email.required' => 'The email field is required',
-            'password.required' => 'The password field is required',
-            'role.required' => 'The role field is required',
             'email.email' => 'This is not a valid email',
             'email.unique' => 'This is not a valid email',
             'password.min' => 'The password must have at least 8 characters',
             'role.exists' => 'It is not a valid role',
             'active.required' => 'The active field is required',
+
         ]
     );
 
@@ -114,7 +115,44 @@ $update = function() {
     $this->user->name = $this->name;
     $this->user->email = $this->email;
 
-    $this->user->syncRoles([$this->role]);
+    $validatedPermissions = [];
+
+    foreach ($this->permissions as $permissonId) {
+        $isRolePermission = collect($this->rolePermissions)->contains(function ($item) use ($permissonId) {
+            return $item === $permissonId;
+        });
+
+        if($isRolePermission) {
+            continue;
+        }
+
+        $permission = Permission::find((int) $permissonId);
+
+        if(!$permission) {
+            $this->addError('permissions', "The permission with ID: {$permissonId} not exists");
+            return false;
+        }
+
+        if(!$permission->assignable) {
+            abort(403);
+        }
+
+        $permissionHasSuperAdminLevel = $permission->level === 'super-admin';
+        $isntSuperAdmin = $this->authUser->mainRole->name !== 'super-admin';
+
+        if ($isntSuperAdmin && $permissionHasSuperAdminLevel) {
+            abort(401);
+        }
+
+        $validatedPermissions[] = $permission->name;
+    }
+
+    if($this->user->mainRole->name !== $this->role) {
+        $this->user->syncRoles([$this->role]);
+        $this->user->syncPermissions([]);
+    } else {
+        $this->user->syncPermissions($validatedPermissions);
+    }
 
     $this->user->save();
 
@@ -131,11 +169,10 @@ $update = function() {
 
 mount(function(User $user) {
 
-    $rolePemissions = $user->mainRole->permissions()->pluck('id')->toArray();
-    $userPermissions = $user->permissions()->pluck('id')->toArray();
+    $this->rolePermissions = $user->mainRole->permissions()->pluck('id')->toArray();
+    $this->userPermissions = $user->permissions()->pluck('id')->toArray();
 
-    $this->rolePermissions = $rolePemissions;
-    $this->permissions = collect($rolePemissions)->merge($userPermissions)->toArray();
+    $this->permissions = collect($this->rolePermissions)->merge($this->userPermissions)->toArray();
 
     $this->breadcrumbItems = [
         [
@@ -278,23 +315,39 @@ mount(function(User $user) {
                                             <label for="{{$permission->name}}" class="inputText">
                                                 {{ __($permission->name) }}
                                             </label>
+                                            @if ($user->mainRole->name === 'super-admin')
                                             <div class="flex items-center mr-2 sm:mr-4 mt-2 space-x-2">
                                                 <label class="relative inline-flex h-6 w-[46px] items-center rounded-full transition-all duration-150 cursor-pointer">
                                                     <input
-                                                        wire:model="permissions"
-                                                        name="permissions[]"
-                                                        @checked(in_array($permission->id, $permissions))
-                                                        id="{{$permission->name}}"
-                                                        value="{{ $permission->id }}"
+                                                        checked
                                                         type="checkbox"
                                                         class="sr-only peer"
-                                                        @disabled(!$permission->assignable || in_array($permission->id, $this->rolePermissions))
+                                                        disabled
                                                     >
                                                     <div class="w-14 h-6 bg-gray-200 peer-focus:outline-none ring-0 rounded-full peer dark:bg-gray-900 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:z-10 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-500"></div>
                                                     <span class="absolute left-1 z-20 text-xs text-white font-Inter font-normal opacity-0 peer-checked:opacity-100">On</span>
                                                     <span class="absolute right-1 z-20 text-xs text-white font-Inter font-normal opacity-100 peer-checked:opacity-0">Off</span>
                                                 </label>
                                             </div>
+                                            @else
+                                            <div class="flex items-center mr-2 sm:mr-4 mt-2 space-x-2">
+                                                <label class="relative inline-flex h-6 w-[46px] items-center rounded-full transition-all duration-150 cursor-pointer">
+                                                    <input
+                                                        wire:model="permissions"
+                                                        name="permissions[]"
+                                                        @checked(in_array($permission->id, $this->permissions))
+                                                        id="{{$permission->name}}"
+                                                        value="{{ $permission->id }}"
+                                                        type="checkbox"
+                                                        class="sr-only peer"
+                                                        @disabled(in_array($permission->id, $this->rolePermissions) || !$permission->assignable)
+                                                    >
+                                                    <div class="w-14 h-6 bg-gray-200 peer-focus:outline-none ring-0 rounded-full peer dark:bg-gray-900 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:z-10 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-500"></div>
+                                                    <span class="absolute left-1 z-20 text-xs text-white font-Inter font-normal opacity-0 peer-checked:opacity-100">On</span>
+                                                    <span class="absolute right-1 z-20 text-xs text-white font-Inter font-normal opacity-100 peer-checked:opacity-0">Off</span>
+                                                </label>
+                                            </div>
+                                            @endif
                                         </div>
                                     </li>
                                 @endforeach

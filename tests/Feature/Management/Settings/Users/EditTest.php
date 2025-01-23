@@ -162,6 +162,120 @@ class EditTest extends TestCase
     }
 
     #[Group('users'), Test]
+    public function only_superadmin_users_can_list_superadmin_permissions(): void
+    {
+        $this->seed(RolesAndPermissionsSeeder::class);
+
+        $admin = $this->createUser(['role' => 'admin']);
+        $superAdmin = $this->createUser(['role' => 'super-admin']);
+
+        $this->actingAs($admin);
+
+        $this->get("/management/settings/users/edit/{$admin->id}")->assertDontSeeText('show super admin users');
+
+        $this->actingAs($superAdmin);
+
+        $this->get("/management/settings/users/edit/{$superAdmin->id}")->assertSeeText('show super admin users');
+
+    }
+
+    #[Group('users'), Test]
+    public function only_superadmin_user_can_assign_superadmin_permissions_level(): void
+    {
+        $this->seed(RolesAndPermissionsSeeder::class);
+
+        $admin = $this->createUser(['role' => 'admin']);
+        $superAdmin = $this->createUser(['role' => 'super-admin']);
+
+        $permission = $this->createPermission([
+            'name' => 'super admin permission level',
+            'level' => 'super-admin',
+            'module_name' => 'test'
+        ]);
+
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.users.edit', ['user' => $admin])
+            ->set('permissions', [$permission->id])
+            ->call('update')
+            ->assertUnauthorized();
+
+        Volt::actingAs($superAdmin)
+            ->test('pages.management.settings.users.edit', ['user' => $superAdmin])
+            ->set('permissions', [$permission->id])
+            ->call('update')
+            ->assertOk();
+    }
+
+    #[Group('users'), Test]
+    public function only_can_assign_permissions_if_are_assignables(): void
+    {
+        $this->seed(RolesAndPermissionsSeeder::class);
+
+        $admin = $this->createUser(['role' => 'admin']);
+        $superAdmin = $this->createUser(['role' => 'super-admin']);
+
+        $permission1 = $this->createPermission([
+            'name' => 'permission test 1',
+            'level' => 'regular',
+            'module_name' => 'test',
+            'assignable' => false
+        ]);
+
+        $permission2 = $this->createPermission([
+            'name' => 'permission test 2',
+            'level' => 'regular',
+            'module_name' => 'test',
+            'assignable' => true
+        ]);
+
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.users.edit', ['user' => $admin])
+            ->set('permissions', [$permission1->id])
+            ->call('update')
+            ->assertForbidden();
+
+        Volt::actingAs($superAdmin)
+            ->test('pages.management.settings.users.edit', ['user' => $admin])
+            ->set('permissions', [$permission2->id])
+            ->call('update')
+            ->assertOk();
+    }
+
+    #[Group('users'), Test]
+    public function only_can_assign_free_user_permissions(): void
+    {
+        $this->seed(RolesAndPermissionsSeeder::class);
+
+        $admin = $this->createUser(['role' => 'admin']);
+        $technician = $this->createUser(['role' => 'technician']);
+
+        $rolePermissions = $technician->mainRole->permissions()->pluck('id')->toArray();
+
+
+        $permission1 = $this->createPermission([
+            'name' => 'permission test 1',
+            'level' => 'regular',
+            'module_name' => 'test',
+            'assignable' => true
+        ]);
+
+        $permission2 = $this->createPermission([
+            'name' => 'permission test 2',
+            'level' => 'regular',
+            'module_name' => 'test',
+            'assignable' => true
+        ]);
+
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.users.edit', ['user' => $technician])
+            ->set('permissions', collect($rolePermissions)->merge([$permission1->id, $permission2->id])->toArray())
+            ->call('update')
+            ->assertOk();
+
+        $this->assertSame($technician->permissions()->pluck('name')->toArray(), [$permission1->name, $permission2->name]);
+    }
+
+    #[Group('users'), Test]
     public function can_update_users(): void
     {
         $this->seed(RolesAndPermissionsSeeder::class);
@@ -182,16 +296,4 @@ class EditTest extends TestCase
             ->assertDontSeeText($user->name)
             ->assertDontSeeText($user->email);
     }
-
-    // #[Group('users'), Test]
-    // public function my_test(): void
-    // {
-    //     $this->markTestSkipped();
-    //     $this->seed(RolesAndPermissionsSeeder::class);
-
-    //     $user = $this->createUser(['role' => 'technician']);
-    //     $admin = $this->createUser(['role' => 'admin']);
-    //     $superAdmin = $this->createUser(['role' => 'super-admin']);
-
-    // }
 }
