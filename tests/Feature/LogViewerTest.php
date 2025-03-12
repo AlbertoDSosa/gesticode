@@ -24,7 +24,7 @@ class LogViewerTest extends TestCase
 
         $this->seed(RolesAndPermissionsSeeder::class);
 
-        $this->get('/log-viewer')->assertStatus(403);
+        $this->get('/log-viewer')->assertRedirect('login');
 
         $user = $this->createUser(['role' => 'technician']);
         $admin = $this->createUser(['role' => 'admin']);
@@ -32,7 +32,7 @@ class LogViewerTest extends TestCase
 
         $this->actingAs($user);
 
-        $this->get('/log-viewer')->assertStatus(403);
+        $this->get('/log-viewer')->assertRedirect('dashboard');
 
         $this->actingAs($admin);
 

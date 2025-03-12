@@ -14,10 +14,6 @@ Route::middleware('guest')->group(function () {
 
     Volt::route('reset-password/{token}', 'pages.auth.reset-password')
         ->name('password.reset');
-
-    Route::any('{any}', function () {
-        return redirect('login');
-    })->where('any', '.*')->fallback();
 });
 
 Route::middleware('auth')->group(function () {

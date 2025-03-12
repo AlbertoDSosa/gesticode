@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
-use Opcodes\LogViewer\Facades\LogViewer;
+// use Opcodes\LogViewer\Facades\LogViewer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,8 +28,8 @@ class AppServiceProvider extends ServiceProvider
             return $user->hasRole('super-admin') ? true : null;
         });
 
-        LogViewer::auth(function ($request) {
-            return $request->user() && $request->user()->hasAnyRole(['admin', 'super-admin']);
-        });
+        // LogViewer::auth(function ($request) {
+        //     return $request->user() && $request->user()->hasAnyRole(['admin', 'super-admin']);
+        // });
     }
 }
