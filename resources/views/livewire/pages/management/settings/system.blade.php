@@ -89,15 +89,15 @@ mount(function () {
         </div>
     </div>
 
-    @push('scripts')
-        <script>
-
-            // COLLPASED CARD
-            function collapsedCard(key) {
-                $('#settingBox' + key).toggleClass('hideContent');
-                $('.generalSettingsCardIcon' + key).toggleClass('rotate-icon');
-            }
-
-        </script>
-    @endpush
 </div>
+@script
+<script>
+
+    // COLLPASED CARD
+    function collapsedCard(key) {
+        $('#settingBox' + key).toggleClass('hideContent');
+        $('.generalSettingsCardIcon' + key).toggleClass('rotate-icon');
+    }
+
+</script>
+@endscript

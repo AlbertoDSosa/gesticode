@@ -61,3 +61,9 @@ $logout = function (Logout $logout) {
         </div>
     </div>
 </div>
+
+{{-- @script
+<script>
+    console.log('dentro', $("#bodyOverlay"));
+</script>
+@endscript --}}

@@ -9,7 +9,11 @@
     <ul class="m-0 p-0 list-none">
         @empty(!$breadcrumbItems)
             <li class="inline-block relative top-[3px] text-base text-primary-500 font-Inter">
-                <a href="{{ route('dashboard') }}" class="breadcrumbList">
+                <a
+                    href="{{ route('dashboard') }}"
+                    class="breadcrumbList"
+                    wire:navigate
+                >
                     <iconify-icon icon="heroicons-outline:home"></iconify-icon>
                     <iconify-icon icon="heroicons-outline:chevron-right" class="relative text-slate-500 text-sm rtl:rotate-180"></iconify-icon>
                 </a>
@@ -19,13 +23,21 @@
         @foreach($breadcrumbItems as $breadcrumbItem)
             @if($breadcrumbItem['active'])
             <li class="inline-block">
-                <a href="{{$breadcrumbItem['url']}}" class="breadcrumbList breadcrumbActive dark:text-slate-300">
+                <a
+                    href="{{$breadcrumbItem['url']}}"
+                    class="breadcrumbList breadcrumbActive dark:text-slate-300"
+                    wire:navigate
+                >
                     {{ __($breadcrumbItem['name']) }}
+
                 </a>
             </li>
             @else
             <li class="inline-block relative text-sm text-primary-500 font-Inter">
-                <a href="{{$breadcrumbItem['url']}}" class="breadcrumbList">
+                <a
+                    href="{{$breadcrumbItem['url']}}" class="breadcrumbList"
+                    wire:navigate
+                >
                     {{ __($breadcrumbItem['name']) }}
                     <iconify-icon icon="heroicons-outline:chevron-right" class="relative top-[3px] text-slate-500 rtl:rotate-180"></iconify-icon>
                 </a>

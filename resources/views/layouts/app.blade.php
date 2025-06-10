@@ -8,7 +8,14 @@
         <x-favicon />
 
         <!-- Scripts -->
-        @vite(['resources/css/app.scss', 'resources/js/custom/store.js'])
+        @vite([
+            'resources/css/app.scss'
+        ])
+        @vite([
+            'resources/js/app.js',
+            'resources/js/custom/store.js',
+            'resources/js/main.js'
+        ])
     </head>
     <body class="font-inter dashcode-app" id="body_class">
         <div class="app-wrapper">
@@ -45,7 +52,28 @@
 
             </div>
         </div>
-        @vite(['resources/js/app.js', 'resources/js/main.js'])
-        @stack('scripts')
+        {{-- @vite([]) --}}
+        <script>
+            document.addEventListener('livewire:navigate', (event) => {
+                // Triggers when a navigation is triggered.
+
+                console.log('livewire:navigate', $("#bodyOverlay"))
+            })
+
+            document.addEventListener('livewire:navigating', () => {
+                // Triggered when new HTML is about to swapped onto the page...
+
+                // This is a good place to mutate any HTML before the page
+                // is navigated away from...
+                console.log('livewire:navigating', $("#bodyOverlay"))
+            })
+
+            document.addEventListener('livewire:navigated', () => {
+                // Triggered as the final step of any page navigation...
+
+                // Also triggered on page-load instead of "DOMContentLoaded"...
+                console.log('livewire:navigated',$("#bodyOverlay"))
+            })
+        </script>
     </body>
 </html>

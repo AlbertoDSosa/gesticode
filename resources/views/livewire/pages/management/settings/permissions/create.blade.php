@@ -101,7 +101,7 @@ $create = function() {
     session()
         ->flash('status', ['message' => 'Permisson has been created successfully.', 'type' => 'success']);
 
-    $this->redirect(route('management.settings.permissions'));
+    $this->redirect(route('management.settings.permissions'), navigate: true);
 
 }
 

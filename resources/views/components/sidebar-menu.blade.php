@@ -26,7 +26,7 @@
         <ul class="sidebar-menu">
             <li class="sidebar-menu-title">{{ __('MENU') }}</li>
             <li class="{{ request()->route()->getName() == 'dashboard' ? 'active' : '' }}">
-                <a href="{{ route('dashboard') }}" class="navItem">
+                <a wire:navigate href="{{ route('dashboard') }}" class="navItem">
                     <span class="flex items-center">
                         <iconify-icon class="nav-icon" icon="heroicons-outline:cube"></iconify-icon>
                         <span>{{ __('Dashboard') }}</span>
@@ -44,10 +44,16 @@
                 </a>
                 <ul class="sidebar-submenu">
                     <li>
-                        <a href="{{ route('site-settings.logos') }}" class="navItem {{ (\Request::route()->getName() == 'site-settings.logos') ? 'active' : '' }}">Logos</a>
+                        <a
+                            href="{{ route('site-settings.logos') }}"
+                            class="navItem {{ (\Request::route()->getName() == 'site-settings.logos') ? 'active' : '' }}"
+                            wire:navigate
+                        >
+                            Logos
+                        </a>
                     </li>
                     {{-- <li>
-                        <a href="{{ route('') }}" class="navItem {{ (\Request::route()->getName() == '') ? 'active' : '' }}">{{ __('') }}
+                        <a wire:navigate href="{{ route('') }}" class="navItem {{ (\Request::route()->getName() == '') ? 'active' : '' }}">{{ __('') }}
                         </a>
                     </li> --}}
                 </ul>
@@ -59,6 +65,7 @@
                 <a
                     href="{{route('management.settings')}}"
                     class="navItem {{ Str::startsWith(request()->route()->getName(), 'management.settings') ? 'active' : '' }}"
+                    wire:navigate
                 >
                     <span class="flex items-center">
                         {{-- <iconify-icon class="nav-icon" icon="material-symbols:settings-outline"></iconify-icon> --}}
@@ -71,6 +78,7 @@
                 <a
                     href="{{route('management.tools')}}"
                     class="navItem {{ Str::startsWith(request()->route()->getName(), 'management.tools') ? 'active' : '' }}"
+                    wire:navigate
                 >
                     <span class="flex items-center">
                         <iconify-icon class="nav-icon" icon="heroicons:wrench-screwdriver"></iconify-icon>

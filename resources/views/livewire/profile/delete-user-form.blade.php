@@ -15,7 +15,7 @@ $deleteUser = function (Logout $logout) {
 
     tap(Auth::user(), $logout(...))->delete();
 
-    $this->redirect('/');
+    $this->redirect('/login');
 };
 
 ?>

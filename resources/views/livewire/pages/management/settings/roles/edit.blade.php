@@ -127,7 +127,7 @@ $update = function () {
         ]
     );
 
-    $this->redirect(route('management.settings.roles'));
+    $this->redirect(route('management.settings.roles'), navigate: true);
 };
 
 ?>

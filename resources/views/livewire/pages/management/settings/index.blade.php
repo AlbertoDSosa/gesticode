@@ -42,6 +42,7 @@ state(compact('breadcrumbItems', 'pageTitle'));
                         </div>
                         <a
                             href="{{route('management.settings.system')}}"
+                            wire:navigate
                             class="inline-flex items-center space-x-3 rtl:space-x-reverse text-sm capitalize font-medium text-slate-600
                                 dark:text-slate-300"
                         >
@@ -67,9 +68,12 @@ state(compact('breadcrumbItems', 'pageTitle'));
                         <div class="text-slate-600 dark:text-slate-300 text-sm">
                             Manage Roles (Add, Edit, Delete role)
                         </div>
-                        <a href="{{route('management.settings.roles')}}"
+                        <a
+                            href="{{route('management.settings.roles')}}"
                             class="inline-flex items-center space-x-3 rtl:space-x-reverse text-sm capitalize font-medium text-slate-600
-                                dark:text-slate-300">
+                                dark:text-slate-300"
+                            wire:navigate
+                        >
                             <span>Change Settings</span>
                             <iconify-icon icon="heroicons:arrow-right"></iconify-icon>
                         </a>
@@ -91,9 +95,12 @@ state(compact('breadcrumbItems', 'pageTitle'));
                         <div class="text-slate-600 dark:text-slate-300 text-sm">
                             Manage Permissions (Add, Edit, Delete Permission)
                         </div>
-                        <a href="{{route('management.settings.permissions')}}"
+                        <a
+                            href="{{route('management.settings.permissions')}}"
                             class="inline-flex items-center space-x-3 rtl:space-x-reverse text-sm capitalize font-medium text-slate-600
-                                dark:text-slate-300">
+                                dark:text-slate-300"
+                            wire:navigate
+                        >
                             <span>Change Settings</span>
                             <iconify-icon icon="heroicons:arrow-right"></iconify-icon>
                         </a>
@@ -115,9 +122,12 @@ state(compact('breadcrumbItems', 'pageTitle'));
                         <div class="text-slate-600 dark:text-slate-300 text-sm">
                             Manage Users (Add, Edit, Delete Users)
                         </div>
-                        <a href="{{route('management.settings.users')}}"
+                        <a
+                            href="{{route('management.settings.users')}}"
                             class="inline-flex items-center space-x-3 rtl:space-x-reverse text-sm capitalize font-medium text-slate-600
-                                dark:text-slate-300">
+                                dark:text-slate-300"
+                            wire:navigate
+                        >
                             <span>Change Settings</span>
                             <iconify-icon icon="heroicons:arrow-right"></iconify-icon>
                         </a>

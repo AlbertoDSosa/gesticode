@@ -164,7 +164,7 @@ $update = function() {
         ]
     );
 
-    $this->redirect(route('management.settings.users'));
+    $this->redirect(route('management.settings.users'), navigate: true);
 };
 
 mount(function(User $user) {
