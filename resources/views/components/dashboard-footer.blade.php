@@ -3,7 +3,7 @@
     <div class="site-footer px-6 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-300 py-4 ltr:ml-[248px] rtl:mr-[248px]">
         <div class="grid md:grid-cols-2 grid-cols-1 md:gap-5">
         <div class="text-center ltr:md:text-start rtl:md:text-right text-sm">
-            {{ __('COPYRIGHT') }} © <script>  document.write(new Date().getFullYear())</script> {{ __('Beat & Code, All rights Reserved') }}
+            {{ __('COPYRIGHT') }} © <span id="thisYear"></span> {{ __('Beat & Code, All rights Reserved') }}
         </div>
         <div class="ltr:md:text-right rtl:md:text-end text-center text-sm">
             {{ __('Design & Develop by') }}

@@ -8,7 +8,7 @@
         <title>{{ config('app.name', 'Gesticode') }}</title>
         <x-favicon />
         <!-- Scripts -->
-        @vite(['resources/css/app.scss', 'resources/js/custom/store.js'])
+        @vite(['resources/css/app.scss'])
     </head>
     <body class=" font-inter flex flex-col justify-between min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
         <header class="">

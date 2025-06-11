@@ -8,13 +8,14 @@
         <x-application-logo />
 
         <!-- Sidebar Type Button -->
-        <div id="sidebar_type" class="cursor-pointer text-slate-900 dark:text-white text-lg">
+        <div id="sidebar_type" class="cursor-pointer text-slate-900 dark:text-white text-lg"
+             @click="toggleSidebar()">
             <iconify-icon class="sidebarDotIcon extend-icon text-slate-900 dark:text-slate-200"
                 icon="fa-regular:dot-circle"></iconify-icon>
             <iconify-icon class="sidebarDotIcon collapsed-icon text-slate-900 dark:text-slate-200"
                 icon="material-symbols:circle-outline"></iconify-icon>
         </div>
-        <button class="sidebarCloseIcon text-2xl inline-block md:hidden">
+        <button class="sidebarCloseIcon text-2xl inline-block md:hidden" @click="closeSidebar()">
             <iconify-icon class="text-slate-900 dark:text-slate-200" icon="clarity:window-close-line"></iconify-icon>
         </button>
     </div>
@@ -22,7 +23,7 @@
         class="nav_shadow h-[60px] absolute top-[80px] nav-shadow z-[1] w-full transition-all duration-200 pointer-events-none
       opacity-0">
     </div>
-    <div class="sidebar-menus bg-white dark:bg-slate-800 py-2 px-4 h-[calc(100%-80px)] z-50" id="sidebar_menus">
+    <div class="sidebar-menus bg-white dark:bg-slate-800 py-2 px-4 h-[calc(100%-80px)] z-50" id="sidebar_menus" x-data="sidebarMenu">
         <ul class="sidebar-menu">
             <li class="sidebar-menu-title">{{ __('MENU') }}</li>
             <li class="{{ request()->route()->getName() == 'dashboard' ? 'active' : '' }}">
@@ -35,7 +36,7 @@
             </li>
             @can('show site settings')
             <li class="{{ Str::startsWith(request()->route()->getName(), 'site-settings') ? 'active' : '' }}">
-                <a href="#" class="navItem">
+                <a href="#" class="navItem" @click="toggleSubmenu($event, $el)">
                     <span class="flex items-center">
                         <iconify-icon class=" nav-icon" icon="heroicons:cog-8-tooth"></iconify-icon>
                         <span>{{ __('Site Settings') }}</span>

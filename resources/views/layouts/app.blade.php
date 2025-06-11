@@ -13,12 +13,24 @@
         ])
         @vite([
             'resources/js/app.js',
-            'resources/js/custom/store.js',
             'resources/js/main.js'
         ])
+
+        <!-- Alpine.js Styles -->
+        <style>
+            [x-cloak] { display: none !important; }
+        </style>
     </head>
-    <body class="font-inter dashcode-app" id="body_class">
-        <div class="app-wrapper">
+    <body class="font-inter dashcode-app" id="body_class" x-data="responsiveDebug" x-cloak>
+        <!-- Panel de depuración responsiva (visible solo en desarrollo) -->
+        @if(config('app.debug'))
+        <div class="fixed bottom-0 left-0 z-50 bg-black bg-opacity-75 text-white p-2 text-xs rounded-tr-md" style="font-family: monospace;">
+            <span>Screen: <span x-text="screenSize"></span></span>
+            <span class="ml-2">Size: <span x-text="width + 'x' + height"></span></span>
+        </div>
+        @endif
+
+        <div class="app-wrapper" x-data="sidebarManager"
 
             <!-- BEGIN: Sidebar Navigation -->
             <x-sidebar-menu />
@@ -55,25 +67,41 @@
         {{-- @vite([]) --}}
         <script>
             document.addEventListener('livewire:navigate', (event) => {
-                // Triggers when a navigation is triggered.
-
-                console.log('livewire:navigate', $("#bodyOverlay"))
-            })
+                // Almacenar el estado actual del tema y la navegación
+                // if (window.Alpine) {
+                //     const themeManager = Alpine.store('themeState') || {};
+                //     if (themeManager.saveState) {
+                //         themeManager.saveState();
+                //     }
+                // }
+            });
 
             document.addEventListener('livewire:navigating', () => {
-                // Triggered when new HTML is about to swapped onto the page...
-
-                // This is a good place to mutate any HTML before the page
-                // is navigated away from...
-                console.log('livewire:navigating', $("#bodyOverlay"))
-            })
+                // Podemos mostrar un estado de carga aquí si es necesario
+                const bodyOverlay = document.getElementById('bodyOverlay');
+                if (bodyOverlay) {
+                    bodyOverlay.classList.remove('hidden');
+                }
+            });
 
             document.addEventListener('livewire:navigated', () => {
-                // Triggered as the final step of any page navigation...
+                // Reinicializar componentes Alpine.js después de la navegación
+                // if (window.Alpine) {
+                //     // Actualizar componentes Alpine.js
+                //     Alpine.initTree(document.body);
+                // }
 
-                // Also triggered on page-load instead of "DOMContentLoaded"...
-                console.log('livewire:navigated',$("#bodyOverlay"))
-            })
+                // También inicializar los event listeners
+                // if (window.setupEventListeners) {
+                //     window.setupEventListeners();
+                // }
+
+                // Ocultar overlay una vez completada la navegación
+                const bodyOverlay = document.getElementById('bodyOverlay');
+                if (bodyOverlay) {
+                    bodyOverlay.classList.add('hidden');
+                }
+            });
         </script>
     </body>
 </html>

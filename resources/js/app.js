@@ -1,9 +1,5 @@
 import './bootstrap';
 
-import jQuery from "jquery";
-window.$ = jQuery;
-window.jQuery = jQuery;
-
 // Icon
 import "iconify-icon";
 
@@ -41,3 +37,5 @@ window.Swal = Swal;
 // import tippy from "tippy.js";
 // import "tippy.js/dist/tippy.css";
 // window.tippy = tippy;
+
+import './lib/alpine';

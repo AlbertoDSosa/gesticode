@@ -1,5 +1,6 @@
 <!-- BEGIN: Settings -->
 <!-- Settings Toggle Button -->
+<div x-data="layoutManager">
 <button
     class="fixed ltr:md:right-[-29px] ltr:right-0 rtl:left-0 rtl:md:left-[-29px] top-1/2 z-[1045] translate-y-1/2 bg-slate-800 text-slate-50 dark:bg-slate-700 dark:text-slate-300 cursor-pointer transform rotate-90 flex items-center text-sm font-medium px-2 py-2 shadow-deep ltr:rounded-b rtl:rounded-t"
     type="button"
@@ -55,21 +56,23 @@
                     </div>
                 </div> -->
                 <h3 class="mt-4">Theme</h3>
-                <form class="input-area flex items-center space-x-8 rtl:space-x-reverse" id="themeChanger">
+                <div class="input-area flex items-center space-x-8 rtl:space-x-reverse" id="themeChanger" x-data="themeManager">
                     <div class="input-group flex items-center">
-                        <input type="radio" id="light" name="theme" value="light" class="themeCustomization-checkInput">
+                        <input type="radio" id="light" name="theme" value="light" class="themeCustomization-checkInput"
+                               :checked="currentTheme === 'light'" @change="setTheme('light')">
                         <label for="light" class="themeCustomization-checkInput-label">Light</label>
                     </div>
                     <div class="input-group flex items-center">
-                        <input type="radio" id="dark" name="theme" value="dark" class="themeCustomization-checkInput">
+                        <input type="radio" id="dark" name="theme" value="dark" class="themeCustomization-checkInput"
+                               :checked="currentTheme === 'dark'" @change="setTheme('dark')">
                         <label for="dark" class="themeCustomization-checkInput-label">Dark</label>
                     </div>
                     <div class="input-group flex items-center">
-                        <input type="radio" id="semiDark" name="theme" value="semiDark"
-                            class="themeCustomization-checkInput">
+                        <input type="radio" id="semiDark" name="theme" value="semiDark" class="themeCustomization-checkInput"
+                               :checked="currentTheme === 'semiDark'" @change="setTheme('semiDark')">
                         <label for="semiDark" class="themeCustomization-checkInput-label">Semi Dark</label>
                     </div>
-                </form>
+                </div>
             </div>
             <div class="divider"></div>
             <div class="p-6">
@@ -87,7 +90,8 @@
                     <h3 class="!mb-0">Rtl</h3>
                     <label id="rtl_ltr"
                         class="relative inline-flex h-6 w-[46px] items-center rounded-full transition-all duration-150 cursor-pointer">
-                        <input type="checkbox" value="" class="sr-only peer">
+                        <input type="checkbox" value="" class="sr-only peer"
+                               :checked="direction === 'rtl'" @change="setDirection(direction === 'ltr' ? 'rtl' : 'ltr')">
                         <span
                             class="w-11 h-6 bg-gray-200 peer-focus:outline-none ring-0 rounded-full peer dark:bg-gray-900 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-black-600"></span>
                     </label>
@@ -99,12 +103,16 @@
                 <div class="input-area flex items-center space-x-8 rtl:space-x-reverse">
                     <div class="input-group flex items-center">
                         <input type="radio" id="fullWidth" name="content-width" value="fullWidth"
-                            class="themeCustomization-checkInput">
+                            class="themeCustomization-checkInput"
+                            :checked="contentLayout === 'layout-full'"
+                            @change="setContentLayout('layout-full')">
                         <label for="fullWidth" class="themeCustomization-checkInput-label ">Full Width</label>
                     </div>
                     <div class="input-group flex items-center">
                         <input type="radio" id="boxed" name="content-width" value="boxed"
-                            class="themeCustomization-checkInput">
+                            class="themeCustomization-checkInput"
+                            :checked="contentLayout === 'layout-boxed'"
+                            @change="setContentLayout('layout-boxed')">
                         <label for="boxed" class="themeCustomization-checkInput-label ">Boxed</label>
                     </div>
                 </div>
@@ -112,12 +120,16 @@
                 <div class="input-area flex items-center space-x-8 rtl:space-x-reverse">
                     <div class="input-group flex items-center">
                         <input type="radio" id="vertical_menu" name="menu_layout" value="vertical"
-                            class="themeCustomization-checkInput">
+                            class="themeCustomization-checkInput"
+                            :checked="menuLayout === ''"
+                            @change="setMenuLayout('')">
                         <label for="vertical_menu" class="themeCustomization-checkInput-label">Vertical</label>
                     </div>
                     <div class="input-group flex items-center">
                         <input type="radio" id="horizontal_menu" name="menu_layout" value="horizontal"
-                            class="themeCustomization-checkInput">
+                            class="themeCustomization-checkInput"
+                            :checked="menuLayout === 'horizontalMenu'"
+                            @change="setMenuLayout('horizontalMenu')">
                         <label for="horizontal_menu" class="themeCustomization-checkInput-label">Horizontal</label>
                     </div>
                 </div>
@@ -125,7 +137,7 @@
                     <h3 class="!mb-0">Menu Collapsed</h3>
                     <label
                         class="relative inline-flex h-6 w-[46px] items-center rounded-full transition-all duration-150 cursor-pointer">
-                        <input type="checkbox" value="" class="sr-only peer">
+                        <input type="checkbox" :checked="collapsed" @change="toggleSidebar()" class="sr-only peer">
                         <span
                             class="w-11 h-6 bg-gray-200 peer-focus:outline-none ring-0 rounded-full peer dark:bg-gray-900 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-black-500"></span>
                     </label>
@@ -134,7 +146,7 @@
                     <h3 class="!mb-0">Menu Hidden</h3>
                     <label id="menuHide"
                         class="relative inline-flex h-6 w-[46px] items-center rounded-full transition-all duration-150 cursor-pointer">
-                        <input type="checkbox" value="" class="sr-only peer">
+                        <input type="checkbox" :checked="hidden" @change="toggleSidebarVisibility()" class="sr-only peer">
                         <span
                             class="w-11 h-6 bg-gray-200 peer-focus:outline-none ring-0 rounded-full peer dark:bg-gray-900 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-black-500"></span>
                     </label>
@@ -146,22 +158,30 @@
                 <div class="input-area flex flex-wrap items-center space-x-4 rtl:space-x-reverse">
                     <div class="input-group flex items-center">
                         <input type="radio" id="nav_floating" name="navbarType" value="floating"
-                            class="themeCustomization-checkInput">
+                            class="themeCustomization-checkInput"
+                            :checked="navbarStyle === 'floating'"
+                            @change="setNavbarStyle('floating')">
                         <label for="nav_floating" class="themeCustomization-checkInput-label ">Floating</label>
                     </div>
                     <div class="input-group flex items-center">
                         <input type="radio" id="nav_sticky" name="navbarType" value="sticky"
-                            class="themeCustomization-checkInput">
+                            class="themeCustomization-checkInput"
+                            :checked="navbarStyle === 'sticky'"
+                            @change="setNavbarStyle('sticky')">
                         <label for="nav_sticky" class="themeCustomization-checkInput-label ">Sticky</label>
                     </div>
                     <div class="input-group flex items-center">
                         <input type="radio" id="nav_static" name="navbarType" value="static"
-                            class="themeCustomization-checkInput">
+                            class="themeCustomization-checkInput"
+                            :checked="navbarStyle === 'static'"
+                            @change="setNavbarStyle('static')">
                         <label for="nav_static" class="themeCustomization-checkInput-label ">Static</label>
                     </div>
                     <div class="input-group flex items-center">
                         <input type="radio" id="nav_hidden" name="navbarType" value="hidden"
-                            class="themeCustomization-checkInput">
+                            class="themeCustomization-checkInput"
+                            :checked="navbarStyle === 'hidden'"
+                            @change="setNavbarStyle('hidden')">
                         <label for="nav_hidden" class="themeCustomization-checkInput-label ">Hidden</label>
                     </div>
                 </div>
@@ -169,22 +189,29 @@
                 <div class="input-area flex items-center space-x-4 rtl:space-x-reverse">
                     <div class="input-group flex items-center">
                         <input type="radio" id="footer_sticky" name="footerType" value="sticky"
-                            class="themeCustomization-checkInput">
+                            class="themeCustomization-checkInput"
+                            :checked="footerStyle === 'sticky bottom-0'"
+                            @change="setFooterStyle('sticky bottom-0')">
                         <label for="footer_sticky" class="themeCustomization-checkInput-label ">Sticky</label>
                     </div>
                     <div class="input-group flex items-center">
                         <input type="radio" id="footer_static" name="footerType" value="static"
-                            class="themeCustomization-checkInput">
+                            class="themeCustomization-checkInput"
+                            :checked="footerStyle === 'static'"
+                            @change="setFooterStyle('static')">
                         <label for="footer_static" class="themeCustomization-checkInput-label ">Static</label>
                     </div>
                     <div class="input-group flex items-center">
                         <input type="radio" id="footer_hidden" name="footerType" value="hidden"
-                            class="themeCustomization-checkInput">
+                            class="themeCustomization-checkInput"
+                            :checked="footerStyle === 'hidden'"
+                            @change="setFooterStyle('hidden')">
                         <label for="footer_hidden" class="themeCustomization-checkInput-label ">Hidden</label>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </div>
 <!-- END: Settings Modal -->

@@ -8,7 +8,7 @@
         <x-favicon />
 
         <!-- Scripts -->
-        @vite(['resources/css/app.scss', 'resources/js/custom/store.js'])
+        @vite(['resources/css/app.scss'])
     </head>
     <body>
         <div class="font-inter loginwrapper">

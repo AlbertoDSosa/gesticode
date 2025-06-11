@@ -22,7 +22,6 @@
         "cleave.js": "1.6.0",
         "dragula": "3.7.3",
         "iconify-icon": "2.1.0",
-        "jquery": "^3.7.1",
         "resize-observer-polyfill": "1.5.1",
         "simplebar": "6.2.7",
         "sweetalert2": "11.10.6",
