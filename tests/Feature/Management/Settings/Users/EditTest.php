@@ -14,15 +14,6 @@ class EditTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        // first include all the normal setUp operations
-        parent::setUp();
-
-        // now de-register all the roles and permissions by clearing the permission cache
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-    }
-
     #[Group('users'), Test]
     public function only_admin_users_can_display_the_update_user_page(): void
     {
@@ -55,13 +46,13 @@ class EditTest extends TestCase
         $admin = $this->createUser(['role' => 'admin']);
         $superAdmin = $this->createUser(['role' => 'super-admin']);
 
-        $this->actingAs($admin);
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.users.edit', ['user' => $user])
+            ->assertDontSeeText('Super Administrator');
 
-        $this->get("/management/settings/users/edit/{$user->id}")->assertDontSeeText('Super Administrator');
-
-        $this->actingAs($superAdmin);
-
-        $this->get("/management/settings/users/edit/{$user->id}")->assertSeeText('Super Administrator');
+        Volt::actingAs($superAdmin)
+            ->test('pages.management.settings.users.edit', ['user' => $user])
+            ->assertSeeText('Super Administrator');
     }
 
     #[Group('users'), Test]
@@ -169,14 +160,13 @@ class EditTest extends TestCase
         $admin = $this->createUser(['role' => 'admin']);
         $superAdmin = $this->createUser(['role' => 'super-admin']);
 
-        $this->actingAs($admin);
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.users.edit', ['user' => $superAdmin])
+            ->assertDontSeeText('show super admin users');
 
-        $this->get("/management/settings/users/edit/{$admin->id}")->assertDontSeeText('show super admin users');
-
-        $this->actingAs($superAdmin);
-
-        $this->get("/management/settings/users/edit/{$superAdmin->id}")->assertSeeText('show super admin users');
-
+        Volt::actingAs($superAdmin)
+            ->test('pages.management.settings.users.edit', ['user' => $superAdmin])
+            ->assertSeeText('show super admin users');
     }
 
     #[Group('users'), Test]
@@ -290,7 +280,8 @@ class EditTest extends TestCase
             ->call('update')
             ->assertRedirect(route('management.settings.users'));
 
-        $this->get('/management/settings/users')
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.users.index')
             ->assertSeeText('Test User')
             ->assertSeeText('test@gmail.com')
             ->assertDontSeeText($user->name)

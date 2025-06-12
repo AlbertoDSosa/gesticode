@@ -15,15 +15,6 @@ class EditTest extends TestCase
 
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        // first include all the normal setUp operations
-        parent::setUp();
-
-        // now de-register all the roles and permissions by clearing the permission cache
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-    }
-
     #[Group('permissions'), Test]
     public function only_admin_users_can_display_the_edit_permissions_page(): void
     {
@@ -93,13 +84,13 @@ class EditTest extends TestCase
             'module_name' => 'test'
         ]);
 
-        $this->actingAs($admin);
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.permissions.edit', ['permission' => $permission])
+            ->assertDontSeeText('super-admin');
 
-        $this->get("/management/settings/permissions/edit/{$permission->id}")->assertDontSeeText('super-admin');
-
-        $this->actingAs($superAdmin);
-
-        $this->get("/management/settings/permissions/edit/{$permission->id}")->assertSeeText('super-admin');
+        Volt::actingAs($superAdmin)
+            ->test('pages.management.settings.permissions.edit', ['permission' => $permission])
+            ->assertSeeText('super-admin');
 
     }
 
@@ -360,7 +351,8 @@ class EditTest extends TestCase
             ->call('update')
             ->assertRedirect(route('management.settings.permissions'));
 
-        $this->get('/management/settings/permissions')
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.permissions.index')
             ->assertSeeText('test permission');
     }
 

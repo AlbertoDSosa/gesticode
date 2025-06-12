@@ -14,15 +14,6 @@ class EditTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        // first include all the normal setUp operations
-        parent::setUp();
-
-        // now de-register all the roles and permissions by clearing the permission cache
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-    }
-
     #[Group('roles'), Test]
     public function only_admin_users_can_display_edit_role_page(): void
     {
@@ -88,14 +79,13 @@ class EditTest extends TestCase
             'display_name' => 'Role'
         ]);
 
-        $this->actingAs($admin);
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.roles.edit', ['role' => $role])
+            ->assertDontSeeText('show super admin users');
 
-        $this->get("/management/settings/roles/edit/{$role->id}")->assertDontSeeText('show super admin users');
-
-        $this->actingAs($superAdmin);
-
-        $this->get("/management/settings/roles/edit/{$role->id}")->assertSeeText('show super admin users');
-
+        Volt::actingAs($superAdmin)
+            ->test('pages.management.settings.roles.edit', ['role' => $role])
+            ->assertSeeText('show super admin users');
     }
 
     #[Group('roles'), Test]
@@ -359,7 +349,8 @@ class EditTest extends TestCase
         $this->assertTrue($role->hasPermissionTo($permission1->name));
         $this->assertTrue($role->hasPermissionTo($permission2->name));
 
-        $this->get('/management/settings/roles')
+        Volt::actingAs($superAdmin)
+            ->test('pages.management.settings.roles.index')
             ->assertSeeText('Test Role 2')
             ->assertDontSeeText('Test Role 1');
 

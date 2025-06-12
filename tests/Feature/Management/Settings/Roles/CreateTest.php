@@ -14,15 +14,6 @@ class CreateTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        // first include all the normal setUp operations
-        parent::setUp();
-
-        // now de-register all the roles and permissions by clearing the permission cache
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-    }
-
     #[Group('roles'), Test]
     public function only_admin_users_can_display_create_role_page(): void
     {
@@ -48,19 +39,18 @@ class CreateTest extends TestCase
     #[Group('roles'), Test]
     public function only_superadmin_users_can_list_superadmin_permissions(): void
     {
-        // $this->markTestSkipped();
         $this->seed(RolesAndPermissionsSeeder::class);
 
         $admin = $this->createUser(['role' => 'admin']);
         $superAdmin = $this->createUser(['role' => 'super-admin']);
 
-        $this->actingAs($admin);
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.roles.create')
+            ->assertDontSeeText('show super admin users');
 
-        $this->get('/management/settings/roles/create')->assertDontSeeText('show super admin users');
-
-        $this->actingAs($superAdmin);
-
-        $this->get('/management/settings/roles/create')->assertSeeText('show super admin users');
+        Volt::actingAs($superAdmin)
+            ->test('pages.management.settings.roles.create')
+            ->assertSeeText('show super admin users');
 
     }
 
@@ -201,7 +191,7 @@ class CreateTest extends TestCase
             ->call('create')
             ->assertRedirect(route('management.settings.roles'));
 
-        $this->get('/management/settings/roles')
+        Volt::test('pages.management.settings.roles.index')
             ->assertSeeText('Test Role');
     }
 

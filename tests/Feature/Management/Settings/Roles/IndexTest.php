@@ -14,15 +14,6 @@ class IndexTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        // first include all the normal setUp operations
-        parent::setUp();
-
-        // now de-register all the roles and permissions by clearing the permission cache
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-    }
-
     #[Group('roles'), Test]
     public function only_admin_users_can_display_the_roles_page(): void
     {
@@ -53,11 +44,13 @@ class IndexTest extends TestCase
         $admin = $this->createUser(['role' => 'admin']);
         $superAdmin = $this->createUser(['role' => 'super-admin']);
 
-        $this->actingAs($admin);
-        $this->get('/management/settings/roles')->assertDontSeeText('Super Administrator');
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.roles.index')
+            ->assertDontSeeText('Super Administrator');
 
-        $this->actingAs($superAdmin);
-        $this->get('/management/settings/roles')->assertSeeText('Super Administrator');
+        Volt::actingAs($superAdmin)
+            ->test('pages.management.settings.roles.index')
+            ->assertSeeText('Super Administrator');
     }
 
    #[Group('roles'), Test]
@@ -143,9 +136,7 @@ class IndexTest extends TestCase
 
         Volt::test('pages.management.settings.roles.index')
             ->call('delete', $role->id)
-            ->assertSuccessful();
-
-        $this->get('/management/settings/roles')->assertDontSeeText('Role Test');
+            ->assertDontSeeText('Role Test');
     }
 
     // #[Group('roles'), Test]

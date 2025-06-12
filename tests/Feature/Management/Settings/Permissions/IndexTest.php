@@ -14,15 +14,6 @@ class IndexTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        // first include all the normal setUp operations
-        parent::setUp();
-
-        // now de-register all the roles and permissions by clearing the permission cache
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-    }
-
     #[Group('permissions'), Test]
     public function only_admin_users_can_display_the_permissions_page(): void
     {
@@ -59,14 +50,13 @@ class IndexTest extends TestCase
             'module_name' => 'test'
         ]);
 
-        $this->actingAs($admin);
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.permissions.index')
+            ->assertDontSeeText('super admin permission level');
 
-        $this->get('/management/settings/permissions')->assertDontSeeText('super admin permission level');
-
-        $this->actingAs($superAdmin);
-
-        $this->get('/management/settings/permissions')->assertSeeText('super admin permission level');
-
+        Volt::actingAs($superAdmin)
+            ->test('pages.management.settings.permissions.index')
+            ->assertSeeText('super admin permission level');
     }
 
     #[Group('permissions'), Test]
@@ -161,7 +151,9 @@ class IndexTest extends TestCase
             ->call('delete', $permission->id)
             ->assertSuccessful();
 
-        $this->get('management/settings/permissions')->assertDontSeeText('permission test');
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.permissions.index')
+            ->assertDontSeeText('permission test');
 
     }
 

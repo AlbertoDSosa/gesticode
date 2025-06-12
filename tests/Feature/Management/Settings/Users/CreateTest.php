@@ -13,15 +13,6 @@ class CreateTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        // first include all the normal setUp operations
-        parent::setUp();
-
-        // now de-register all the roles and permissions by clearing the permission cache
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-    }
-
     #[Group('users'), Test]
     public function only_admin_users_can_display_the_create_user_page(): void
     {
@@ -52,13 +43,13 @@ class CreateTest extends TestCase
         $admin = $this->createUser(['role' => 'admin']);
         $superAdmin = $this->createUser(['role' => 'super-admin']);
 
-        $this->actingAs($admin);
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.users.create')
+            ->assertDontSeeText('Super Administrator');
 
-        $this->get('/management/settings/users/create')->assertDontSeeText('Super Administrator');
-
-        $this->actingAs($superAdmin);
-
-        $this->get('/management/settings/users/create')->assertSeeText('Super Administrator');
+        Volt::actingAs($superAdmin)
+            ->test('pages.management.settings.users.create')
+            ->assertSeeText('Super Administrator');
     }
 
     #[Group('users'), Test]
@@ -205,9 +196,11 @@ class CreateTest extends TestCase
             ->call('create')
             ->assertRedirect(route('management.settings.users'));
 
-        $this->get('/management/settings/users')
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.users.index')
             ->assertSeeText('Test User')
             ->assertSeeText('test@gmail.com');
+
     }
 
     // #[Group('users'), Test]

@@ -64,18 +64,7 @@ class RolesAndPermissionsSeeder extends Seeder
             ['name' => 'show logo settings', 'module_name' => 'site settings', 'level' => 'regular', 'removable' => false, 'editable' => false, 'assignable' => true],
             ['name' => 'edit logo settings', 'module_name' => 'site settings', 'level' => 'regular', 'removable' => false, 'editable' => false, 'assignable' => true],
             ['name' => 'show identity settings', 'module_name' => 'site settings', 'level' => 'regular', 'removable' => false, 'editable' => false, 'assignable' => true],
-            ['name' => 'edit identity settings', 'module_name' => 'site settings', 'level' => 'regular', 'removable' => false, 'editable' => false, 'assignable' => true],
-            // ['name' => 'list customers', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
-            // ['name' => 'show all customers', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
-            // ['name' => 'show own customers', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
-            // ['name' => 'create customers', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
-            // ['name' => 'edit all customers', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
-            // ['name' => 'edit own customers', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
-            // ['name' => 'delete customers', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
-            // ['name' => 'show customer routes', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
-            // ['name' => 'be assigned to customer', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
-            // ['name' => 'be assigned to many customers', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
-            // ['name' => '', 'module_name' => 'customers', 'level' => 'regular', 'removable' => true, 'editable' => true],
+            ['name' => 'edit identity settings', 'module_name' => 'site settings', 'level' => 'regular', 'removable' => false, 'editable' => false, 'assignable' => true]
         ];
 
         $permissions = collect($arrayOfPermissionNames)->map(function ($permission) {
@@ -148,14 +137,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'edit logo settings',
             'show identity settings',
             'edit identity settings',
-            // 'list customers',
-            // 'show all customers',
-            // 'create customers',
-            // 'edit all customers',
-            // 'delete customers',
-            // 'show customer routes',
-            // 'be assigned to customer',
-            // 'be assigned to many customers'
         ]);
 
         $technician = Role::create([
@@ -173,10 +154,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'edit logo settings',
             'show identity settings',
             'edit identity settings',
-            // 'list customers',
-            // 'show own customers',
-            // 'edit own customers',
-            // 'be assigned to many customers'
         ]);
 
         $guest = Role::create([
@@ -187,55 +164,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'editable' => false,
             'guard_name' => 'web'
         ]);
-
-        // $guest->givePermissionTo([
-
-        // ]);
-
-        // $external_reseller = Role::create([
-        //     'name' => 'external-reseller',
-        //     'display_name' => 'External Reseller',
-        //     'description' => 'Es similar al técnico, en cuento a las opciones a las que puede acceder, pero está limitado a varios clientes que tenga asignados y sus hotspots',
-        //     'assignable_to_customer' => true,
-        //     'view' => 'reseller',
-        //     'guard_name' => 'web'
-        // ]);
-
-        // $external_reseller->givePermissionTo([
-        //     'list customers',
-        //     'show own customers',
-        //     'edit own customers',
-        //     'show customer routes',
-        //     'be assigned to many customers'
-        // ]);
-
-        // $technical_customer = Role::create([
-        //     'name' => 'technical-customer',
-        //     'display_name' => 'Technical Customer',
-        //     'description' => 'Es un usuario que tiene acceso como técnico a todos los hotspot que sean del cliente, pero con algún privilegio más de tipo técnico',
-        //     'assignable_to_customer' => true,
-        //     'view' => 'customer',
-        //     'guard_name' => 'web'
-        // ]);
-
-        // $technical_customer->givePermissionTo([
-        //     'show customer routes',
-        //     'be assigned to customer'
-        // ]);
-
-        // $customer = Role::create([
-        //     'name' => 'customer',
-        //     'display_name' => 'Customer',
-        //     'description' => 'Es un usuario que tiene acceso a todos los hotspot del cliente',
-        //     'assignable_to_customer' => true,
-        //     'view' => 'customer',
-        //     'guard_name' => 'web'
-        // ]);
-
-        // $customer->givePermissionTo([
-        //     'show customer routes',
-        //     'be assigned to customer'
-        // ]);
 
         Role::create([
             'name' => 'user',

@@ -14,15 +14,6 @@ class CreateTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        // first include all the normal setUp operations
-        parent::setUp();
-
-        // now de-register all the roles and permissions by clearing the permission cache
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-    }
-
     #[Group('permissions'), Test]
     public function only_admin_users_can_display_the_create_permissions_page(): void
     {
@@ -60,11 +51,15 @@ class CreateTest extends TestCase
 
         $this->actingAs($admin);
 
-        $this->get('/management/settings/permissions/create')->assertDontSeeText('super-admin');
-
         $this->actingAs($superAdmin);
 
-        $this->get('/management/settings/permissions/create')->assertSeeText('super-admin');
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.permissions.create')
+            ->assertDontSeeText('super-admin');
+
+        Volt::actingAs($superAdmin)
+            ->test('pages.management.settings.permissions.create')
+            ->assertSeeText('super-admin');
 
     }
 
@@ -308,7 +303,6 @@ class CreateTest extends TestCase
             ->set('assignable', true)
             ->call('create')
             ->assertSuccessful();
-
     }
 
     #[Group('permissions'), Test]
@@ -329,8 +323,9 @@ class CreateTest extends TestCase
             ->call('create')
             ->assertRedirect(route('management.settings.permissions'));
 
-        $this->get('/management/settings/permissions')
-                ->assertSeeText('test permission 1');
+        Volt::actingAs($admin)
+            ->test('pages.management.settings.permissions.index')
+            ->assertSeeText('test permission 1');
     }
 
     // #[Group('permissions'), Test]
@@ -343,6 +338,5 @@ class CreateTest extends TestCase
     //     $technician = $this->createUser(['role' => 'technician']);
     //     $admin = $this->createUser(['role' => 'admin']);
     //     $superAdmin = $this->createUser(['role' => 'super-admin']);
-
     // }
 }

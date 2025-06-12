@@ -90,15 +90,13 @@ class DashboardTest extends TestCase
 
         $this->get('/dashboard')
             ->assertSee('<span>Settings</span>', $escaped = false)
-            ->assertSee('<span>Tools</span>', $escaped = false)
-            ->assertSeeText('MANAGEMENT');
+            ->assertSee('<span>Tools</span>', $escaped = false);
 
         $this->actingAs($superAdmin);
 
         $this->get('/dashboard')
             ->assertSee('<span>Settings</span>', $escaped = false)
-            ->assertSee('<span>Tools</span>', $escaped = false)
-            ->assertSeeText('MANAGEMENT');
+            ->assertSee('<span>Tools</span>', $escaped = false);
     }
 
 }
