@@ -9,10 +9,11 @@ import "animate.css";
 import {
     Dropdown,
     initTWE,
-    Offcanvas
+    Offcanvas,
+    Modal
   } from "tw-elements";
 
-initTWE({ Dropdown,  Offcanvas });
+initTWE({ Dropdown, Offcanvas, Modal });
 
 import SimpleBar from "simplebar";
 window.SimpleBar = SimpleBar;
@@ -25,7 +26,7 @@ window.ResizeObserver = ResizeObserver;
 // window.Cleave = Cleave;
 
 // Drag and Drop
-// import dragula from "dragula/dist/dragula";
+// import dragula from "dragula";
 // import "dragula/dist/dragula.css";
 // window.dragula = dragula;
 

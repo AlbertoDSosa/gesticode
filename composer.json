@@ -7,6 +7,8 @@
     "require": {
         "php": "^8.2",
         "codezero/laravel-unique-translation": "^4.3",
+        "inspector-apm/inspector-laravel": "^4.15",
+        "inspector-apm/neuron-ai": "^1.16",
         "jackiedo/dotenv-editor": "^1.1",
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",
@@ -15,6 +17,7 @@
         "livewire/livewire": "^3.4",
         "livewire/volt": "^1.0",
         "opcodesio/log-viewer": "^3.10",
+        "opis/json-schema": "^2.4",
         "spatie/image": "^3.7",
         "spatie/laravel-activitylog": "^4.8",
         "spatie/laravel-backup": "^9.0",

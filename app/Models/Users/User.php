@@ -66,11 +66,6 @@ class User extends Authenticatable implements HasMedia
         return $this->hasOne(UserProfile::class);
     }
 
-    public function customers()
-    {
-        return $this->belongsToMany(Customer::class, 'user_has_customers');
-    }
-
     public function registerMediaConversions(?Media $media = null): void
     {
         $this

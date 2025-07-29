@@ -219,7 +219,7 @@ $create = function () {
                 </div>
             </div>
             <button type="submit" class="btn inline-flex justify-center btn-dark mt-4 w-full">
-                {{ __('Save') }}
+                Save
             </button>
         </div>
 

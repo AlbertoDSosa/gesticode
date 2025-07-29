@@ -76,8 +76,6 @@ Alpine.data('sidebarManager', () => ({
     },
 
     handleScreenChange(detail) {
-        console.log('Sidebar - Cambio de pantalla detectado:', detail.size);
-
         if (detail.width < 1281 && !this.collapsed) {
             // Auto-colapsar en pantallas pequeñas
             this.closeSidebar();
@@ -131,8 +129,6 @@ Alpine.data('sidebarManager', () => ({
     checkScreenSize() {
         try {
             const width = window.innerWidth;
-
-            console.log('Verificando tamaño de pantalla:', width);
 
             // Elementos de DOM que necesitamos actualizar
             const elements = {

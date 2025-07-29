@@ -12,4 +12,10 @@ Route::middleware(['auth', 'role:admin|super-admin'])->prefix('management')->gro
 
     Volt::route('tools/logs/user-activity', 'pages.management.tools.logs.user-activity')
         ->name('management.tools.logs.user-activity');
+
+    Volt::route('tools/invoces', 'pages.management.tools.invoices.index')
+        ->name('management.tools.invoices');
+
+    Volt::route('tools/invoces/create', 'pages.management.tools.invoices.create')
+        ->name('management.tools.invoices.create');
 });
