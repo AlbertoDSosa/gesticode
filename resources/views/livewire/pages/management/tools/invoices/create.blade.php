@@ -76,7 +76,7 @@ $create = function() {
         return session()->flash(
             'status',
             [
-                'message' => 'Failed to process the invoice. Please try again later.',
+                'message' => 'Failed to process the invoice. Please try again later or with other image.',
                 'type' => 'danger'
             ]
         );
@@ -87,7 +87,7 @@ $create = function() {
         return session()->flash(
             'status',
             [
-                'message' => 'Failed to process the invoice. Please try again later.',
+                'message' => 'Failed to process the invoice. Please try again later or with other image.',
                 'type' => 'danger'
             ]
         );
@@ -95,7 +95,7 @@ $create = function() {
 
     $invoiceData = $response->json()['data'];
 
-    Invoice::create([
+    $invoice = Invoice::create([
         'user_id' => auth()->user()->id,
         'number' => $invoiceData['number'] ?? '',
         'total_amount' => $invoiceData['total_amount'] ?? 0.00,
@@ -107,6 +107,9 @@ $create = function() {
         'seller_info' => $invoiceData['seller_info'] ?? [],
         'items' => $invoiceData['items'] ?? [],
     ]);
+
+    $invoice->addMedia($this->invoice->path())
+        ->toMediaCollection('invoices');
 
     session()->flash(
         'status',

@@ -10,10 +10,8 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\Image\Enums\Fit;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-use App\Models\Customers\Customer;
+use App\Models\Invoice;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -66,11 +64,8 @@ class User extends Authenticatable implements HasMedia
         return $this->hasOne(UserProfile::class);
     }
 
-    public function registerMediaConversions(?Media $media = null): void
+    public function invoices()
     {
-        $this
-            ->addMediaConversion('preview')
-            ->fit(Fit::Contain, 300, 300)
-            ->nonQueued();
+        return $this->hasMany(Invoice::class);
     }
 }

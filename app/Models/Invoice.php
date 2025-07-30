@@ -4,10 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use App\Models\Users\User;
 
-class Invoice extends Model
+
+class Invoice extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
 
     protected $fillable = [
         'user_id',
@@ -23,6 +27,23 @@ class Invoice extends Model
         'items',
         'invoice_edit_reason'
     ];
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('invoices')
+            ->singleFile()
+            ->useDisk('invoices')
+            ->acceptsMimeTypes(['image/jpeg', 'image/jpg']);
+
+    }
+
+    /**
+     * Get the user that owns the invoice.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     /**
      * Get the attributes that should be cast.

@@ -18,4 +18,7 @@ Route::middleware(['auth', 'role:admin|super-admin'])->prefix('management')->gro
 
     Volt::route('tools/invoces/create', 'pages.management.tools.invoices.create')
         ->name('management.tools.invoices.create');
+
+    // Volt::route('tools/invoces/detail/{id}', 'pages.management.tools.invoices.detail')
+    //     ->name('management.tools.invoices.detail');
 });
