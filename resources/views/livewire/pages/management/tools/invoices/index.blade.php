@@ -39,6 +39,10 @@ $resetUrl = function() {
     $this->sort = 'id';
 };
 
+$resetStatus = function () {
+    session()->forget('status');
+};
+
 $toggleSort = function($sort) {
     if($sort == $this->sort) {
         $this->sort = "-{$sort}";
@@ -59,6 +63,13 @@ $delete = function($id) {
         {{--Breadcrumb start--}}
         <x-breadcrumb :breadcrumb-items="$breadcrumbItems" :page-title="$pageTitle" />
     </div>
+
+    {{-- Alert start --}}
+    @if (session('status'))
+    <x-alert :message="session('status')['message']" :type="session('status')['type']" />
+    @endif
+    {{-- Alert end --}}
+
     <div class="card">
         <header class=" card-header noborder">
             <div class="justify-end flex gap-3 items-center flex-wrap">
@@ -157,7 +168,7 @@ $delete = function($id) {
                                         {{$invoice->total_amount}} €
                                     </td>
                                     <td class="table-td">
-                                        {{ $invoice->purchase_date_time }}
+                                        {{ $invoice->purchase_datetime }}
                                     </td>
 
                                     <td class="table-td">

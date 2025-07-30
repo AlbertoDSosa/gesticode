@@ -20,7 +20,7 @@ class Invoice extends Model
         'llm_name',
         'llm_text_response',
         'seller_info',
-        'shopping_items',
+        'items',
         'invoice_edit_reason'
     ];
 

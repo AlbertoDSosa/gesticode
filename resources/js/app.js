@@ -10,10 +10,11 @@ import {
     Dropdown,
     initTWE,
     Offcanvas,
-    Modal
+    Modal,
+    Ripple,
   } from "tw-elements";
 
-initTWE({ Dropdown, Offcanvas, Modal });
+initTWE({ Dropdown, Offcanvas, Modal, Ripple });
 
 import SimpleBar from "simplebar";
 window.SimpleBar = SimpleBar;
