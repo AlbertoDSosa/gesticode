@@ -1,0 +1,260 @@
+.dashcode-app .fc-toolbar-chunk button {
+  height: 50px;
+}
+
+.dashcode-app .fc-toolbar-chunk button.fc-prev-button:after {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.dashcode-app .fc-toolbar-chunk button.fc-next-button:after {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.dashcode-app .fc-button {
+  font-size: 14px !important;
+  line-height: 14px !important;
+  height: auto !important;
+  text-transform: capitalize !important;
+  font-family: Inter !important;
+  padding: 12px 20px 12px 20px !important;
+}
+
+.dashcode-app .fc .fc-button-primary {
+  background: transparent !important;
+  @apply border-slate-100 text-slate-900 dark:text-white;
+}
+
+.dashcode-app .fc .fc-button-primary:not(:disabled):active,
+.dashcode-app .fc .fc-button-primary:not(:disabled).fc-button-active,
+.dashcode-app .fc .fc-button-primary:hover {
+  background: #111112 !important;
+  color: #fff !important;
+}
+
+.dashcode-app .fc .fc-button-primary:disabled {
+  background: #a0aec0 !important;
+  border-color: #a0aec0 !important;
+  @apply cursor-not-allowed;
+}
+
+.dashcode-app .fc .fc-daygrid-day.fc-day-today {
+  background: rgba(95, 99, 242, 0.04) !important;
+}
+
+.dashcode-app .fc .fc-button-primary:focus {
+  box-shadow: none !important;
+}
+
+.dashcode-app .fc-theme-standard .fc-scrollgrid {
+  border-color: #eef1f9 !important;
+}
+
+.dashcode-app .fc-theme-standard td,
+.dashcode-app .fc-theme-standard th {
+  @apply border-slate-100 dark:border-slate-700;
+}
+
+.dashcode-app .fc-col-header-cell .fc-scrollgrid-sync-inner {
+  @apply bg-slate-50 py-3 text-xs font-normal text-slate-500 dark:bg-slate-700 dark:text-slate-300;
+}
+
+.dashcode-app .fc-daygrid-day-top {
+  @apply px-3 py-2 text-sm font-normal text-slate-900 dark:text-white;
+}
+
+.dashcode-app .fc-h-event .fc-event-main-frame {
+  @apply mx-auto w-max justify-center text-center;
+}
+
+.dashcode-app .fc-h-event .fc-event-main-frame .fc-event-time {
+  @apply flex-none font-normal;
+}
+
+.dashcode-app .fc-event-time {
+  @apply text-sm font-normal;
+}
+
+.dashcode-app .fc-event-title {
+  font-size: 14px !important;
+  font-weight: 300 !important;
+}
+
+.dashcode-app .fc .fc-toolbar-title {
+  @apply text-lg font-normal text-slate-600 dark:text-slate-300;
+}
+
+.dashcode-app .fc-daygrid-event-dot {
+  @apply hidden;
+}
+
+@media (max-width: 981px) {
+  .dashcode-app .fc-button-group,
+  .dashcode-app .fc .fc-toolbar {
+    display: block !important;
+  }
+
+  .dashcode-app .fc .fc-toolbar {
+    @apply space-y-4;
+  }
+
+  .dashcode-app .fc-toolbar-chunk {
+    @apply space-y-4;
+  }
+
+  .dashcode-app .fc .fc-button {
+    padding: 0.4em 0.65em !important;
+  }
+}
+
+.dashcode-app .fc .fc-timegrid-axis-cushion,
+.dashcode-app .fc .fc-timegrid-slot-label-cushion {
+  @apply dark:text-slate-300;
+}
+
+.dashcode-app .fc .fc-list-event:hover td {
+  @apply bg-inherit;
+}
+
+.dashcode-app .fc .fc-list-event-dot {
+  @apply hidden;
+}
+
+.dashcode-app .fc-direction-ltr .fc-list-day-text,
+.dashcode-app .fc-direction-rtl .fc-list-day-side-text,
+.dashcode-app .fc-direction-ltr .fc-list-day-side-text,
+.dashcode-app .fc-direction-rtl .fc-list-day-text {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.dark .fc-col-header-cell .fc-scrollgrid-sync-inner {
+  @apply bg-slate-700 text-slate-300;
+}
+
+.dark .fc-daygrid-day-top {
+  @apply text-slate-300;
+}
+
+.dark .fc .fc-day-other .fc-daygrid-day-top {
+  @apply opacity-70;
+}
+
+.dark .fc .fc-button-primary {
+  @apply border-slate-600 text-slate-300;
+}
+
+.dark .fc-theme-standard td,
+.dark .fc-theme-standard th {
+  @apply border-slate-700;
+}
+
+.dark .fc .fc-toolbar-title {
+  @apply text-slate-300;
+}
+
+.dark .fc .fc-button-primary:not(:disabled):active,
+.dark .fc .fc-button-primary:not(:disabled).fc-button-active,
+.dark .fc .fc-button-primary:hover {
+  background: #0f172a !important;
+}
+
+.dark .fc .fc-button-primary:disabled {
+  background: #334155 !important;
+  border-color: #334155 !important;
+}
+
+.dark .fc .fc-daygrid-day.fc-day-today {
+  background: #334155 !important;
+}
+
+.dark .fc-theme-standard .fc-scrollgrid {
+  border-color: #334155 !important;
+}
+
+.dashcode-calender .primary {
+  @apply border-none bg-[#4669FA] px-2 text-center text-sm font-medium text-white;
+}
+
+.dashcode-calender .secondary {
+  @apply border-none bg-[#A0AEC0] px-2 text-center text-sm font-medium text-white;
+}
+
+.dashcode-calender .danger {
+  @apply border-none bg-[#F1595C] px-2 text-center text-sm font-medium text-white;
+}
+
+.dashcode-calender .info {
+  @apply border-none bg-[#0CE7FA] px-2 text-center text-sm font-medium text-white;
+}
+
+.dashcode-calender .warning {
+  @apply border-none bg-[#FA916B] px-2 text-center text-sm font-medium text-white;
+}
+
+.dashcode-calender .success {
+  @apply border-none bg-[#50C793] px-2 text-center text-sm font-medium text-white;
+}
+
+.dashcode-calender .dark {
+  @apply border-none bg-[#222] px-2 text-center text-sm font-medium text-white;
+}
+
+/* Event modal box */
+.addmodal-wrapper {
+  @apply relative z-[-1];
+}
+
+.addmodal-wrapper .modal-overlay {
+  @apply invisible fixed inset-0 bg-slate-900/50 opacity-0 backdrop-blur-sm backdrop-filter;
+}
+
+.addmodal-wrapper .modal-content {
+  @apply invisible fixed inset-0 overflow-y-auto opacity-0;
+}
+
+.addmodal-wrapper.open-add-modal {
+  @apply z-[9999];
+}
+
+.addmodal-wrapper.open-add-modal .modal-overlay {
+  @apply visible opacity-100;
+}
+
+.addmodal-wrapper.open-add-modal .modal-content {
+  @apply visible opacity-100;
+}
+
+.calender-checkbox {
+  @apply relative h-4 w-4 rounded before:absolute before:inset-0 before:m-[-0.7px] before:flex before:h-[18px] before:w-[18px] before:flex-col before:items-center before:justify-center before:rounded before:bg-slate-100 checked:before:bg-slate-900 checked:before:leading-[10px] checked:before:ring-2 checked:before:ring-black-500 checked:before:ring-offset-2 checked:before:content-[url("https://api.iconify.design/heroicons-outline/check.svg?color=white")] dark:before:bg-slate-500 checked:before:dark:ring-slate-700 checked:before:dark:ring-offset-0;
+}
+
+/* Normal calendar */
+#dashcode-mini-calendar .zabuto-calendar__navigation__item--header__title {
+  @apply my-4 block text-2xl font-medium text-slate-900 dark:text-slate-300;
+}
+
+#dashcode-mini-calendar .zabuto-calendar__navigation__item--prev {
+  @apply text-xl text-slate-900 dark:text-slate-300;
+}
+
+#dashcode-mini-calendar .zabuto-calendar__navigation__item--next {
+  @apply text-xl text-slate-900 dark:text-slate-300;
+}
+
+#dashcode-mini-calendar .zabuto-calendar__days-of-week__item {
+  @apply text-xs font-normal capitalize text-slate-600 dark:text-slate-300;
+}
+
+#dashcode-mini-calendar .zabuto-calendar__day {
+  @apply p-1 dark:text-slate-300 text-sm;
+}
+
+#dashcode-mini-calendar table tbody td:nth-child(n+6) {
+  @apply text-danger-500 dark:text-danger-500;
+}

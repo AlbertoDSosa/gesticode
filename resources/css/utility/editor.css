@@ -1,0 +1,51 @@
+/* Rich editor */
+.dashcode-app .ql-editor {
+  min-height: 120px;
+}
+
+.dashcode-app .ql-toolbar.ql-snow {
+  @apply mb-2 border-none p-0;
+}
+
+.dashcode-app .ql-container.ql-snow {
+  @apply border-none bg-[#FBFBFB] text-base;
+}
+
+.dashcode-app .ql-editor {
+  @apply rounded border border-slate-200 text-base dark:border-slate-700;
+}
+
+.dark .ql-editor {
+  @apply border-slate-700 bg-slate-900 text-slate-300 placeholder:text-slate-300;
+}
+
+.dark .ql-editor.ql-blank::before {
+  @apply text-slate-500;
+}
+
+.dark .ql-snow .ql-stroke {
+  @apply stroke-slate-300;
+}
+
+.dark .ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-label {
+  @apply bg-slate-700;
+}
+
+.dark .ql-snow.ql-toolbar button:hover,
+.dark .ql-snow .ql-toolbar button:hover,
+.dark .ql-snow.ql-toolbar button:focus,
+.dark .ql-snow .ql-toolbar button:focus,
+.dark .ql-snow.ql-toolbar .ql-picker-label:hover,
+.dark .ql-snow .ql-toolbar .ql-picker-label:hover,
+.dark .ql-snow.ql-toolbar .ql-picker-item:hover,
+.dark .ql-snow .ql-toolbar .ql-picker-item:hover {
+  @apply bg-slate-700;
+}
+
+.dark .ql-picker-label {
+  @apply text-slate-300;
+}
+
+.dark .ql-snow .ql-picker.ql-expanded .ql-picker-label {
+  @apply border-slate-700 bg-slate-300;
+}

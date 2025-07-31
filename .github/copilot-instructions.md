@@ -45,7 +45,7 @@ $variable = 'value';
 ## Development Workflows
 
 ### Asset Building
-- **Frontend**: Vite 5.4+ with Sass/SCSS (`resources/css/app.scss`), TailwindCSS 3.4+, Alpine.js
+- **Frontend**: Vite 5.4+ with PostCSS (`resources/css/app.css`), TailwindCSS 3.4+, Alpine.js
 - **Build Commands**: `npm run dev` for development, `npm run build` for production
 - **Assets**: Multiple entry points in `vite.config.js` for modular loading
 - **Laravel Vite Plugin**: v1.3+ for hot module replacement and asset versioning

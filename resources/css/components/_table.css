@@ -23,7 +23,7 @@
     before:dark:ring-offset-0;
 }
 
-// table css
+/*  table css */
 .dashcode-data-table {
   label {
     @apply inline-block w-full cursor-pointer text-sm font-medium capitalize leading-6 text-slate-600 rtl:block rtl:text-right dark:text-slate-300;

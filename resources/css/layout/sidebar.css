@@ -61,7 +61,7 @@
 }
 
 .icon-arrow {
-  @apply flex h-5  w-5  items-center justify-center rounded-full bg-secondary-500 bg-opacity-30 text-[14px] text-slate-600 text-opacity-70 transition-all duration-300 rtl:rotate-180 dark:bg-slate-700 dark:text-white;
+  @apply flex h-5 w-5 items-center justify-center rounded-full bg-secondary-500 bg-opacity-30 text-[14px] text-slate-600 text-opacity-70 transition-all duration-300 rtl:rotate-180 dark:bg-slate-700 dark:text-white;
 }
 
 .sidebar-menu > li > a {
@@ -96,6 +96,7 @@
 .app-wrapper.collapsed .collapsed-icon {
   @apply hidden;
 }
+
 .app-wrapper.extend .extend-icon {
   @apply block;
 }
@@ -103,6 +104,7 @@
 .app-wrapper.collapsed .extend-icon {
   @apply hidden;
 }
+
 .app-wrapper.extend .collapsed-icon {
   @apply hidden;
 }
@@ -114,6 +116,7 @@
 .app-wrapper.collapsed .sidebarOpenButton {
   display: inline-flex !important;
 }
+
 .app-wrapper.extend .sidebarOpenButton {
   display: none !important;
 }
@@ -121,8 +124,8 @@
 /* Collapsed button */
 .app-header,
 .content-wrapper,
-.site-footer{
-  @apply ml-[0px] xl:ltr:ml-[248px] rtl:mr-[0px] xl:rtl:mr-[248px]
+.site-footer {
+  @apply ml-[0px] xl:ltr:ml-[248px] rtl:mr-[0px] xl:rtl:mr-[248px];
 }
 
 .collapsed .app-header,
@@ -174,32 +177,36 @@
   @apply hidden;
 }
 
-// Semidark
+/* Semidark */
 .semiDark .sidebar-wrapper {
   @apply bg-slate-800;
 }
 
-.semiDark {
-  .logo-segment {
-    @apply bg-transparent;
-    .sidebarDotIcon,
-    span {
-      @apply text-white;
-    }
-  }
-  #sidebar_menus {
-    @apply bg-transparent;
-  }
-  .sidebar-menu > li.active > a {
-    @apply bg-secondary-700 text-slate-200;
-  }
-  .sidebar-menu > li.active .icon-arrow {
-    @apply text-slate-200
-  }
-  .sidebar-menu .sidebar-submenu > li > a {
-    @apply text-slate-300 before:border-slate-300
-  }
-  .sidebar-menu .sidebar-submenu > li > a.active {
-    @apply text-white before:bg-white before:ring-slate-50 before:ring-opacity-10
-  }
+.semiDark .logo-segment {
+  @apply bg-transparent;
+}
+
+.semiDark .logo-segment .sidebarDotIcon,
+.semiDark .logo-segment span {
+  @apply text-white;
+}
+
+.semiDark #sidebar_menus {
+  @apply bg-transparent;
+}
+
+.semiDark .sidebar-menu > li.active > a {
+  @apply bg-secondary-700 text-slate-200;
+}
+
+.semiDark .sidebar-menu > li.active .icon-arrow {
+  @apply text-slate-200;
+}
+
+.semiDark .sidebar-menu .sidebar-submenu > li > a {
+  @apply text-slate-300 before:border-slate-300;
+}
+
+.semiDark .sidebar-menu .sidebar-submenu > li > a.active {
+  @apply text-white before:bg-white before:ring-slate-50 before:ring-opacity-10;
 }

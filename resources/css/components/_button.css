@@ -213,7 +213,7 @@
     @apply text-white;
   }
 
-// action btn
+/*  action btn */
 .action-btn {
   @apply flex h-6 w-6 flex-col items-center justify-center rounded border border-slate-200 dark:border-slate-700;
 }
