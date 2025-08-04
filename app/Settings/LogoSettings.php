@@ -28,7 +28,7 @@ class LogoSettings extends Settings
                 ->first();
 
                 $logoSetting->clearMediaCollection($key);
-                $logoSetting->addMedia($form->$key)->toMediaCollection($key);
+                $logoSetting->addMedia($form->$key)->toMediaCollection($key, 'public');
 
                 $this->$key = [
                     'contentType' => 'image',

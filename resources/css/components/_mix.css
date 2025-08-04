@@ -2,7 +2,7 @@ body {
   @apply h-full overflow-x-hidden font-normal text-slate-600 dark:text-slate-900;
 }
 
-.light body, 
+.light body,
 .skin-default body {
   @apply bg-slate-100;
 }
@@ -20,7 +20,8 @@ body {
   @apply -mx-6 mb-6 border-b border-slate-100 px-6 pb-5 dark:border-slate-700;
 }
 
-/*  */
+/*
+ */
 .icon-list {
   @apply relative flex cursor-pointer items-center justify-center rounded-full text-[20px] text-slate-900 dark:text-white;
 }
@@ -58,7 +59,7 @@ body {
   @apply inline-block h-4 w-4 flex-none cursor-pointer rounded-full accent-black-500 dark:accent-black-100;
 }
 
-/*  flex-none c  transition-all duration-150 focus:border-red-500 focus:outline-none focus:ring-0 
+/*  flex-none c  transition-all duration-150 focus:border-red-500 focus:outline-none focus:ring-0
 */
 .themeCustomization-checkInput-label {
   @apply cursor-pointer font-Inter text-sm font-normal text-slate-600 ltr:pl-2 rtl:pr-2 dark:text-slate-200;
@@ -179,7 +180,8 @@ blockquote {
   @apply bg-black-500 text-white;
 }
 
-/*  label */
+/*  label
+ */
 .date-label {
   @apply mb-1 text-xs text-slate-400 dark:text-slate-400;
 }
@@ -261,11 +263,10 @@ html.semiDark .black_logo {
 .horizontalMenu .content-wrapper,
 .horizontalMenu .site-footer {
   @apply mx-0;
-  margin: {
-    left: 0 !important;
-    right: 0 !important;
-  }
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
+
 #headerLogo {
   @apply hidden;
 }
@@ -311,7 +312,7 @@ html.semiDark .black_logo {
 }
 
 /*======================
-ToolTip And PopOver  
+ToolTip And PopOver
 ======================*/
 /* Primary Color ToolTip */
 .tippy-box[data-theme~="primary"] {

@@ -20,12 +20,12 @@ class Invoice extends Model implements HasMedia
         'currency_code',
         'payment_method',
         'status',
-        'purchase_datetime',
+        'time',
+        'date',
         'llm_name',
         'llm_text_response',
         'seller_info',
-        'items',
-        'invoice_edit_reason'
+        'items'
     ];
 
     public function registerMediaCollections(): void

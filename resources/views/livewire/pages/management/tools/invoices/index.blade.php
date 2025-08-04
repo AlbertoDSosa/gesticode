@@ -81,7 +81,7 @@ $delete = function($id) {
                     <iconify-icon icon="mdi:refresh" class="text-xl"></iconify-icon>
                 </button>
                 {{--Refresh Button end--}}
-                <a href="{{route('management.tools.invoices.create')}}" wire:navigate class="btn inline-flex justify-center btn-outline-dark text-xl !p-2.5">Add Invoice</a>
+                <a href="{{route('management.tools.invoices.create')}}" wire:navigate class="btn inline-flex justify-center btn-outline-dark text-lg">Add Invoice</a>
 
             </div>
             <div class="justify-center flex flex-wrap sm:flex items-center lg:justify-end gap-3">
@@ -122,15 +122,19 @@ $delete = function($id) {
                                     </th>
 
                                     <th scope="col" class="table-th ">
+                                        Number
+                                    </th>
+
+                                    <th scope="col" class="table-th ">
+                                        Status
+                                    </th>
+
+                                    <th scope="col" class="table-th ">
                                         Model Name
                                     </th>
 
                                     <th scope="col" class="table-th ">
                                         Payment Method
-                                    </th>
-
-                                    <th scope="col" class="table-th ">
-                                        Number
                                     </th>
 
                                     <th scope="col" class="table-th">
@@ -139,6 +143,10 @@ $delete = function($id) {
 
                                     <th scope="col" class="table-th">
                                         Date
+                                    </th>
+
+                                    <th scope="col" class="table-th">
+                                        Time
                                     </th>
 
                                     <th scope="col" class="table-th">
@@ -155,25 +163,55 @@ $delete = function($id) {
                                     <td class="table-td">
                                         # {{ $invoice->id }}
                                     </td>
-                                    <td class="table-td">
-                                        {{ $invoice->llm_name }}
-                                    </td>
-                                    <td class="table-td">
-                                        {{ $invoice->payment_method}}
-                                    </td>
+
                                     <td class="table-td">
                                         {{$invoice->number}}
                                     </td>
+
+                                    <td class="table-td">
+                                        {{ $invoice->status }}
+                                    </td>
+
+                                    <td class="table-td">
+                                        {{ $invoice->llm_name }}
+                                    </td>
+
+                                    <td class="table-td">
+                                        {{ $invoice->payment_method}}
+                                    </td>
+
                                     <td class="table-td">
                                         {{$invoice->total_amount}} €
                                     </td>
+
                                     <td class="table-td">
-                                        {{ $invoice->purchase_datetime }}
+                                        {{ $invoice->date ?? 'N/A' }}
+                                    </td>
+
+                                    <td class="table-td">
+                                        {{ $invoice->time ?? 'N/A' }}
                                     </td>
 
                                     <td class="table-td">
                                         {{ $invoice->created_at->diffForHumans() }}
                                     </td>
+
+                                    {{-- <td class="table-td">
+                                        <div class="flex items-center gap-2">
+                                            <a href="{{ route('management.tools.invoices.show', $invoice->id) }}" class="btn btn-primary btn-sm" wire:navigate>
+                                                <iconify-icon icon="heroicons:eye"></iconify-icon>
+                                            </a>
+                                            <a href="{{ route('management.tools.invoices.edit', $invoice->id) }}" class="btn btn-secondary btn-sm" wire:navigate>
+                                                <iconify-icon icon="heroicons:pencil-square"></iconify-icon>
+                                            </a>
+                                            <button
+                                                class="btn btn-danger btn-sm"
+                                                wire:click="$dispatch('confirmDelete', {{ $invoice->id }})"
+                                            >
+                                                <iconify-icon icon="heroicons:trash"></iconify-icon>
+                                            </button>
+                                        </div>
+                                    </td> --}}
 
                                 </tr>
                                 @empty
