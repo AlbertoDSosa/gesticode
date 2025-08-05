@@ -4,6 +4,7 @@ use function Livewire\Volt\{state, layout, usesPagination, with};
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Models\Users\User;
 use App\Models\Invoice;
+use Illuminate\Support\Str;
 
 usesPagination();
 
@@ -27,7 +28,11 @@ $breadcrumbItems = [
 $pageTitle = 'User Invoices';
 
 with(function() {
-    $invoices = Invoice::paginate(10);
+    $search = addslashes($this->search ?? '');
+    $invoices = QueryBuilder::for(Invoice::class)
+        ->defaultSort($this->sort)
+        ->where('number', 'like', "%{$search}%")
+        ->paginate($this->rows);
     return compact('invoices');
 });
 
