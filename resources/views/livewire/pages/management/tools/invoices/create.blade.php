@@ -55,8 +55,8 @@ $create = function() {
 
     try {
 
-    $response = Http::attach('invoice', $invoiceFile , $this->invoice->getClientOriginalName())
-        ->post(env('N8N_WEBHOOK_URL'));
+        $response = Http::attach('invoice', $invoiceFile , $this->invoice->getClientOriginalName())
+                        ->post(env('N8N_WEBHOOK_URL'));
 
     } catch (\Throwable $th) {
         $this->dispatch('clear-file');
@@ -110,7 +110,7 @@ $create = function() {
     ]);
 
     $invoice->addMedia($this->invoice->path())
-        ->toMediaCollection('invoices');
+            ->toMediaCollection('invoices');
 
     session()->flash(
         'status',

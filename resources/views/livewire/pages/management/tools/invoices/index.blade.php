@@ -57,8 +57,8 @@ $toggleSort = function($sort) {
 };
 
 $delete = function($id) {
-    $user = User::find($id);
-    $user->delete();
+    $invoice = Invoice::find($id);
+    $invoice->delete();
 };
 
 ?>
@@ -201,22 +201,23 @@ $delete = function($id) {
                                         {{ $invoice->created_at->diffForHumans() }}
                                     </td>
 
-                                    {{-- <td class="table-td">
+                                    <td class="table-td">
                                         <div class="flex items-center gap-2">
-                                            <a href="{{ route('management.tools.invoices.show', $invoice->id) }}" class="btn btn-primary btn-sm" wire:navigate>
+                                            {{-- <a href="{{ route('management.tools.invoices.show', $invoice->id) }}" class="btn btn-primary btn-sm" wire:navigate>
                                                 <iconify-icon icon="heroicons:eye"></iconify-icon>
-                                            </a>
+                                            </a> --}}
                                             <a href="{{ route('management.tools.invoices.edit', $invoice->id) }}" class="btn btn-secondary btn-sm" wire:navigate>
                                                 <iconify-icon icon="heroicons:pencil-square"></iconify-icon>
                                             </a>
                                             <button
+                                                x-data="deleteInvoice"
                                                 class="btn btn-danger btn-sm"
-                                                wire:click="$dispatch('confirmDelete', {{ $invoice->id }})"
+                                                x-on:click="exec({{$invoice->id}})"
                                             >
                                                 <iconify-icon icon="heroicons:trash"></iconify-icon>
                                             </button>
                                         </div>
-                                    </td> --}}
+                                    </td>
 
                                 </tr>
                                 @empty
@@ -238,3 +239,23 @@ $delete = function($id) {
         </div>
     </div>
 </div>
+
+@script
+<script>
+    Alpine.data('deleteInvoice', () => ({
+        exec(id) {
+            Swal.fire({
+                title: '@lang('Are you sure ? ')',
+                icon : 'question',
+                showDenyButton: true,
+                confirmButtonText: '@lang('Delete')',
+                denyButtonText: '@lang('Cancel')',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $wire.delete(id);
+                }
+            });
+        }
+    }));
+</script>
+@endscript
