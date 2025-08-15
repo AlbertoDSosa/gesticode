@@ -13,15 +13,18 @@ Route::middleware(['auth', 'role:admin|super-admin'])->prefix('management')->gro
     Volt::route('tools/logs/user-activity', 'pages.management.tools.logs.user-activity')
         ->name('management.tools.logs.user-activity');
 
-    Volt::route('tools/invoces', 'pages.management.tools.invoices.index')
+    Volt::route('tools/invoices', 'pages.management.tools.invoices.index')
         ->name('management.tools.invoices');
 
-    Volt::route('tools/invoces/create', 'pages.management.tools.invoices.create')
+    Volt::route('tools/invoices/create', 'pages.management.tools.invoices.create')
         ->name('management.tools.invoices.create');
 
     // Volt::route('tools/invoces/show/{id}', 'pages.management.tools.invoices.show')
     //     ->name('management.tools.invoices.show');
 
-    Volt::route('tools/invoces/edit/{invoice}', 'pages.management.tools.invoices.edit')
+    Volt::route('tools/invoices/edit/{invoice}', 'pages.management.tools.invoices.edit')
         ->name('management.tools.invoices.edit');
+
+    Volt::route('tools/invoices/advanced-search', 'pages.management.tools.invoices.advanced-search')
+        ->name('management.tools.invoices.advanced-search');
 });

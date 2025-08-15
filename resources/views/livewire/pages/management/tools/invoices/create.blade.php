@@ -7,6 +7,9 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 
+use App\Neuron\RAG\InvoicesRAG;
+use NeuronAI\RAG\DataLoader\StringDataLoader;
+
 layout('layouts.app');
 
 usesFileUploads();
@@ -95,22 +98,51 @@ $create = function() {
 
     $invoiceData = $response->json()['data'];
 
-    $invoice = Invoice::create([
-        'user_id' => auth()->user()->id,
-        'number' => $invoiceData['number'] ?? '',
-        'total_amount' => $invoiceData['total_amount'] ?? 0.00,
-        'currency_code' => $invoiceData['currency_code'] ?? 'EUR',
-        'date' => $invoiceData['date'] ?? null,
-        'time' => $invoiceData['time'] ?? null,
-        'payment_method' => $invoiceData['payment_method'] ?? 'Desconocido',
-        'llm_name' => $invoiceData['llm_name'] ?? 'Gemmini',
-        'llm_text_response' => $invoiceData['llm_text_response'] ?? '',
-        'seller_info' => $invoiceData['seller_info'] ?? [],
-        'items' => $invoiceData['items'] ?? [],
-    ]);
+    DB::transaction(function () use($invoiceData) {
+        try {
+            $invoice = Invoice::create([
+                'user_id' => auth()->user()->id,
+                'number' => $invoiceData['number'] ?? '',
+                'total_amount' => $invoiceData['total_amount'] ?? 0.00,
+                'currency_code' => $invoiceData['currency_code'] ?? 'EUR',
+                'date' => $invoiceData['date'] ?? null,
+                'time' => $invoiceData['time'] ?? null,
+                'payment_method' => $invoiceData['payment_method'] ?? 'Desconocido',
+                'llm_name' => $invoiceData['llm_name'] ?? 'Gemmini',
+                'llm_text_response' => $invoiceData['llm_text_response'] ?? '',
+                'content_description' => $invoiceData['content_description'] ?? '',
+                'seller_info' => $invoiceData['seller_info'] ?? [],
+                'items' => $invoiceData['items'] ?? [],
+            ]);
 
-    $invoice->addMedia($this->invoice->path())
-            ->toMediaCollection('invoices');
+            $documents = StringDataLoader::for($invoice->generateInvoiceContent())->getDocuments();
+
+            foreach($documents as $document) {
+                $document->addMetadata('invoice_id', $invoice->id);
+                $document->addMetadata('user_id', $invoice->user_id);
+                $document->addMetadata('invoice_number', $invoice->number);
+            }
+
+            $rag = InvoicesRAG::forUser($invoice->user_id);
+
+            $rag->addDocuments($documents);
+
+            $invoice->addMedia($this->invoice->path())
+                    ->usingName($this->invoice->getClientOriginalName())
+                    ->toMediaCollection('invoices');
+
+        } catch (\Throwable $th) {
+            $this->dispatch('clear-file');
+            session()->flash(
+                'status',
+                [
+                    'message' => 'Failed to process the invoice. Please try again later or with other image.',
+                    'type' => 'danger'
+                ]
+            );
+        }
+
+    });
 
     session()->flash(
         'status',

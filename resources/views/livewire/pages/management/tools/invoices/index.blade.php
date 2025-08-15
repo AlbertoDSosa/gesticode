@@ -86,8 +86,9 @@ $delete = function($id) {
                     <iconify-icon icon="mdi:refresh" class="text-xl"></iconify-icon>
                 </button>
                 {{--Refresh Button end--}}
-                <a href="{{route('management.tools.invoices.create')}}" wire:navigate class="btn inline-flex justify-center btn-outline-dark text-lg">Add Invoice</a>
+                <a href="{{route('management.tools.invoices.create')}}" wire:navigate class="btn inline-flex justify-center btn-outline-dark">Add Invoice</a>
 
+                <a href="{{ route('management.tools.invoices.advanced-search') }}" class="btn btn-outline-dark">Advanced Search</a>
             </div>
             <div class="justify-center flex flex-wrap sm:flex items-center lg:justify-end gap-3">
                 <div class="relative w-full sm:w-auto flex items-center">
@@ -157,9 +158,9 @@ $delete = function($id) {
                                     <th scope="col" class="table-th">
                                         Created at
                                     </th>
-                                    {{-- <th scope="col" class="table-th w-20">
+                                    <th scope="col" class="table-th w-20">
                                         Action
-                                    </th> --}}
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
@@ -221,10 +222,12 @@ $delete = function($id) {
 
                                 </tr>
                                 @empty
-                                <tr class="border border-slate-100 dark:border-slate-900 relative">
-                                    <td class="table-cell text-center" colspan="5">
-                                        <img src="{{asset('images/result-not-found.svg')}}" alt="page not found" class="w-64 m-auto" />
-                                        <h2 class="text-xl text-slate-700 mb-8 -mt-4">No results found.</h2>
+                                <tr class="border border-slate-100 dark:border-slate-900">
+                                    <td class="table-td text-center py-12" colspan="10">
+                                        <div class="flex flex-col items-center justify-center">
+                                            <img src="{{asset('images/result-not-found.svg')}}" alt="page not found" class="w-64 mb-4" />
+                                            <h2 class="text-xl text-slate-700 dark:text-slate-300">No results found.</h2>
+                                        </div>
                                     </td>
                                 </tr>
                                 @endforelse
@@ -245,11 +248,11 @@ $delete = function($id) {
     Alpine.data('deleteInvoice', () => ({
         exec(id) {
             Swal.fire({
-                title: '@lang('Are you sure ? ')',
+                title: 'Are you sure?',
                 icon : 'question',
                 showDenyButton: true,
-                confirmButtonText: '@lang('Delete')',
-                denyButtonText: '@lang('Cancel')',
+                confirmButtonText: 'Delete',
+                denyButtonText: 'Cancel',
             }).then((result) => {
                 if (result.isConfirmed) {
                     $wire.delete(id);

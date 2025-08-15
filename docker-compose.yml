@@ -23,50 +23,47 @@ services:
         networks:
             - sail
         depends_on:
-            - mysql
-    phpmyadmin:
-        image: phpmyadmin
+            - postgres
+    pgadmin:
+        image: dpage/pgadmin4
         ports:
             - 8080:80
         depends_on:
-            - mysql
+            - postgres
         environment:
-            - PMA_ARBITRARY=1
-            - PMA_HOST=mysql:3306
-            - PMA_USER=root
-            - PMA_PASSWORD=yalosabes
-            # MAX_EXECUTION_TIME:
-            # MEMORY_LIMIT:
-            # UPLOAD_LIMIT:
+            PGADMIN_DEFAULT_EMAIL: admin@gesticode.com
+            PGADMIN_DEFAULT_PASSWORD: '${DB_PASSWORD:-yalosabes}'
+            PGADMIN_CONFIG_SERVER_MODE: 'False'
+        volumes:
+            - 'sail-pgadmin:/var/lib/pgadmin'
         networks:
             - sail
-    mysql:
-        image: 'mysql/mysql-server:8.0'
+    postgres:
+        image: 'pgvector/pgvector:pg16'
         ports:
-            - '${FORWARD_DB_PORT:-3306}:3306'
+            - '${FORWARD_DB_PORT:-5432}:5432'
         environment:
-            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
-            MYSQL_ROOT_HOST: '%'
-            MYSQL_DATABASE: '${DB_DATABASE}'
-            MYSQL_USER: '${DB_USERNAME}'
-            MYSQL_PASSWORD: '${DB_PASSWORD}'
-            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+            POSTGRES_DB: '${DB_DATABASE}'
+            POSTGRES_USER: '${DB_USERNAME}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD}'
+            POSTGRES_HOST_AUTH_METHOD: trust
         volumes:
-            - 'sail-mysql:/var/lib/mysql'
-            - './docker/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+            - 'sail-postgres:/var/lib/postgresql/data'
+            - './docker/postgres/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh'
         networks:
             - sail
         healthcheck:
             test:
-                - CMD
-                - mysqladmin
-                - ping
-                - '-p${DB_PASSWORD}'
+                - CMD-SHELL
+                - pg_ready -U ${DB_USERNAME} -d ${DB_DATABASE}
             retries: 3
             timeout: 5s
+            interval: 10s
 networks:
     sail:
         driver: bridge
 volumes:
-    sail-mysql:
+    sail-postgres:
+        driver: local
+    sail-pgadmin:
         driver: local

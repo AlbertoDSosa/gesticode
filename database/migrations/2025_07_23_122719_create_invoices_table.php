@@ -14,7 +14,6 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->uuid()->unique()->default(new Expression('(UUID())'));
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('number')->nullable()->comment('Número de la factura');
             $table->double('total_amount')->comment('Monto total de la compra')->default(0.00);
@@ -25,9 +24,9 @@ return new class extends Migration
             $table->enum('payment_method', ['Desconocido', 'Targeta Bancaria', 'Efectivo'])->comment('Método de pago')->default('Desconocido')->nullable();
             $table->enum('status', ['pendiente', 'aprobada', 'rechazada'])->comment('Estado de la factura')->default('pendiente');
             $table->text('llm_text_response')->comment('Respuesta en texto de los datos extraidos de la imagen de la factura por el modelo de lenguaje')->nullable();
+            $table->text('content_description')->comment('Descripción del contenido de la factura')->nullable();
             $table->json('seller_info')->comment('Información del vendedor')->nullable();
             $table->json('items')->comment('Lista de artículos comprados')->nullable();
-            // $table->vector('embedding', dimensions: 100);
             $table->timestamps();
         });
     }
