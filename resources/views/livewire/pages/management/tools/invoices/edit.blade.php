@@ -8,7 +8,7 @@ use Spatie\Image\Image;
 
 layout('layouts.app');
 
-state(['invoice', 'number', 'total_amount', 'currency_code', 'payment_method', 'status', 'time', 'date', 'llm_name', 'llm_text_response', 'content_description']);
+state(['invoice', 'number', 'total_amount', 'currency_code', 'payment_method', 'status', 'time', 'date', 'llm_name', 'llm_text_response']);
 
 mount(function (Invoice $invoice) {
     $this->invoice = $invoice;
@@ -25,7 +25,6 @@ mount(function (Invoice $invoice) {
     $this->date = $this->invoice->date;
     $this->llm_name = $this->invoice->llm_name;
     $this->llm_text_response = $this->invoice->llm_text_response;
-    $this->content_description = $this->invoice->content_description;
 });
 
 $breadcrumbItems = [
@@ -61,7 +60,6 @@ $updateInvoice = function () {
         'date' => ['nullable', 'date'],
         'llm_name' => ['nullable', 'string', 'max:255'],
         'llm_text_response' => ['nullable', 'string'],
-        'content_description' => ['nullable', 'string'],
     ]);
 
     $this->invoice->update($validated);
@@ -241,23 +239,6 @@ $updateInvoice = function () {
                                 id="time"
                                 class="w-full rounded-md border border-gray-300 dark:border-gray-600 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:bg-slate-700 dark:text-white" />
                             <x-input-error :messages="$errors->get('time')" class="mt-2" />
-                        </div>
-
-                        {{-- Content Description --}}
-                        <div>
-                            <label for="content_description"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Content Description
-                            </label>
-                            <textarea
-                                wire:model="content_description"
-                                id="content_description"
-                                rows="5"
-                                disabled
-                                class="w-full rounded-md border border-gray-300 dark:border-gray-600 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:bg-slate-700 dark:text-white"
-                                placeholder="Enter content description..."
-                            ></textarea>
-                            <x-input-error :messages="$errors->get('content_description')" class="mt-2" />
                         </div>
 
                         {{-- LLM Name --}}

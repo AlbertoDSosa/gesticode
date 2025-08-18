@@ -29,7 +29,6 @@ class Invoice extends Model implements HasMedia
         'seller_info',
         'items',
         'metadata',
-        'content_description',
         'content_embedding',
         'searchable_content',
         'embedding_generated_at',
@@ -65,7 +64,6 @@ class Invoice extends Model implements HasMedia
             'items' => 'array',
             'embedding_generated_at' => 'datetime',
             'content_embedding' => 'array',
-            'metadata_embedding' => 'array',
             'metadata' => 'array',
         ];
     }
@@ -118,22 +116,6 @@ class Invoice extends Model implements HasMedia
         });
     }
 
-    /**
-     * Buscar facturas por metadatos similares (vendedor, tipo de producto, etc.)
-     */
-    // public function findSimilarByMetadata(array $queryVector, int $limit = 5)
-    // {
-    //     $vectorString = $this->arrayToVector($queryVector);
-
-    //     return self::where('user_id', $this->user_id)
-    //         ->whereNotNull('metadata_embedding')
-    //         ->select('*')
-    //         ->selectRaw('metadata_embedding <-> ? as distance', [$vectorString])
-    //         ->orderBy('distance')
-    //         ->limit($limit)
-    //         ->get();
-    // }
-
 
     /**
      * Generar contenido de factura para embedding
@@ -161,10 +143,6 @@ class Invoice extends Model implements HasMedia
             }
         }
 
-        if ($this->content_description) {
-            $content[] = "Descripción del contenido: {$this->content_description}";
-        }
-
         if ($this->items && is_array($this->items)) {
             $itemsText = [];
             foreach ($this->items as $item) {
@@ -190,7 +168,7 @@ class Invoice extends Model implements HasMedia
     }
 
     /**
-     * Obtener facturas relacionadas (por contenido y metadatos)
+     * Obtener facturas relacionadas por contenido
      */
     public function getRelatedInvoices(int $limit = 5)
     {
@@ -201,12 +179,6 @@ class Invoice extends Model implements HasMedia
             $contentSimilar = $this->findSimilarInvoices($this->content_embedding, $limit);
             $related = $related->merge($contentSimilar);
         }
-
-        // Buscar por metadatos similares
-        // if ($this->metadata_embedding) {
-        //     $metadataSimilar = $this->findSimilarByMetadata($this->metadata_embedding, $limit);
-        //     $related = $related->merge($metadataSimilar);
-        // }
 
         // Eliminar duplicados y la factura actual
         return $related->unique('id')

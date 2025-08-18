@@ -110,7 +110,6 @@ $create = function() {
                 'payment_method' => $invoiceData['payment_method'] ?? 'Desconocido',
                 'llm_name' => $invoiceData['llm_name'] ?? 'Gemmini',
                 'llm_text_response' => $invoiceData['llm_text_response'] ?? '',
-                'content_description' => $invoiceData['content_description'] ?? '',
                 'seller_info' => $invoiceData['seller_info'] ?? [],
                 'items' => $invoiceData['items'] ?? [],
             ]);

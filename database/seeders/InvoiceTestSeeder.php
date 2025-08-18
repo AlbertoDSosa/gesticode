@@ -45,7 +45,6 @@ class InvoiceTestSeeder extends Seeder
                     ['description' => 'Pollo filetes', 'quantity' => 1, 'price' => 6.90, 'price_per_unit' => 6.90],
                     ['description' => 'Yogures naturales', 'quantity' => 1, 'price' => 3.20, 'price_per_unit' => 3.20]
                 ],
-                'content_description' => 'Compra en supermercado con productos básicos de alimentación incluyendo lácteos, carnes y frutas.'
             ],
             [
                 'number' => 'FAC-2025-002',
@@ -62,7 +61,6 @@ class InvoiceTestSeeder extends Seeder
                 'items' => [
                     ['description' => 'Gasolina 95', 'quantity' => 45.2, 'price' => 1.45, 'price_per_unit' => 1.45]
                 ],
-                'content_description' => 'Repostaje de combustible gasolina 95 octanos en estación de servicio Repsol.'
             ],
             [
                 'number' => 'FAC-2025-003',
@@ -81,7 +79,6 @@ class InvoiceTestSeeder extends Seeder
                     ['description' => 'Vitamina C', 'quantity' => 1, 'price' => 12.40, 'price_per_unit' => 12.40],
                     ['description' => 'Crema hidratante', 'quantity' => 1, 'price' => 8.00, 'price_per_unit' => 8.00]
                 ],
-                'content_description' => 'Compra en farmacia de medicamentos analgésicos, suplementos vitamínicos y productos de cuidado personal.'
             ],
             [
                 'number' => 'FAC-2025-004',
@@ -99,7 +96,6 @@ class InvoiceTestSeeder extends Seeder
                     ['name' => 'Menú degustación para 2', 'quantity' => 1, 'price' => 75.00, 'price_per_unit' => 75.00],
                     ['name' => 'Vino Ribera del Duero', 'quantity' => 1, 'price' => 14.99, 'price_per_unit' => 14.99]
                 ],
-                'content_description' => 'Cena en restaurante tradicional español con menú degustación y maridaje de vinos.'
             ],
             [
                 'number' => 'FAC-2025-005',
@@ -118,7 +114,6 @@ class InvoiceTestSeeder extends Seeder
                     ['description' => 'Revisión ITV', 'quantity' => 1, 'price' => 45.00, 'price_per_unit' => 45.00],
                     ['description' => 'Mano de obra', 'quantity' => 2, 'price' => 23.225, 'price_per_unit' => 11.6125]
                 ],
-                'content_description' => 'Servicio de mantenimiento vehicular con cambio de aceite, filtros y revisión técnica reglamentaria.'
             ],
             [
                 'number' => 'FAC-2025-006',
@@ -137,7 +132,6 @@ class InvoiceTestSeeder extends Seeder
                     ['description' => 'Bolígrafos azules', 'quantity' => 1, 'price' => 4.25, 'price_per_unit' => 4.25],
                     ['description' => 'Agenda 2025', 'quantity' => 1, 'price' => 12.50, 'price_per_unit' => 12.50],
                 ],
-                'content_description' => 'Compra de material de oficina y papelería para uso personal y profesional.'
             ]
         ];
 
@@ -153,7 +147,6 @@ class InvoiceTestSeeder extends Seeder
                 'time' => $invoiceData['date']->format('H:i:s'),
                 'seller_info' => $invoiceData['seller_info'],
                 'items' => $invoiceData['items'],
-                'content_description' => $invoiceData['content_description'],
             ]);
 
             echo "✅ Factura creada: {$invoice->number} - {$invoice->total_amount} {$invoice->currency_code}\n";
